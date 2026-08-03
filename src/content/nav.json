@@ -1,0 +1,10 @@
+{
+  "items": [
+    { "label": "Work", "href": "#work" },
+    { "label": "Skills", "href": "#skills" },
+    { "label": "Experience", "href": "#experience" },
+    { "label": "About", "href": "#about" }
+  ],
+  "resumeLabel": "Résumé",
+  "exploreLabel": "Explore"
+}

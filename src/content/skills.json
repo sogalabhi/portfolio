@@ -1,0 +1,18 @@
+[
+  {
+    "group": "Data Engineering",
+    "skills": ["Spark", "Airflow", "Delta Lake", "dbt", "Kafka", "MinIO"]
+  },
+  {
+    "group": "Cloud & Infra",
+    "skills": ["Azure", "Terraform", "Docker", "K8s", "GitHub Actions", "Linux"]
+  },
+  {
+    "group": "Full Stack",
+    "skills": ["FastAPI", "Django", "Flutter", "React", "Next.js", "Node"]
+  },
+  {
+    "group": "Tools",
+    "skills": ["Git", "Postman", "Figma", "TimescaleDB"]
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "tier1": [
+    {
+      "org": "FOSSEE, IIT Bombay",
+      "period": "May 2025 – Present",
+      "stack": ["React", "Django", "Redis", "WebSockets"],
+      "roles": [
+        { "title": "Web Lead", "period": "Nov 2025 – Present" },
+        { "title": "Autumn Intern", "period": "Aug 2025 – Nov 2025" },
+        { "title": "Summer Intern", "period": "May 2025 – Aug 2025" }
+      ],
+      "bullets": [
+        "NEEDS_INPUT: complete detail on leading a team of 4 — what was delivered, for whom, team size confirmation",
+        "NEEDS_INPUT: complete detail on architecting Redis caching + WebSocket infra — scale/latency numbers",
+        "NEEDS_INPUT: complete detail on load testing scripts + live CPU/RAM/core dashboard — thresholds, tooling"
+      ],
+      "note": "NEEDS_INPUT: reconcile résumé vs LinkedIn — Web Lead start date (May 2025 vs Nov 2025) and title (Web Lead vs Web Mentor). See prompt.md section 7."
+    },
+    {
+      "org": "IRIS, NITK",
+      "period": "NEEDS_INPUT",
+      "stack": ["NEEDS_INPUT"],
+      "roles": [
+        { "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" }
+      ],
+      "bullets": [
+        "NEEDS_INPUT: team size and your position",
+        "NEEDS_INPUT: 1 metric for this role",
+        "NEEDS_INPUT: one thing you're proud of that isn't on the résumé"
+      ]
+    },
+    {
+      "org": "Momento (Humora Technologies)",
+      "period": "NEEDS_INPUT: résumé says Nov 2025 – Feb 2026, LinkedIn says Oct 2025 – Jan 2026 — resolve",
+      "stack": ["NEEDS_INPUT"],
+      "roles": [
+        { "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" }
+      ],
+      "bullets": [
+        "NEEDS_INPUT: team size and your position",
+        "NEEDS_INPUT: 1 metric for this role",
+        "NEEDS_INPUT: one thing you're proud of that isn't on the résumé"
+      ]
+    },
+    {
+      "org": "SNSDS Trust",
+      "period": "NEEDS_INPUT",
+      "stack": ["NEEDS_INPUT"],
+      "roles": [
+        { "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" }
+      ],
+      "bullets": [
+        "NEEDS_INPUT: team size and your position",
+        "NEEDS_INPUT: 1 metric for this role",
+        "NEEDS_INPUT: one thing you're proud of that isn't on the résumé"
+      ]
+    }
+  ],
+  "tier2": [
+    { "org": "E-Cell NITK", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" },
+    { "org": "PACE NITK", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" },
+    { "org": "Kannada Vedike NITK", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" },
+    { "org": "Advista.live", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" },
+    { "org": "SriSadguru Hypertechnologies", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" },
+    { "org": "SriSadguru Hypertechnologies", "title": "NEEDS_INPUT (2nd stint)", "period": "NEEDS_INPUT" },
+    { "org": "Datta Web Designers", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" }
+  ]
+}

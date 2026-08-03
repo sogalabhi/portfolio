@@ -1,0 +1,18 @@
+{
+  "name": "Abhijith Sogal",
+  "tagline": "Civil engineering student at NITK who builds production systems — distributed data pipelines, Flutter apps with 2,000+ users, and real-time web infrastructure.",
+  "availability": "Available for SDE / Data Engineering roles · 2027",
+  "location": "Mysuru, Karnataka, India",
+  "email": "abhijithsogal@gmail.com",
+  "links": {
+    "github": "NEEDS_INPUT: GitHub profile URL",
+    "linkedin": "NEEDS_INPUT: LinkedIn profile URL",
+    "resume": "/resume.pdf"
+  },
+  "stats": [
+    { "value": "2,000+", "label": "app users" },
+    { "value": "4.9★", "label": "Play Store" },
+    { "value": "3rd/190+", "label": "AssetHub" },
+    { "value": "5 yrs", "label": "shipping" }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "summary": "Finalist in all 4 hackathons entered",
+  "hackathons": [
+    {
+      "event": "EthGlobal New Delhi",
+      "date": "NEEDS_INPUT: YYYY-MM",
+      "result": "Finalist round",
+      "project": "NEEDS_INPUT: what was built",
+      "oneLiner": "NEEDS_INPUT",
+      "myRole": "NEEDS_INPUT: team size + your specific contribution",
+      "stack": ["NEEDS_INPUT"],
+      "links": { "github": "", "devpost": "", "demo": "" }
+    },
+    {
+      "event": "AssetHub Hackathon, Goa 2025",
+      "date": "2025",
+      "result": "3rd of 190+",
+      "project": "NEEDS_INPUT: what was built",
+      "oneLiner": "NEEDS_INPUT",
+      "myRole": "NEEDS_INPUT: team size + your specific contribution",
+      "stack": ["NEEDS_INPUT"],
+      "links": { "github": "", "devpost": "", "demo": "" }
+    },
+    {
+      "event": "Builder House Bengaluru",
+      "date": "NEEDS_INPUT: YYYY-MM",
+      "result": "3rd place",
+      "project": "INR ↔ Polkadot bridge",
+      "oneLiner": "NEEDS_INPUT",
+      "myRole": "NEEDS_INPUT: team size + your specific contribution",
+      "stack": ["NEEDS_INPUT"],
+      "links": { "github": "", "devpost": "", "demo": "" }
+    },
+    {
+      "event": "NEEDS_INPUT: 4th hackathon name",
+      "date": "NEEDS_INPUT",
+      "result": "Finalist",
+      "project": "NEEDS_INPUT",
+      "oneLiner": "NEEDS_INPUT",
+      "myRole": "NEEDS_INPUT",
+      "stack": ["NEEDS_INPUT"],
+      "links": { "github": "", "devpost": "", "demo": "" }
+    }
+  ]
+}

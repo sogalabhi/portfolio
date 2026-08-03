@@ -1,122 +1,110 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Nav from './components/layout/Nav'
+import Footer from './components/layout/Footer'
+import Section from './components/layout/Section'
+import Hero from './components/hero/Hero'
+import FeaturedCard from './components/work/FeaturedCard'
+import ProjectGrid from './components/work/ProjectGrid'
+import SkillGroup from './components/skills/SkillGroup'
+import GithubHeatmap from './components/skills/GithubHeatmap'
+import TimelineCard from './components/exp/TimelineCard'
+import CompactRoleList from './components/exp/CompactRoleList'
+import EducationBlock from './components/exp/EducationBlock'
+import Achievements from './components/misc/Achievements'
+import Contact from './components/misc/Contact'
+import NotFound from './components/misc/NotFound'
+import projects from './content/projects.json'
+import skills from './content/skills.json'
+import experience from './content/experience.json'
+import education from './content/education.json'
 
-function App() {
-  const [count, setCount] = useState(0)
+function Home() {
+  const featuredProjects = projects
+    .filter((p) => p.featured)
+    .sort((a, b) => a.order - b.order)
+  const moreProjects = projects
+    .filter((p) => !p.featured)
+    .sort((a, b) => a.order - b.order)
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      <Nav />
+      <main>
+        <Hero />
 
-      <div className="ticks"></div>
+        <Section id="work">
+          <h2 className="text-ink">Work</h2>
+          <div className="mt-10 space-y-8">
+            {featuredProjects.map((project, i) => (
+              <FeaturedCard key={project.id} project={project} index={i} />
+            ))}
+          </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          {moreProjects.length > 0 && (
+            <div className="mt-16">
+              <h3 className="font-display text-lg font-semibold text-ink">
+                More projects
+              </h3>
+              <div className="mt-6">
+                <ProjectGrid projects={moreProjects} />
+              </div>
+            </div>
+          )}
+        </Section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+        <Section id="skills" className="border-t border-line">
+          <h2 className="text-ink">Skills</h2>
+          <div className="mt-10 space-y-8">
+            {skills.map((group) => (
+              <SkillGroup key={group.group} group={group.group} skills={group.skills} />
+            ))}
+          </div>
+
+          <div className="mt-12">
+            <GithubHeatmap />
+          </div>
+        </Section>
+
+        <Section id="experience" className="border-t border-line">
+          <h2 className="text-ink">Experience</h2>
+          <div className="mt-10 space-y-14">
+            {experience.tier1.map((exp) => (
+              <TimelineCard key={exp.org} experience={exp} />
+            ))}
+            <CompactRoleList roles={experience.tier2} />
+          </div>
+
+          <div className="mt-16">
+            <h3 className="font-display text-lg font-semibold text-ink">Education</h3>
+            <div className="mt-6">
+              <EducationBlock education={education} />
+            </div>
+          </div>
+        </Section>
+
+        <Section id="about" className="border-t border-line">
+          <h2 className="text-ink">Achievements</h2>
+          <div className="mt-10">
+            <Achievements />
+          </div>
+
+          <div className="mt-24">
+            <Contact />
+          </div>
+        </Section>
+      </main>
+      <Footer />
     </>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}

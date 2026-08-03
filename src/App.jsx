@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
 import { useGSAP } from '@gsap/react'
@@ -27,6 +27,8 @@ import skills from './content/skills.json'
 import experience from './content/experience.json'
 import education from './content/education.json'
 import sections from './content/sections.json'
+
+const World = lazy(() => import('./world/WorldPage'))
 
 function Home() {
   const featuredProjects = projects
@@ -171,6 +173,14 @@ export default function App() {
       <KeyboardShortcuts />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route
+          path="/world"
+          element={
+            <Suspense fallback={<div className="fixed inset-0 bg-paper" />}>
+              <World />
+            </Suspense>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Analytics />

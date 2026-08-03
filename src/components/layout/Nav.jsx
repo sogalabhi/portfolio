@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Menu, X, Download } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Menu, X, Download, ArrowUpRight } from 'lucide-react'
 import { track } from '@vercel/analytics'
 import navContent from '../../content/nav.json'
 import profile from '../../content/profile.json'
@@ -69,6 +70,14 @@ export default function Nav() {
         </ul>
 
         <div className="hidden items-center gap-3 md:flex">
+          <Link
+            to="/world"
+            onClick={() => track('world_explore_click', { source: 'nav' })}
+            className="inline-flex items-center gap-2 rounded-[10px] border border-line px-4 py-2 text-sm font-medium text-ink transition-colors duration-150 hover:border-clay hover:text-clay"
+          >
+            {navContent.exploreLabel}
+            <ArrowUpRight size={16} aria-hidden="true" />
+          </Link>
           <a
             href={profile.links.resume}
             target="_blank"
@@ -104,6 +113,17 @@ export default function Nav() {
               {item.label}
             </a>
           ))}
+          <Link
+            to="/world"
+            onClick={() => {
+              track('world_explore_click', { source: 'nav_mobile' })
+              setMenuOpen(false)
+            }}
+            className="mt-4 inline-flex w-fit items-center gap-2 rounded-[10px] border border-line px-5 py-3 text-base font-medium text-ink"
+          >
+            {navContent.exploreLabel}
+            <ArrowUpRight size={18} aria-hidden="true" />
+          </Link>
           <a
             href={profile.links.resume}
             target="_blank"
@@ -112,7 +132,7 @@ export default function Nav() {
               track('resume_download', { source: 'nav_mobile' })
               setMenuOpen(false)
             }}
-            className="mt-4 inline-flex w-fit items-center gap-2 rounded-[10px] bg-clay px-5 py-3 text-base font-medium text-paper"
+            className="inline-flex w-fit items-center gap-2 rounded-[10px] bg-clay px-5 py-3 text-base font-medium text-paper"
           >
             {navContent.resumeLabel}
             <Download size={18} aria-hidden="true" />

@@ -6,6 +6,7 @@ export default function SkillGroup({ group, skills }) {
         {skills.map((skill, i) => (
           <span
             key={i}
+            data-reveal
             className="rounded-full bg-sand px-3 py-1.5 font-mono text-[13px] text-ink"
           >
             {skill}

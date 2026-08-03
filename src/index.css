@@ -71,3 +71,37 @@
     outline-offset: 2px;
   }
 }
+
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  * {
+    color: #000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+  }
+
+  /* scroll-triggered reveals may not have played if the page was never scrolled
+     before printing — force every animated element to its final visible state */
+  [data-reveal],
+  [data-hero-item],
+  [data-timeline-line],
+  [data-heatmap-cell] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    color: #444 !important;
+  }
+}

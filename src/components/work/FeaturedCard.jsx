@@ -1,4 +1,5 @@
 import { ExternalLink, Smartphone } from 'lucide-react'
+import { track } from '@vercel/analytics'
 import { GithubIcon } from '../misc/BrandIcons'
 
 export default function FeaturedCard({ project, index }) {
@@ -6,7 +7,10 @@ export default function FeaturedCard({ project, index }) {
   const order = String(index + 1).padStart(2, '0')
 
   return (
-    <article className="grid gap-8 rounded-2xl border border-line bg-card p-6 md:grid-cols-2 md:gap-10 md:p-8">
+    <article
+      data-reveal
+      className="grid gap-8 rounded-2xl border border-line bg-card p-6 md:grid-cols-2 md:gap-10 md:p-8"
+    >
       <div
         className={`flex aspect-video items-center justify-center rounded-xl border border-dashed border-line bg-paper text-sm text-faint md:aspect-auto ${
           reversed ? 'md:order-2' : ''
@@ -72,6 +76,7 @@ export default function FeaturedCard({ project, index }) {
               href={project.links.github}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => track('project_link_click', { project: project.id, type: 'github' })}
               className="inline-flex items-center gap-2 text-sm font-medium text-ink transition-colors duration-150 hover:text-clay"
             >
               <GithubIcon size={16} />
@@ -83,6 +88,7 @@ export default function FeaturedCard({ project, index }) {
               href={project.links.live || project.links.playStore || project.links.demo}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => track('project_link_click', { project: project.id, type: 'live' })}
               className="inline-flex items-center gap-2 text-sm font-medium text-clay"
             >
               Live

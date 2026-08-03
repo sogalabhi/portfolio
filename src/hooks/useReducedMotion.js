@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
+
+const query = () => window.matchMedia('(prefers-reduced-motion: reduce)')
+
+function subscribe(callback) {
+  const media = query()
+  media.addEventListener('change', callback)
+  return () => media.removeEventListener('change', callback)
+}
 
 export default function useReducedMotion() {
-  const [reduced, setReduced] = useState(
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-  )
-
-  useEffect(() => {
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const handleChange = (event) => setReduced(event.matches)
-    query.addEventListener('change', handleChange)
-    return () => query.removeEventListener('change', handleChange)
-  }, [])
-
-  return reduced
+  return useSyncExternalStore(subscribe, () => query().matches, () => false)
 }

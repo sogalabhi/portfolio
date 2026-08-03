@@ -1,15 +1,19 @@
 import { Trophy } from 'lucide-react'
+import useGsapReveal from '../../hooks/useGsapReveal'
 import achievements from '../../content/achievements.json'
 
 export default function Achievements() {
+  const revealRef = useGsapReveal({ batch: true, stagger: 0.06 })
+
   return (
     <div>
       <p className="mb-6 font-mono text-sm text-moss">{achievements.summary}</p>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div ref={revealRef} className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {achievements.hackathons.map((item) => (
           <article
             key={item.event}
+            data-reveal
             className="rounded-2xl border border-line bg-card p-6"
           >
             <div className="flex items-start justify-between gap-4">

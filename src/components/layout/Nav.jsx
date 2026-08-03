@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Menu, X, Download } from 'lucide-react'
+import { track } from '@vercel/analytics'
 import navContent from '../../content/nav.json'
 import profile from '../../content/profile.json'
 
@@ -42,7 +43,7 @@ export default function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-200 ${
+      className={`fixed inset-x-0 top-0 z-50 print:hidden transition-colors duration-200 ${
         scrolled || menuOpen ? 'bg-paper border-b border-line' : 'bg-transparent'
       }`}
     >
@@ -56,8 +57,9 @@ export default function Nav() {
             <li key={item.href}>
               <a
                 href={item.href}
+                aria-current={active === item.href ? 'true' : undefined}
                 className={`text-sm transition-colors duration-150 hover:text-clay ${
-                  active === item.href ? 'text-clay' : 'text-slate'
+                  active === item.href ? 'font-medium text-clay' : 'text-slate'
                 }`}
               >
                 {item.label}
@@ -71,6 +73,7 @@ export default function Nav() {
             href={profile.links.resume}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track('resume_download', { source: 'nav' })}
             className="inline-flex items-center gap-2 rounded-[10px] bg-clay px-4 py-2 text-sm font-medium text-paper transition-colors duration-150 hover:bg-clay/90"
           >
             {navContent.resumeLabel}
@@ -105,7 +108,10 @@ export default function Nav() {
             href={profile.links.resume}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setMenuOpen(false)}
+            onClick={() => {
+              track('resume_download', { source: 'nav_mobile' })
+              setMenuOpen(false)
+            }}
             className="mt-4 inline-flex w-fit items-center gap-2 rounded-[10px] bg-clay px-5 py-3 text-base font-medium text-paper"
           >
             {navContent.resumeLabel}

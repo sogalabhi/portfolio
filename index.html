@@ -2,29 +2,65 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // deterministic scroll-triggered reveals: never let the browser silently
+      // restore a mid-page scroll position on reload — always start at top
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#FAF7F0" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Abhijith Sogal — Software Engineer</title>
+    <title>Abhijith Sogal — Developer</title>
     <meta
       name="description"
-      content="Abhijith Sogal — civil engineering student at NITK who builds production systems: distributed data pipelines, Flutter apps with 2,000+ users, and real-time web infrastructure."
+      content="A NITK student who builds production systems — distributed data pipelines, Flutter apps with 2,000+ users, and real-time web infrastructure that ships."
     />
+    <link rel="canonical" href="https://NEEDS_INPUT-your-domain.com" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Abhijith Sogal — Software Engineer" />
+    <meta property="og:url" content="https://NEEDS_INPUT-your-domain.com" />
+    <meta property="og:title" content="Abhijith Sogal — Developer" />
     <meta
       property="og:description"
-      content="Civil engineering student at NITK who builds production systems: distributed data pipelines, Flutter apps with 2,000+ users, and real-time web infrastructure."
+      content="A NITK student who builds production systems — distributed data pipelines, Flutter apps with 2,000+ users, and real-time web infrastructure that ships."
     />
-    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image" content="https://NEEDS_INPUT-your-domain.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Abhijith Sogal — Software Engineer" />
+    <meta name="twitter:title" content="Abhijith Sogal — Developer" />
     <meta
       name="twitter:description"
-      content="Civil engineering student at NITK who builds production systems: distributed data pipelines, Flutter apps with 2,000+ users, and real-time web infrastructure."
+      content="A NITK student who builds production systems — distributed data pipelines, Flutter apps with 2,000+ users, and real-time web infrastructure that ships."
     />
-    <meta name="twitter:image" content="/og-image.png" />
+    <meta name="twitter:image" content="https://NEEDS_INPUT-your-domain.com/og-image.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Abhijith Sogal V",
+        "url": "https://NEEDS_INPUT-your-domain.com",
+        "email": "abhijithsogal@gmail.com",
+        "jobTitle": "Software Developer",
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "National Institute of Technology Karnataka, Surathkal"
+        },
+        "sameAs": [
+          "https://github.com/sogalabhi",
+          "NEEDS_INPUT: LinkedIn profile URL"
+        ],
+        "knowsAbout": ["Data Engineering", "Apache Spark", "Flutter", "React", "FastAPI"]
+      }
+    </script>
+
+    <link rel="prefetch" href="/resume.pdf" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

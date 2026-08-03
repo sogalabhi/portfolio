@@ -2,12 +2,12 @@
   "tier1": [
     {
       "org": "FOSSEE, IIT Bombay",
-      "period": "May 2025 – Present",
+      "period": "May 2025 - Present",
       "stack": ["React", "Django", "Redis", "WebSockets"],
       "roles": [
-        { "title": "Web Lead", "period": "Nov 2025 – Present" },
-        { "title": "Autumn Intern", "period": "Aug 2025 – Nov 2025" },
-        { "title": "Summer Intern", "period": "May 2025 – Aug 2025" }
+        { "title": "Web Lead", "period": "Nov 2025 - Present" },
+        { "title": "Autumn Intern", "period": "Aug 2025 - Nov 2025" },
+        { "title": "Summer Intern", "period": "May 2025 - Aug 2025" }
       ],
       "bullets": [
         "NEEDS_INPUT: complete detail on leading a team of 4 — what was delivered, for whom, team size confirmation",
@@ -31,7 +31,7 @@
     },
     {
       "org": "Momento (Humora Technologies)",
-      "period": "NEEDS_INPUT: résumé says Nov 2025 – Feb 2026, LinkedIn says Oct 2025 – Jan 2026 — resolve",
+      "period": "NEEDS_INPUT: résumé says Nov 2025 - Feb 2026, LinkedIn says Oct 2025 - Jan 2026 — resolve",
       "stack": ["NEEDS_INPUT"],
       "roles": [
         { "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" }

@@ -1,0 +1,40 @@
+{
+  "stops": [
+    {
+      "id": "hero",
+      "target": "#hero",
+      "title": "Start here",
+      "note": "NEEDS_INPUT: your own one-line take on the intro, ≤ 160 chars, first person, conversational"
+    },
+    {
+      "id": "work",
+      "target": "#work",
+      "title": "The work",
+      "note": "NEEDS_INPUT: your own one-line take on the work section"
+    },
+    {
+      "id": "skills",
+      "target": "#skills",
+      "title": "What I use",
+      "note": "NEEDS_INPUT: your own one-line take on the skills section"
+    },
+    {
+      "id": "experience",
+      "target": "#experience",
+      "title": "Where I've built",
+      "note": "NEEDS_INPUT: your own one-line take on the experience section"
+    },
+    {
+      "id": "achievements",
+      "target": "#achievements",
+      "title": "Hackathons",
+      "note": "NEEDS_INPUT: your own one-line take on the achievements section"
+    },
+    {
+      "id": "contact",
+      "target": "#contact",
+      "title": "Get in touch",
+      "note": "NEEDS_INPUT: your own one-line take on how to reach you"
+    }
+  ]
+}

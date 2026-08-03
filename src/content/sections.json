@@ -1,0 +1,13 @@
+{
+  "work": { "heading": "Work", "moreHeading": "More projects" },
+  "skills": { "heading": "Skills" },
+  "experience": { "heading": "Experience", "educationHeading": "Education" },
+  "achievements": { "heading": "Achievements" },
+  "contact": { "heading": "Let's build something." },
+  "notFound": {
+    "eyebrow": "404",
+    "title": "This page doesn't exist.",
+    "body": "The page you're looking for was moved, renamed, or never existed.",
+    "cta": "Back to home"
+  }
+}

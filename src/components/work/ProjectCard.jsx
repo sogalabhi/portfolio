@@ -1,9 +1,13 @@
 import { ExternalLink, Trophy } from 'lucide-react'
+import { track } from '@vercel/analytics'
 import { GithubIcon } from '../misc/BrandIcons'
 
 export default function ProjectCard({ project }) {
   return (
-    <article className="flex flex-col rounded-2xl border border-line bg-card p-6 transition-shadow duration-150 hover:shadow-sm">
+    <article
+      data-reveal
+      className="flex flex-col rounded-2xl border border-line bg-card p-6 transition-shadow duration-150 hover:shadow-sm"
+    >
       {project.hackathon && (
         <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-clay/10 px-3 py-1 text-xs font-medium text-clay">
           <Trophy size={12} aria-hidden="true" />
@@ -32,6 +36,7 @@ export default function ProjectCard({ project }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${project.title} on GitHub`}
+            onClick={() => track('project_link_click', { project: project.id, type: 'github' })}
             className="text-ink transition-colors duration-150 hover:text-clay"
           >
             <GithubIcon size={16} />
@@ -43,6 +48,7 @@ export default function ProjectCard({ project }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${project.title} live link`}
+            onClick={() => track('project_link_click', { project: project.id, type: 'live' })}
             className="text-ink transition-colors duration-150 hover:text-clay"
           >
             <ExternalLink size={16} />

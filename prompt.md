@@ -134,7 +134,7 @@ Shadow         only on hover, and only shadow-sm → shadow-md
 Reveal       opacity 0→1, y 24→0, duration 0.6, ease "power2.out"
 Stagger      0.08 between siblings
 ScrollTrigger start: "top 85%", once: true
-Hover        150–200ms, color/border/shadow only
+Hover        150-200ms, color/border/shadow only
 ```
 
 **Forbidden:** scale transforms on hover that shift layout, parallax on text, scroll-jacking, entrance animations longer than 800ms, anything that delays reading.
@@ -231,12 +231,12 @@ Vertical line on the left, cards to the right.
 
 Nested-role rendering matters — it shows promotion, not job-hopping:
 ```
-● FOSSEE, IIT Bombay                        May 2025 – Present
+● FOSSEE, IIT Bombay                        May 2025 - Present
 │  React · Django · Redis · WebSockets
 │
-│  ├ Web Lead              Nov 2025 – Present
-│  ├ Autumn Intern         Aug – Nov 2025
-│  └ Summer Intern         May – Aug 2025
+│  ├ Web Lead              Nov 2025 - Present
+│  ├ Autumn Intern         Aug - Nov 2025
+│  └ Summer Intern         May - Aug 2025
 │
 │  • Led a team of 4...
 │  • Architected Redis caching and WebSocket infra...
@@ -250,7 +250,7 @@ Collapsed behind a `Show 7 more roles ↓` toggle. Everything present, nothing c
 
 ### 4.7 Education
 ```
-National Institute of Technology Karnataka, Surathkal      2023 – Present
+National Institute of Technology Karnataka, Surathkal      2023 - Present
 B.Tech, Civil Engineering — CGPA 7.92
 Minor, Electronics & Communication — CGPA 7.25
 ```
@@ -348,8 +348,8 @@ Fill these into `content/*.json`. Everything not listed here is already in the r
   "title": "",
   "tagline": "",              // one line, ≤ 90 chars, what it does for whom
   "domain": "",               // Data Engineering | Mobile | Infra | Web | Blockchain
-  "problem": "",              // 1–2 sentences: what was broken/missing
-  "whatIBuilt": ["", "", ""], // 3–4 bullets, each starting with a verb
+  "problem": "",              // 1-2 sentences: what was broken/missing
+  "whatIBuilt": ["", "", ""], // 3-4 bullets, each starting with a verb
   "impact": "",               // NUMBERS. users, latency, rows/sec, %, rank
   "stack": ["", ""],
   "links": { "github": "", "live": "", "demo": "", "playStore": "" },
@@ -385,7 +385,7 @@ Fill these into `content/*.json`. Everything not listed here is already in the r
 }
 ```
 
-You mentioned 5–6 hackathons, 2 wins. Send details for all — even non-placing ones, if the build was interesting.
+You mentioned 5-6 hackathons, 2 wins. Send details for all — even non-placing ones, if the build was interesting.
 
 Known so far: EthGlobal New Delhi (finalist round), AssetHub Goa 2025 (3rd/190+), Builder House Bengaluru (3rd, INR↔Polkadot bridge). **Three more missing.**
 
@@ -399,7 +399,7 @@ Résumé bullets are a starting point but are compressed. For each of FOSSEE, IR
 ### 6.4 Assets & links needed
 - [ ] Résumé PDF, final version → `public/resume.pdf`
 - [ ] A photo (optional but recommended — a real face outperforms an avatar)
-- [ ] Play Store link for Arjun Guruji + 2–3 app screenshots
+- [ ] Play Store link for Arjun Guruji + 2-3 app screenshots
 - [ ] Favicon
 - [ ] OG image, 1200×630 — name + tagline. Controls how the link looks when shared. Do not skip.
 - [ ] Any live project URLs
@@ -417,7 +417,7 @@ These are real inconsistencies between the résumé and LinkedIn. Pick one sourc
 
 | Item | Résumé | LinkedIn | Action |
 |---|---|---|---|
-| Momento / Humora dates | Nov 2025 – Feb 2026 | Oct 2025 – Jan 2026 | Resolve |
+| Momento / Humora dates | Nov 2025 - Feb 2026 | Oct 2025 - Jan 2026 | Resolve |
 | Osdag "Web Lead" start | May 2025 | Nov 2025 (Web Mentor) | Resolve |
 | Osdag role title | Web Lead | Web mentor | Pick one |
 | LinkedIn Autumn Intern blurb | — | "Will work on UI revamp" | Rewrite in past tense — the role is finished |
@@ -439,7 +439,7 @@ Do not consider a phase done until all of these pass.
 **Interaction**
 - [ ] `cursor-pointer` on everything clickable
 - [ ] Hover states are visible and do not shift layout
-- [ ] Transitions 150–300ms
+- [ ] Transitions 150-300ms
 - [ ] Touch targets ≥ 44×44px
 
 **Responsive**

@@ -11,4 +11,5 @@ export const EVENTS = {
   TELEPORT: 'world:teleport',
   PAUSE_INPUT: 'world:pauseInput',
   PROMPT_POS: 'world:promptPos',
+  SHEET_FULL: 'world:sheetFull',
 }

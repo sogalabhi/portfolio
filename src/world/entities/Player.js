@@ -29,6 +29,7 @@ export default class Player {
 
     this.facing = 'down'
     this.moveTarget = null
+    this.moveArriveCallback = null
     this.moving = false
     this.stuckSince = null
     this.lastPos = { x, y }
@@ -60,13 +61,15 @@ export default class Player {
     })
   }
 
-  moveTo(x, y) {
+  moveTo(x, y, { onArrive } = {}) {
     this.moveTarget = { x, y }
+    this.moveArriveCallback = onArrive || null
     this.stuckSince = null
   }
 
   stop() {
     this.moveTarget = null
+    this.moveArriveCallback = null
     this.sprite.body.setVelocity(0, 0)
   }
 
@@ -92,7 +95,10 @@ export default class Player {
     if (down) vy += 1
 
     const usingKeyboard = vx !== 0 || vy !== 0
-    if (usingKeyboard) this.moveTarget = null
+    if (usingKeyboard) {
+      this.moveTarget = null
+      this.moveArriveCallback = null
+    }
 
     if (!usingKeyboard && this.moveTarget) {
       const dx = this.moveTarget.x - this.sprite.x
@@ -101,6 +107,9 @@ export default class Player {
 
       if (dist < ARRIVE_DIST) {
         this.moveTarget = null
+        const onArrive = this.moveArriveCallback
+        this.moveArriveCallback = null
+        if (onArrive) onArrive()
       } else {
         vx = dx / dist
         vy = dy / dist
@@ -109,7 +118,9 @@ export default class Player {
         if (moved < 0.5) {
           this.stuckSince = this.stuckSince ?? performance.now()
           if (performance.now() - this.stuckSince > STUCK_MS) {
+            // gave up short of the target — not a real arrival, don't fire onArrive
             this.moveTarget = null
+            this.moveArriveCallback = null
             vx = 0
             vy = 0
           }

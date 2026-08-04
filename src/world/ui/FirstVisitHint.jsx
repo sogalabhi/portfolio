@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
+import { useMode } from '../DeviceModeContext'
 
 const STORAGE_KEY = 'world-hint-seen'
 
 export default function FirstVisitHint() {
+  const mode = useMode()
   const [dismissed, setDismissed] = useState(() => {
     try {
       return localStorage.getItem(STORAGE_KEY) === '1'
@@ -21,11 +23,24 @@ export default function FirstVisitHint() {
     }
   }
 
+  // touch dismisses on the first tap anywhere, not just the close button —
+  // never gate the world behind reading the hint
+  useEffect(() => {
+    if (dismissed || mode !== 'touch') return undefined
+    const handlePointerDown = () => dismiss()
+    window.addEventListener('pointerdown', handlePointerDown)
+    return () => window.removeEventListener('pointerdown', handlePointerDown)
+  }, [dismissed, mode])
+
   if (dismissed) return null
 
   return (
     <div className="fixed bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-3 rounded-lg border-2 border-[#2B2438] bg-[#F4EDE2] px-4 py-2.5 text-sm text-[#2B2438] shadow-md">
-      <p>WASD or click to move · E to interact</p>
+      <p>
+        {mode === 'touch'
+          ? 'Tap to move. Tap a building to enter it. Or use the menu ☰ to jump anywhere.'
+          : 'WASD or click to move · E to interact'}
+      </p>
       <button
         type="button"
         onClick={dismiss}

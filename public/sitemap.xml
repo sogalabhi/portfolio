@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- NEEDS_INPUT: replace the domain below with the deployed custom domain -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://NEEDS_INPUT-your-domain.com/</loc>
+    <loc>https://sogalabhi.vercel.app/</loc>
   </url>
 </urlset>

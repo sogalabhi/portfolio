@@ -2,12 +2,18 @@ import { useEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import { track } from '@vercel/analytics'
 import { bus, EVENTS } from '../bus'
+import { useMode } from '../DeviceModeContext'
 import { ZONES } from '../data/zones'
 import profile from '../../content/profile.json'
 
 const ZONE_IDS = ZONES.map((z) => z.id).filter((id) => id !== 'terminal')
 const COMMANDS = ['help', 'whoami', 'ls', 'cd', 'cat', 'contact', 'clear', 'sudo']
 const CAT_ARGS = ['resume']
+
+// The primary path on touch — commands are discoverable by tapping without
+// having to know to type 'help' first. Full runnable strings, not bare verbs,
+// since 'cd' needs a zone argument (that's what the zone jump menu is for).
+const CHIP_COMMANDS = ['whoami', 'ls', 'cat resume', 'contact', 'help', 'clear', 'sudo hire-me']
 const SUDO_ARGS = ['hire-me']
 
 // last whitespace-separated token is what Tab completes; which pool it matches
@@ -68,6 +74,7 @@ function Confetti() {
 }
 
 export default function Terminal({ onClose }) {
+  const mode = useMode()
   const [lines, setLines] = useState([
     "guest@island:~$ type 'help' to see what's here",
   ])
@@ -156,6 +163,12 @@ export default function Terminal({ onClose }) {
     setInput('')
   }
 
+  const runChip = (cmd) => {
+    setHistory((prev) => [...prev, cmd])
+    setHistoryIndex(-1)
+    runCommand(cmd)
+  }
+
   const handleTabComplete = () => {
     const { words, word, options } = getCompletionOptions(input)
     if (options.length === 0) return
@@ -207,7 +220,8 @@ export default function Terminal({ onClose }) {
         aria-label="Terminal"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
-        className="flex h-[70vh] w-full max-w-xl flex-col rounded-lg border border-[#4A7C4E]/40 bg-black/90 p-4 font-mono text-sm text-[#5FA65A] shadow-2xl"
+        className="flex h-[70dvh] w-full max-w-xl flex-col rounded-lg border border-[#4A7C4E]/40 bg-black/90 p-4 font-mono text-sm text-[#5FA65A] shadow-2xl"
+        style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
       >
         <div className="mb-2 flex items-center justify-between border-b border-[#4A7C4E]/30 pb-2">
           <p style={{ fontFamily: "'Press Start 2P', monospace" }} className="text-xs text-[#5FA65A]">
@@ -231,6 +245,21 @@ export default function Terminal({ onClose }) {
           ))}
         </div>
 
+        {mode === 'touch' && (
+          <div className="flex flex-wrap gap-2 border-t border-[#4A7C4E]/30 pt-2">
+            {CHIP_COMMANDS.map((cmd) => (
+              <button
+                key={cmd}
+                type="button"
+                onClick={() => runChip(cmd)}
+                className="min-h-11 cursor-pointer rounded-full border border-[#4A7C4E]/40 bg-[#4A7C4E]/15 px-3 py-2 text-sm text-[#5FA65A] active:bg-[#4A7C4E]/30"
+              >
+                {cmd}
+              </button>
+            ))}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="mt-2 flex items-center gap-2 border-t border-[#4A7C4E]/30 pt-2">
           <span>guest@island:~$</span>
           <input
@@ -239,6 +268,7 @@ export default function Terminal({ onClose }) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             className="flex-1 bg-transparent text-[#F4EDE2] outline-none"
+            style={mode === 'touch' ? { fontSize: 16 } : undefined}
             autoComplete="off"
             spellCheck="false"
             aria-label="Terminal input"

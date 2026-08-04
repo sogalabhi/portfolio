@@ -5,7 +5,11 @@ import { SPAWN_POINT, ZONES, TILE } from '../data/zones'
 import Player from '../entities/Player'
 import ZoneManager from '../entities/Zone'
 
-const ZOOM = 1.5
+const ZOOM = { pointer: 1.5, touch: 1 }
+const LERP = { pointer: 0.1, touch: 0.15 }
+const FOLLOW_OFFSET_Y = { pointer: 0, touch: 40 }
+const TOUCH_ZONE_PAD = 20
+const FOOTPRINT_THROTTLE_MS = 180
 
 const PROP_BY_ZONE = {
   workshop: 'prop-workbench',
@@ -48,6 +52,11 @@ export default class WorldScene extends Phaser.Scene {
   create() {
     if (import.meta.env.DEV) window.__worldScene = this
 
+    // read once here — camera/input config doesn't react to mode changing
+    // mid-session (e.g. a tablet rotating), matching how Player/WorldScene
+    // pick their art/behavior once at create
+    this.mode = this.registry.get('mode') || 'pointer'
+
     const mapData = buildMap()
 
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -71,9 +80,10 @@ export default class WorldScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
     const cam = this.cameras.main
     cam.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
-    cam.setZoom(ZOOM)
-    const lerp = this.reducedMotion ? 1 : 0.1
+    cam.setZoom(ZOOM[this.mode])
+    const lerp = this.reducedMotion ? 1 : LERP[this.mode]
     cam.startFollow(this.player.sprite, true, lerp, lerp)
+    cam.setFollowOffset(0, FOLLOW_OFFSET_Y[this.mode])
 
     this.zoneManager = new ZoneManager(this, this.player, ZONES)
 
@@ -104,7 +114,11 @@ export default class WorldScene extends Phaser.Scene {
 
     this.input.on('pointerdown', (pointer) => {
       if (this.pauseInput) return
-      this.player.moveTo(pointer.worldX, pointer.worldY)
+      const hitZone = this.mode === 'touch' ? this.zoneAt(pointer.worldX, pointer.worldY) : null
+
+      this.player.moveTo(pointer.worldX, pointer.worldY, {
+        onArrive: hitZone ? () => bus.emit(EVENTS.INTERACT, { id: hitZone.id }) : null,
+      })
     })
 
     const capturedKeys = [
@@ -179,9 +193,21 @@ export default class WorldScene extends Phaser.Scene {
     }
   }
 
+  // Tap target, not player proximity — a finger is imprecise, so touch gets
+  // extra hit-area radius (a near-miss that walks past the building is the
+  // most annoying possible failure). Independent of ZoneManager's activeZone,
+  // which drives the desktop E-prompt off the player's own position.
+  zoneAt(x, y) {
+    const pad = this.mode === 'touch' ? TOUCH_ZONE_PAD : 0
+    return ZONES.find(
+      (z) => Math.abs(x - z.x) <= z.width / 2 + pad && Math.abs(y - z.y) <= z.height / 2 + pad
+    )
+  }
+
   updateFootprints(time) {
     if (this.reducedMotion || !this.player.moving) return
-    if (this.lastFootprintAt && time - this.lastFootprintAt < 180) return
+    const throttle = this.mode === 'touch' ? FOOTPRINT_THROTTLE_MS * 2 : FOOTPRINT_THROTTLE_MS
+    if (this.lastFootprintAt && time - this.lastFootprintAt < throttle) return
 
     const { x, y } = this.player.sprite
     const tile = this.groundLayer.getTileAtWorldXY(x, y)

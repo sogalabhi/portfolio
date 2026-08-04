@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://NEEDS_INPUT-your-domain.com/sitemap.xml
+Sitemap: https://sogalabhi.vercel.app/sitemap.xml

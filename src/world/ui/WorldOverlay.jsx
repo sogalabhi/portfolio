@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
 import { bus, EVENTS } from '../bus'
+import { useMode } from '../DeviceModeContext'
 import WorldNav from './WorldNav'
 import InteractPrompt from './InteractPrompt'
-import ZonePanel from './ZonePanel'
+import ZonePanel, { CONTENT_BY_ZONE, ZONE_TITLES } from './ZonePanel'
+import BottomSheet from './BottomSheet'
 import Terminal from './Terminal'
 import FirstVisitHint from './FirstVisitHint'
+import ZoneMenu from './ZoneMenu'
+import RotatePrompt from './RotatePrompt'
 
 export default function WorldOverlay() {
+  const mode = useMode()
   const [nearZone, setNearZone] = useState(null)
   const [promptPos, setPromptPos] = useState(null)
   const [openZone, setOpenZone] = useState(null)
@@ -50,15 +55,33 @@ export default function WorldOverlay() {
     return () => window.removeEventListener('keydown', handleKey)
   }, [openZone, closePanel])
 
+  const handleSheetHeight = useCallback((heightPct) => {
+    bus.emit(EVENTS.SHEET_FULL, heightPct >= 90)
+  }, [])
+
+  const zoneSheetOpen = openZone && openZone !== 'terminal'
+  const ZoneContent = zoneSheetOpen ? CONTENT_BY_ZONE[openZone] : null
+
   return (
     <>
       <WorldNav />
+      {mode === 'touch' && <ZoneMenu />}
       {!openZone && <FirstVisitHint />}
-      {!openZone && nearZone && promptPos && (
+      {mode === 'pointer' && !openZone && nearZone && promptPos && (
         <InteractPrompt x={promptPos.x} y={promptPos.y} zoneId={nearZone} />
       )}
       {openZone === 'terminal' && <Terminal onClose={closePanel} />}
-      {openZone && openZone !== 'terminal' && <ZonePanel zoneId={openZone} onClose={closePanel} />}
+      {zoneSheetOpen && mode === 'touch' && (
+        <BottomSheet
+          title={ZONE_TITLES[openZone] ?? openZone}
+          onClose={closePanel}
+          onHeightChange={handleSheetHeight}
+        >
+          {ZoneContent ? <ZoneContent /> : <p className="text-[#F4EDE2]/70">Coming soon.</p>}
+        </BottomSheet>
+      )}
+      {zoneSheetOpen && mode === 'pointer' && <ZonePanel zoneId={openZone} onClose={closePanel} />}
+      <RotatePrompt />
     </>
   )
 }

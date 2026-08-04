@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 import profile from '../../content/profile.json'
 import projects from '../../content/projects.json'
@@ -7,7 +8,7 @@ import education from '../../content/education.json'
 import achievements from '../../content/achievements.json'
 import useGithubContributions from '../../hooks/useGithubContributions'
 
-const TITLES = {
+export const ZONE_TITLES = {
   spawn: 'Welcome',
   workshop: 'Workshop — Projects',
   garden: 'Garden — Skills',
@@ -56,13 +57,13 @@ function WorkshopContent() {
               </span>
             ))}
           </div>
-          <div className="mt-3 flex gap-4 text-sm">
+          <div className="-my-2.5 mt-3 flex gap-4 text-sm">
             {p.links.github && (
               <a
                 href={p.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#E86A6A] hover:underline"
+                className="inline-block py-2.5 text-[#E86A6A] hover:underline"
               >
                 GitHub
               </a>
@@ -72,7 +73,7 @@ function WorkshopContent() {
                 href={p.links.live || p.links.demo || p.links.playStore}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#E86A6A] hover:underline"
+                className="inline-block py-2.5 text-[#E86A6A] hover:underline"
               >
                 Live
               </a>
@@ -88,6 +89,14 @@ const CROP_COLORS = ['bg-[#5A4632]', 'bg-[#3E7A44]/30', 'bg-[#3E7A44]/55', 'bg-[
 
 function GardenContent() {
   const heatmap = useGithubContributions()
+  const scrollRef = useRef(null)
+
+  // scrolled to the most recent weeks by default — on a narrow sheet the
+  // heatmap overflows and oldest-first would otherwise open on old history
+  useEffect(() => {
+    const el = scrollRef.current
+    if (el) el.scrollLeft = el.scrollWidth
+  }, [heatmap.status])
 
   return (
     <div>
@@ -110,6 +119,7 @@ function GardenContent() {
       {heatmap.status === 'ready' ? (
         <div>
           <div
+            ref={scrollRef}
             className="flex gap-0.5 overflow-x-auto pb-2"
             role="img"
             aria-label={`${heatmap.total} contributions in the last year, ${heatmap.streak}-day streak`}
@@ -174,15 +184,18 @@ function TowerContent() {
   return (
     <div className="space-y-5">
       <p className="text-sm text-[#F4EDE2]/70">Sending a signal to —</p>
-      <a href={`mailto:${profile.email}`} className="block text-lg font-semibold text-[#E86A6A] hover:underline">
+      <a
+        href={`mailto:${profile.email}`}
+        className="-my-2.5 inline-block py-2.5 text-lg font-semibold text-[#E86A6A] hover:underline"
+      >
         {profile.email}
       </a>
-      <div className="flex gap-5 text-sm">
+      <div className="-my-2.5 flex gap-5 text-sm">
         <a
           href={profile.links.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[#F4EDE2]/80 hover:text-[#F2A65A]"
+          className="inline-block py-2.5 text-[#F4EDE2]/80 hover:text-[#F2A65A]"
         >
           GitHub
         </a>
@@ -190,7 +203,7 @@ function TowerContent() {
           href={profile.links.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[#F4EDE2]/80 hover:text-[#F2A65A]"
+          className="inline-block py-2.5 text-[#F4EDE2]/80 hover:text-[#F2A65A]"
         >
           LinkedIn
         </a>
@@ -200,7 +213,7 @@ function TowerContent() {
   )
 }
 
-const CONTENT_BY_ZONE = {
+export const CONTENT_BY_ZONE = {
   spawn: SpawnContent,
   workshop: WorkshopContent,
   garden: GardenContent,
@@ -211,7 +224,7 @@ const CONTENT_BY_ZONE = {
 
 export default function ZonePanel({ zoneId, onClose }) {
   const Content = CONTENT_BY_ZONE[zoneId]
-  const title = TITLES[zoneId] ?? zoneId
+  const title = ZONE_TITLES[zoneId] ?? zoneId
 
   return (
     <div className="fixed inset-0 z-40 flex items-stretch justify-end bg-black/30" onClick={onClose}>

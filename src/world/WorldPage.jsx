@@ -1,52 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Phaser from 'phaser'
-import { makeConfig } from './config'
+import { makeConfig, getViewportSize } from './config'
 import { bus, EVENTS } from './bus'
+import { useDeviceMode } from './useDeviceMode'
+import { DeviceModeProvider } from './DeviceModeContext'
 import WorldOverlay from './ui/WorldOverlay'
+import EdgeCaseNotice from './ui/EdgeCaseNotice'
 import profile from '../content/profile.json'
-
-function isMobileGated() {
-  if (typeof window === 'undefined') return false
-  return window.matchMedia('(pointer: coarse)').matches && window.innerWidth < 1024
-}
-
-function MobileGate() {
-  const [countdown, setCountdown] = useState(4)
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (countdown <= 0) {
-      navigate('/')
-      return undefined
-    }
-    const timer = setTimeout(() => setCountdown((c) => c - 1), 1000)
-    return () => clearTimeout(timer)
-  }, [countdown, navigate])
-
-  return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-6 bg-paper px-6 text-center">
-      <p className="max-w-[36ch] text-lg text-ink">
-        The world is best on desktop. Here's the full portfolio instead.
-      </p>
-      <Link
-        to="/"
-        className="inline-flex items-center gap-2 rounded-[10px] bg-clay px-5 py-3 text-sm font-medium text-paper transition-colors duration-150 hover:bg-clay/90"
-      >
-        {countdown > 0 ? `Go to portfolio (${countdown})` : 'Go to portfolio'}
-      </Link>
-      {countdown > 0 && (
-        <button
-          type="button"
-          onClick={() => setCountdown(-1)}
-          className="cursor-pointer text-sm text-slate underline underline-offset-2"
-        >
-          Cancel redirect
-        </button>
-      )}
-    </div>
-  )
-}
 
 function WorldLoading({ progress }) {
   return (
@@ -70,7 +31,7 @@ export default function WorldPage() {
   const gameRef = useRef(null)
   const [ready, setReady] = useState(false)
   const [progress, setProgress] = useState(0)
-  const [gated] = useState(isMobileGated)
+  const mode = useDeviceMode()
 
   useEffect(() => {
     const meta = document.createElement('meta')
@@ -80,7 +41,7 @@ export default function WorldPage() {
 
     const canonical = document.createElement('link')
     canonical.rel = 'canonical'
-    canonical.href = 'https://NEEDS_INPUT-your-domain.com/'
+    canonical.href = 'https://sogalabhi.vercel.app/'
     document.head.appendChild(canonical)
 
     const link = document.createElement('link')
@@ -96,7 +57,6 @@ export default function WorldPage() {
   }, [])
 
   useEffect(() => {
-    if (gated) return undefined
     if (import.meta.env.DEV) window.__worldBus = bus
 
     const handleProgress = (v) => setProgress(v)
@@ -104,31 +64,70 @@ export default function WorldPage() {
     bus.on(EVENTS.BOOT_PROGRESS, handleProgress)
     bus.on(EVENTS.READY, handleReady)
 
+    // mode is read once here, at the moment the game boots — Phaser scenes
+    // pick camera/input config off the registry at create() and don't react
+    // to it changing later (e.g. a tablet rotating mid-session)
     gameRef.current = new Phaser.Game(makeConfig(containerRef.current))
+    gameRef.current.registry.set('mode', mode)
 
-    const handleVisibility = () => {
+    // loop.sleep() covers two independent reasons the canvas isn't visible —
+    // tab hidden, or a bottom sheet fully covering it — either can toggle
+    // independently, so track both and only wake once neither holds
+    let hidden = document.hidden
+    let sheetFull = false
+    const syncLoop = () => {
       if (!gameRef.current) return
-      if (document.hidden) gameRef.current.loop.sleep()
+      if (hidden || sheetFull) gameRef.current.loop.sleep()
       else gameRef.current.loop.wake()
     }
+
+    const handleVisibility = () => {
+      hidden = document.hidden
+      syncLoop()
+    }
+    const handleSheetFull = (isFull) => {
+      sheetFull = isFull
+      syncLoop()
+    }
     document.addEventListener('visibilitychange', handleVisibility)
+    bus.on(EVENTS.SHEET_FULL, handleSheetFull)
+
+    // iOS Safari fires 'resize' continuously while the toolbar collapses on
+    // scroll — debounce it, and read visualViewport (not innerWidth/Height,
+    // which can lag during that same animation) for the size to resize to
+    let resizeTimer = null
+    const handleResize = () => {
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(() => {
+        if (!gameRef.current) return
+        const { width, height } = getViewportSize()
+        gameRef.current.scale.resize(width, height)
+      }, 150)
+    }
+    window.addEventListener('resize', handleResize)
+    window.visualViewport?.addEventListener('resize', handleResize)
 
     return () => {
       bus.off(EVENTS.BOOT_PROGRESS, handleProgress)
       bus.off(EVENTS.READY, handleReady)
+      bus.off(EVENTS.SHEET_FULL, handleSheetFull)
       document.removeEventListener('visibilitychange', handleVisibility)
+      window.removeEventListener('resize', handleResize)
+      window.visualViewport?.removeEventListener('resize', handleResize)
+      clearTimeout(resizeTimer)
       gameRef.current?.destroy(true)
       gameRef.current = null
     }
-  }, [gated])
-
-  if (gated) return <MobileGate />
+  }, [])
 
   return (
-    <div className="fixed inset-0 overflow-hidden bg-[#87C5C2]">
-      <div ref={containerRef} className="absolute inset-0" />
-      {!ready && <WorldLoading progress={progress} />}
-      {ready && <WorldOverlay />}
-    </div>
+    <DeviceModeProvider value={mode}>
+      <div className="fixed inset-0 overflow-hidden bg-[#87C5C2]">
+        <div ref={containerRef} className="absolute inset-0" />
+        {!ready && <WorldLoading progress={progress} />}
+        {ready && <WorldOverlay />}
+        <EdgeCaseNotice />
+      </div>
+    </DeviceModeProvider>
   )
 }

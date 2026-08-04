@@ -1,11 +1,16 @@
 import profile from '../../content/profile.json'
 
+// Deep plum (--color-panel), not the paper background the rest of the page
+// uses — a single deliberate dark section, the "you're leaving the article"
+// cue right before the page ends. See index.css for why this and teal are
+// the only two /world colors borrowed here, and why as accents, not a
+// palette-wide swap.
 export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-line py-10">
-      <div className="mx-auto flex max-w-5xl flex-col gap-4 px-6 text-sm text-faint md:flex-row md:items-center md:justify-between md:px-10">
+    <footer className="bg-panel py-10">
+      <div className="mx-auto flex max-w-5xl flex-col gap-4 px-6 text-sm text-paper/60 md:flex-row md:items-center md:justify-between md:px-10">
         <p>
           © {year} {profile.name}
         </p>

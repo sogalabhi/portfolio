@@ -21,6 +21,14 @@
   --color-moss: #4A7C4E;
   --color-sand: #E8DCC4;
 
+  /* the two /world colors that aren't already duplicates of the homepage
+     palette (its terracotta/moss/sand/cream match clay/moss/sand/paper
+     exactly) — used as rare, deliberate accents, not a base-palette swap:
+     panel for one contained dark section (the footer), teal for a single
+     hover accent on the /world link. See conversation for the reasoning. */
+  --color-panel: #2B2438;
+  --color-teal: #87C5C2;
+
   --font-display: "Newsreader", ui-serif, Georgia, serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Departure Mono", ui-monospace, monospace;

@@ -73,7 +73,7 @@ export default function Nav() {
           <Link
             to="/world"
             onClick={() => track('world_explore_click', { source: 'nav' })}
-            className="inline-flex items-center gap-2 rounded-[10px] border border-line px-4 py-2 text-sm font-medium text-ink transition-colors duration-150 hover:border-clay hover:text-clay"
+            className="inline-flex items-center gap-2 rounded-[10px] border border-line px-4 py-2 text-sm font-medium text-ink transition-colors duration-150 hover:border-teal hover:text-teal"
           >
             {navContent.exploreLabel}
             <ArrowUpRight size={16} aria-hidden="true" />

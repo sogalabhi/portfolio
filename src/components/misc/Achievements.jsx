@@ -10,11 +10,9 @@ export default function Achievements() {
 
       <ul ref={revealRef} className="divide-y divide-line border-t border-line">
         {achievements.hackathons.map((item) => (
-          <li key={item.event} data-reveal className="flex flex-wrap items-baseline gap-x-6 gap-y-2 py-6">
-            <span className="font-mono text-3xl font-medium text-clay sm:w-40 sm:shrink-0">
-              {item.result}
-            </span>
-            <div className="min-w-0 flex-1">
+          <li key={item.event} data-reveal className="flex flex-col gap-1 py-6">
+            <span className="font-mono text-xl font-medium text-clay sm:text-2xl">{item.result}</span>
+            <div>
               <h3 className="font-display text-lg font-semibold text-ink">{item.event}</h3>
               <p className="mt-1 text-sm text-slate">{item.project}</p>
               {item.oneLiner && item.oneLiner !== 'NEEDS_INPUT' && (

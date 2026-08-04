@@ -1,5 +1,12 @@
 import Phaser from 'phaser'
 
+// 'char' is a single static 32x32 sprite (a "32x32 Battlers" pack frame — front-
+// facing only, no walk cycle), loaded by BootScene from world/char.png. It's a
+// quick real-art swap-in, not the deliberate LimeZu/Kenney walk-cycle pack call —
+// see scripts/assets/README.md for that. With no frames to animate, we just flip
+// the sprite horizontally for left/right and hold the single pose otherwise.
+// Falls back to the placeholder 'player' texture/anim rig when 'char' isn't loaded.
+
 const SPEED = 130
 const ARRIVE_DIST = 4
 const STUCK_MS = 300
@@ -7,9 +14,17 @@ const STUCK_MS = 300
 export default class Player {
   constructor(scene, x, y) {
     this.scene = scene
-    this.sprite = scene.physics.add.sprite(x, y, 'player', 'down-0')
-    this.sprite.body.setSize(8, 6)
-    this.sprite.body.setOffset(2, 10)
+    this.usingCharArt = scene.textures.exists('char')
+
+    if (this.usingCharArt) {
+      this.sprite = scene.physics.add.sprite(x, y, 'char', 0)
+      this.sprite.body.setSize(20, 14)
+      this.sprite.body.setOffset(6, 16)
+    } else {
+      this.sprite = scene.physics.add.sprite(x, y, 'player', 'down-0')
+      this.sprite.body.setSize(8, 6)
+      this.sprite.body.setOffset(2, 10)
+    }
     this.sprite.setDepth(y)
 
     this.facing = 'down'
@@ -18,8 +33,10 @@ export default class Player {
     this.stuckSince = null
     this.lastPos = { x, y }
 
-    this.createAnimations()
-    this.sprite.play('idle-down')
+    if (!this.usingCharArt) {
+      this.createAnimations()
+      this.sprite.play('idle-down')
+    }
   }
 
   createAnimations() {
@@ -56,7 +73,7 @@ export default class Player {
   update(delta, cursors, wasd, pauseInput) {
     if (pauseInput) {
       this.sprite.body.setVelocity(0, 0)
-      this.sprite.anims.play(`idle-${this.facing}`, true)
+      if (!this.usingCharArt) this.sprite.anims.play(`idle-${this.facing}`, true)
       this.sprite.setDepth(this.sprite.y)
       return
     }
@@ -111,10 +128,12 @@ export default class Player {
     if (vec.length() > 0) {
       this.facing =
         Math.abs(vec.x) > Math.abs(vec.y) ? (vec.x > 0 ? 'right' : 'left') : vec.y > 0 ? 'down' : 'up'
-      this.sprite.anims.play(`walk-${this.facing}`, true)
+      if (this.usingCharArt) this.sprite.setFlipX(this.facing === 'left')
+      else this.sprite.anims.play(`walk-${this.facing}`, true)
       this.moving = true
     } else {
-      this.sprite.anims.play(`idle-${this.facing}`, true)
+      if (this.usingCharArt) this.sprite.setFlipX(this.facing === 'left')
+      else this.sprite.anims.play(`idle-${this.facing}`, true)
       this.moving = false
     }
 

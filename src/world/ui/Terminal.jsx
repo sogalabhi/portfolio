@@ -6,6 +6,29 @@ import { ZONES } from '../data/zones'
 import profile from '../../content/profile.json'
 
 const ZONE_IDS = ZONES.map((z) => z.id).filter((id) => id !== 'terminal')
+const COMMANDS = ['help', 'whoami', 'ls', 'cd', 'cat', 'contact', 'clear', 'sudo']
+const CAT_ARGS = ['resume']
+const SUDO_ARGS = ['hire-me']
+
+// last whitespace-separated token is what Tab completes; which pool it matches
+// against depends on the command word that started the line
+function getCompletionOptions(value) {
+  const words = value.split(/\s+/)
+  const word = words[words.length - 1]
+  const pool =
+    words.length <= 1
+      ? COMMANDS
+      : { cd: ZONE_IDS, cat: CAT_ARGS, sudo: SUDO_ARGS }[words[0]] || []
+  return { words, word, options: pool.filter((o) => o.startsWith(word)) }
+}
+
+function longestCommonPrefix(strings) {
+  return strings.reduce((prefix, s) => {
+    let i = 0
+    while (i < prefix.length && i < s.length && prefix[i] === s[i]) i++
+    return prefix.slice(0, i)
+  })
+}
 
 const HELP_LINES = [
   'whoami        who is this',
@@ -133,8 +156,30 @@ export default function Terminal({ onClose }) {
     setInput('')
   }
 
+  const handleTabComplete = () => {
+    const { words, word, options } = getCompletionOptions(input)
+    if (options.length === 0) return
+
+    if (options.length === 1) {
+      words[words.length - 1] = options[0]
+      setInput(`${words.join(' ')} `)
+      return
+    }
+
+    const lcp = longestCommonPrefix(options)
+    if (lcp.length > word.length) {
+      words[words.length - 1] = lcp
+      setInput(words.join(' '))
+    } else {
+      print(options.join('  '))
+    }
+  }
+
   const handleKeyDown = (e) => {
-    if (e.key === 'ArrowUp') {
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      handleTabComplete()
+    } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       if (history.length === 0) return
       const nextIndex = historyIndex === -1 ? history.length - 1 : Math.max(historyIndex - 1, 0)

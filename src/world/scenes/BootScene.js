@@ -32,6 +32,13 @@ export default class BootScene extends Phaser.Scene {
     bus.emit(EVENTS.BOOT_PROGRESS, 0.8)
     this.generatePropTextures()
     bus.emit(EVENTS.BOOT_PROGRESS, 1)
+
+    // real art, once generated per scripts/assets/README.md — these 404 today,
+    // which Phaser handles gracefully (fires 'loaderror', doesn't throw). Scenes
+    // check `this.textures.exists('objects')` / `'char'` and fall back to the
+    // placeholder textures above whenever these haven't been produced yet.
+    this.load.atlas('objects', 'world/atlas/atlas.png', 'world/atlas/atlas.json')
+    this.load.spritesheet('char', 'world/char.png', { frameWidth: 32, frameHeight: 32 })
   }
 
   create() {

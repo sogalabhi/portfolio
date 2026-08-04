@@ -3,7 +3,7 @@ import BootScene from './scenes/BootScene'
 import WorldScene from './scenes/WorldScene'
 
 export const TILE = 16
-export const ZOOM = 3
+export const ZOOM = 1.5
 
 export function makeConfig(parent) {
   return {

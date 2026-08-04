@@ -5,7 +5,7 @@ import { SPAWN_POINT, ZONES, TILE } from '../data/zones'
 import Player from '../entities/Player'
 import ZoneManager from '../entities/Zone'
 
-const ZOOM = 3
+const ZOOM = 1.5
 
 const PROP_BY_ZONE = {
   workshop: 'prop-workbench',
@@ -17,6 +17,28 @@ const PROP_BY_ZONE = {
   spawn: 'prop-signpost',
 }
 
+// atlas frame names these placeholders become once scripts/assets/README.md's
+// pipeline has produced public/world/atlas/{atlas.png,atlas.json}
+const ATLAS_FRAME_BY_ZONE = {
+  workshop: 'workshop',
+  garden: 'shed',
+  archive: 'archive',
+  shrine: 'shrine',
+  tower: 'tower',
+  terminal: 'terminal_desk',
+  spawn: 'signpost',
+}
+
+// falls back to the placeholder texture whenever the real atlas (or a given
+// frame within it) hasn't been generated yet — see BootScene.js
+function resolvePropTexture(scene, placeholderKey, atlasFrame) {
+  const atlas = scene.textures.exists('objects') && scene.textures.get('objects')
+  if (atlas && atlasFrame && atlas.has(atlasFrame)) {
+    return { key: 'objects', frame: atlasFrame, isReal: true }
+  }
+  return { key: placeholderKey, frame: undefined, isReal: false }
+}
+
 export default class WorldScene extends Phaser.Scene {
   constructor() {
     super('World')
@@ -24,6 +46,8 @@ export default class WorldScene extends Phaser.Scene {
   }
 
   create() {
+    if (import.meta.env.DEV) window.__worldScene = this
+
     const mapData = buildMap()
 
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -56,7 +80,11 @@ export default class WorldScene extends Phaser.Scene {
     ZONES.forEach((zone) => {
       const propKey = PROP_BY_ZONE[zone.id]
       if (!propKey) return
-      const prop = this.add.image(zone.x, zone.y, propKey)
+      const tex = resolvePropTexture(this, propKey, ATLAS_FRAME_BY_ZONE[zone.id])
+      const prop = this.add.image(zone.x, zone.y, tex.key, tex.frame)
+      // real generated art is authored bottom-anchored (feet at sprite.y) so it
+      // sorts correctly against the player; placeholder rects stay center-anchored
+      if (tex.isReal) prop.setOrigin(0.5, 1)
       prop.setDepth(zone.y)
     })
 
@@ -140,8 +168,12 @@ export default class WorldScene extends Phaser.Scene {
         this.lastPromptEmit = time
         const zone = this.zoneManager.getZone(this.zoneManager.activeZone)
         const cam = this.cameras.main
-        const screenX = (zone.x - cam.scrollX) * cam.zoom
-        const screenY = (zone.y - 40 - cam.scrollY) * cam.zoom
+        // cam.worldView (not scrollX/scrollY — this Phaser version's scrollX/Y
+        // don't mean "world coord at viewport's top-left" while a camera is
+        // actively following with lerp; worldView.x/y verified empirically to
+        // be the correct reference for that) gives the visible world rectangle
+        const screenX = (zone.x - cam.worldView.x) * cam.zoom
+        const screenY = (zone.y - 40 - cam.worldView.y) * cam.zoom
         bus.emit(EVENTS.PROMPT_POS, { id: zone.id, x: screenX, y: screenY })
       }
     }

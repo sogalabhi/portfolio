@@ -10,11 +10,11 @@ import useGithubContributions from '../../hooks/useGithubContributions'
 
 export const ZONE_TITLES = {
   spawn: 'Welcome',
-  workshop: 'Workshop — Projects',
-  garden: 'Garden — Skills',
-  archive: 'Archive — Experience',
-  shrine: 'Shrine — Achievements',
-  tower: 'Tower — Contact',
+  workshop: 'Workshop - Projects',
+  garden: 'Garden - Skills',
+  archive: 'Archive - Experience',
+  shrine: 'Shrine - Achievements',
+  tower: 'Tower - Contact',
 }
 
 function SpawnContent() {
@@ -91,7 +91,7 @@ function GardenContent() {
   const heatmap = useGithubContributions()
   const scrollRef = useRef(null)
 
-  // scrolled to the most recent weeks by default — on a narrow sheet the
+  // scrolled to the most recent weeks by default - on a narrow sheet the
   // heatmap overflows and oldest-first would otherwise open on old history
   useEffect(() => {
     const el = scrollRef.current
@@ -183,7 +183,7 @@ function ShrineContent() {
 function TowerContent() {
   return (
     <div className="space-y-5">
-      <p className="text-sm text-[#F4EDE2]/70">Sending a signal to —</p>
+      <p className="text-sm text-[#F4EDE2]/70">Sending a signal to -</p>
       <a
         href={`mailto:${profile.email}`}
         className="-my-2.5 inline-block py-2.5 text-lg font-semibold text-[#E86A6A] hover:underline"

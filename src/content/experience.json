@@ -10,11 +10,11 @@
         { "title": "Summer Intern", "period": "May 2025 - Aug 2025" }
       ],
       "bullets": [
-        "NEEDS_INPUT: complete detail on leading a team of 4 — what was delivered, for whom, team size confirmation",
-        "NEEDS_INPUT: complete detail on architecting Redis caching + WebSocket infra — scale/latency numbers",
-        "NEEDS_INPUT: complete detail on load testing scripts + live CPU/RAM/core dashboard — thresholds, tooling"
+        "NEEDS_INPUT: complete detail on leading a team of 4 - what was delivered, for whom, team size confirmation",
+        "NEEDS_INPUT: complete detail on architecting Redis caching + WebSocket infra - scale/latency numbers",
+        "NEEDS_INPUT: complete detail on load testing scripts + live CPU/RAM/core dashboard - thresholds, tooling"
       ],
-      "note": "NEEDS_INPUT: reconcile résumé vs LinkedIn — Web Lead start date (May 2025 vs Nov 2025) and title (Web Lead vs Web Mentor). See prompt.md section 7."
+      "note": "NEEDS_INPUT: reconcile résumé vs LinkedIn - Web Lead start date (May 2025 vs Nov 2025) and title (Web Lead vs Web Mentor). See prompt.md section 7."
     },
     {
       "org": "IRIS, NITK",
@@ -31,7 +31,7 @@
     },
     {
       "org": "Momento (Humora Technologies)",
-      "period": "NEEDS_INPUT: résumé says Nov 2025 - Feb 2026, LinkedIn says Oct 2025 - Jan 2026 — resolve",
+      "period": "NEEDS_INPUT: résumé says Nov 2025 - Feb 2026, LinkedIn says Oct 2025 - Jan 2026 - resolve",
       "stack": ["NEEDS_INPUT"],
       "roles": [
         { "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" }

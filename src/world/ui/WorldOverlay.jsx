@@ -9,12 +9,14 @@ import Terminal from './Terminal'
 import FirstVisitHint from './FirstVisitHint'
 import ZoneMenu from './ZoneMenu'
 import RotatePrompt from './RotatePrompt'
+import ZoneLabels from './ZoneLabels'
 
 export default function WorldOverlay() {
   const mode = useMode()
   const [nearZone, setNearZone] = useState(null)
   const [promptPos, setPromptPos] = useState(null)
   const [openZone, setOpenZone] = useState(null)
+  const [zoneLabels, setZoneLabels] = useState([])
 
   const closePanel = useCallback(() => {
     setOpenZone(null)
@@ -32,17 +34,20 @@ export default function WorldOverlay() {
       setOpenZone(id)
       bus.emit(EVENTS.PAUSE_INPUT, true)
     }
+    const handleZoneLabels = (labels) => setZoneLabels(labels)
 
     bus.on(EVENTS.ZONE_ENTER, handleEnter)
     bus.on(EVENTS.ZONE_EXIT, handleExit)
     bus.on(EVENTS.PROMPT_POS, handlePrompt)
     bus.on(EVENTS.INTERACT, handleInteract)
+    bus.on(EVENTS.ZONE_LABELS, handleZoneLabels)
 
     return () => {
       bus.off(EVENTS.ZONE_ENTER, handleEnter)
       bus.off(EVENTS.ZONE_EXIT, handleExit)
       bus.off(EVENTS.PROMPT_POS, handlePrompt)
       bus.off(EVENTS.INTERACT, handleInteract)
+      bus.off(EVENTS.ZONE_LABELS, handleZoneLabels)
     }
   }, [])
 
@@ -65,6 +70,7 @@ export default function WorldOverlay() {
   return (
     <>
       <WorldNav />
+      {!openZone && <ZoneLabels labels={zoneLabels} />}
       {mode === 'touch' && <ZoneMenu />}
       {!openZone && <FirstVisitHint />}
       {mode === 'pointer' && !openZone && nearZone && promptPos && (

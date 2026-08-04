@@ -10,6 +10,21 @@ const LERP = { pointer: 0.1, touch: 0.15 }
 const FOLLOW_OFFSET_Y = { pointer: 0, touch: 40 }
 const TOUCH_ZONE_PAD = 20
 const FOOTPRINT_THROTTLE_MS = 180
+const LABEL_THROTTLE_MS = 66
+const LABEL_MARGIN = 10
+
+// building heights (scripts/assets/README.md's Tier B sizes) - labels float
+// above each building's actual top edge, not a single fixed offset, since a
+// signpost (48 tall) and the tower (112 tall) would otherwise clash
+const BUILDING_HEIGHT_BY_ZONE = {
+  workshop: 80,
+  tower: 112,
+  shrine: 72,
+  garden: 64,
+  terminal: 48,
+  archive: 72,
+  spawn: 48,
+}
 
 const PROP_BY_ZONE = {
   workshop: 'prop-workbench',
@@ -34,7 +49,7 @@ const ATLAS_FRAME_BY_ZONE = {
 }
 
 // falls back to the placeholder texture whenever the real atlas (or a given
-// frame within it) hasn't been generated yet — see BootScene.js
+// frame within it) hasn't been generated yet - see BootScene.js
 function resolvePropTexture(scene, placeholderKey, atlasFrame) {
   const atlas = scene.textures.exists('objects') && scene.textures.get('objects')
   if (atlas && atlasFrame && atlas.has(atlasFrame)) {
@@ -52,7 +67,7 @@ export default class WorldScene extends Phaser.Scene {
   create() {
     if (import.meta.env.DEV) window.__worldScene = this
 
-    // read once here — camera/input config doesn't react to mode changing
+    // read once here - camera/input config doesn't react to mode changing
     // mid-session (e.g. a tablet rotating), matching how Player/WorldScene
     // pick their art/behavior once at create
     this.mode = this.registry.get('mode') || 'pointer'
@@ -136,7 +151,7 @@ export default class WorldScene extends Phaser.Scene {
     ]
 
     // Phaser captures (preventDefault) these keys globally the moment they're
-    // registered via addKeys/createCursorKeys — independent of pauseInput — which
+    // registered via addKeys/createCursorKeys - independent of pauseInput - which
     // silently blocks typing (e.g. Enter submitting the terminal's <form>) in any
     // React input rendered on top while a panel is open. Release capture whenever
     // input is paused, re-capture when back in the world.
@@ -167,6 +182,7 @@ export default class WorldScene extends Phaser.Scene {
     this.player.update(delta, this.cursors, this.wasd, this.pauseInput)
     this.zoneManager.update()
     this.updateFootprints(time)
+    this.emitZoneLabels(time)
 
     if (!this.pauseInput && this.zoneManager.activeZone) {
       const { e, space, enter } = this.interactKeys
@@ -182,7 +198,7 @@ export default class WorldScene extends Phaser.Scene {
         this.lastPromptEmit = time
         const zone = this.zoneManager.getZone(this.zoneManager.activeZone)
         const cam = this.cameras.main
-        // cam.worldView (not scrollX/scrollY — this Phaser version's scrollX/Y
+        // cam.worldView (not scrollX/scrollY - this Phaser version's scrollX/Y
         // don't mean "world coord at viewport's top-left" while a camera is
         // actively following with lerp; worldView.x/y verified empirically to
         // be the correct reference for that) gives the visible world rectangle
@@ -193,7 +209,27 @@ export default class WorldScene extends Phaser.Scene {
     }
   }
 
-  // Tap target, not player proximity — a finger is imprecise, so touch gets
+  // All 7 zones, always - not proximity-gated like the E-prompt/ZoneManager.
+  // People arriving from a link have no reason to already know what "Tower"
+  // means, and shouldn't have to walk up to every building to find out.
+  emitZoneLabels(time) {
+    if (this.lastLabelEmit && time - this.lastLabelEmit < LABEL_THROTTLE_MS) return
+    this.lastLabelEmit = time
+
+    const cam = this.cameras.main
+    const labels = ZONES.map((zone) => {
+      const height = BUILDING_HEIGHT_BY_ZONE[zone.id] ?? 60
+      return {
+        id: zone.id,
+        title: zone.title,
+        x: (zone.x - cam.worldView.x) * cam.zoom,
+        y: (zone.y - height - LABEL_MARGIN - cam.worldView.y) * cam.zoom,
+      }
+    })
+    bus.emit(EVENTS.ZONE_LABELS, labels)
+  }
+
+  // Tap target, not player proximity - a finger is imprecise, so touch gets
   // extra hit-area radius (a near-miss that walks past the building is the
   // most annoying possible failure). Independent of ZoneManager's activeZone,
   // which drives the desktop E-prompt off the player's own position.

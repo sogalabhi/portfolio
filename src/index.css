@@ -90,7 +90,7 @@
   }
 
   /* scroll-triggered reveals may not have played if the page was never scrolled
-     before printing — force every animated element to its final visible state */
+     before printing - force every animated element to its final visible state */
   [data-reveal],
   [data-hero-item],
   [data-timeline-line],

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 // Coarse pointer AND narrow viewport → 'touch'. A touchscreen laptop is
 // 'pointer' (has a mouse too); an iPad in landscape at 1024px is 'pointer'
-// and gets the desktop experience — click-to-move already covers it.
+// and gets the desktop experience - click-to-move already covers it.
 function computeMode() {
   if (typeof window === 'undefined') return 'pointer'
   const coarse = window.matchMedia('(pointer: coarse)').matches
@@ -28,7 +28,7 @@ export function useDeviceMode() {
   return mode
 }
 
-// Sustained sub-30fps for 5+ seconds — not a single dropped frame, which
+// Sustained sub-30fps for 5+ seconds - not a single dropped frame, which
 // happens on every device during asset load.
 export function useLowFrameRate(thresholdMs = 5000) {
   const [low, setLow] = useState(false)

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Node/sharp reimplementation of the guide's process.sh (magenta key-out +
-// despill + palette snap) — no ImageMagick dependency.
+// despill + palette snap) - no ImageMagick dependency.
 //
 // Usage: node scripts/assets/process.mjs <input.png> <output.png>
 
@@ -9,7 +9,7 @@ import { nearestPaletteColor } from './palette.mjs'
 
 const FUZZ = 55
 
-// Gemini's "solid magenta background" isn't pixel-perfect #FF00FF — it comes
+// Gemini's "solid magenta background" isn't pixel-perfect #FF00FF - it comes
 // out as a slightly muted, grainy magenta (observed ~(235,10,233) ± ~26 per
 // channel). Keying against pure (255,0,255) with a modest fuzz leaves a
 // speckled halo of un-keyed background pixels. Instead, measure the actual
@@ -67,7 +67,7 @@ async function main() {
     if (bg) data[o + 3] = 0
   }
 
-  // pass 2: despill — erode alpha by 1px so any background-tinted fringe pixels
+  // pass 2: despill - erode alpha by 1px so any background-tinted fringe pixels
   // bordering the keyed-out region also become transparent
   const eroded = new Uint8Array(alphaMask)
   for (let y = 0; y < height; y++) {

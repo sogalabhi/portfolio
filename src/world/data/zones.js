@@ -1,7 +1,7 @@
 export const TILE = 16
 
 // Center points, in source-pixel coordinates. A real Tiled export would give
-// top-left + width/height instead — Zone.js accepts either shape via x/y as center.
+// top-left + width/height instead - Zone.js accepts either shape via x/y as center.
 export const SPAWN_POINT = { x: 480, y: 320 }
 
 export const ZONES = [

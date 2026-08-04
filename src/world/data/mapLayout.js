@@ -3,7 +3,7 @@ import { TILE, SPAWN_POINT, ZONES } from './zones'
 export const MAP_COLS = 60
 export const MAP_ROWS = 40
 
-// indices into the placeholder tileset generated at runtime in BootScene —
+// indices into the placeholder tileset generated at runtime in BootScene -
 // swap this file out for a real Tiled JSON export later and these go away
 export const TILE_GRASS = 0
 export const TILE_PATH = 1

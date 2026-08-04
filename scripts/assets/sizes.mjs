@@ -2,7 +2,7 @@
 // Single source of truth for the batch downscale step.
 
 export const TARGET_SIZES = {
-  // Tier B — buildings (zone markers)
+  // Tier B - buildings (zone markers)
   workshop: [96, 80],
   tower: [64, 112],
   shrine: [80, 72],
@@ -11,7 +11,7 @@ export const TARGET_SIZES = {
   terminal_desk: [48, 48],
   signpost: [32, 48],
 
-  // Tier C — large props
+  // Tier C - large props
   workbench: [48, 32],
   crates_three: [32, 32],
   crate_open: [32, 24],
@@ -23,7 +23,7 @@ export const TARGET_SIZES = {
   crates_two: [24, 24],
   bench: [40, 20],
 
-  // Tier D — scatter + garden growth
+  // Tier D - scatter + garden growth
   tree_large_a: [48, 64],
   tree_large_b: [48, 64],
   tree_small_a: [32, 40],

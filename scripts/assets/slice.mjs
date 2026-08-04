@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Node/sharp reimplementation of the guide's slice.py (connected-component
-// bounding-box slicer) — no scipy/numpy dependency.
+// bounding-box slicer) - no scipy/numpy dependency.
 //
 // Usage: node scripts/assets/slice.mjs <sheet.png> <outdir>
 
@@ -92,7 +92,7 @@ async function main() {
 }
 
 // Groups boxes into reading-order rows by vertical-span overlap rather than a
-// fixed pixel bucket on the top edge — a fixed bucket breaks the moment two
+// fixed pixel bucket on the top edge - a fixed bucket breaks the moment two
 // objects in the same visual row have different heights (a tall tower next to
 // a short workshop, or four plant-growth stages of increasing size), because
 // their top edges land in different buckets even though they clearly belong

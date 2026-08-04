@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Composites every sliced object (in manifest/reading order) into one grid
-// with its index number stamped on top — a 10-second visual check that catches
+// with its index number stamped on top - a 10-second visual check that catches
 // ordering bugs dimension tables hide.
 //
 // Usage: node scripts/assets/contact-sheet.mjs <cutdir> <output.png>

@@ -33,7 +33,7 @@ export default class BootScene extends Phaser.Scene {
     this.generatePropTextures()
     bus.emit(EVENTS.BOOT_PROGRESS, 1)
 
-    // real art, once generated per scripts/assets/README.md — these 404 today,
+    // real art, once generated per scripts/assets/README.md - these 404 today,
     // which Phaser handles gracefully (fires 'loaderror', doesn't throw). Scenes
     // check `this.textures.exists('objects')` / `'char'` and fall back to the
     // placeholder textures above whenever these haven't been produced yet.

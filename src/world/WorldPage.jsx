@@ -64,14 +64,14 @@ export default function WorldPage() {
     bus.on(EVENTS.BOOT_PROGRESS, handleProgress)
     bus.on(EVENTS.READY, handleReady)
 
-    // mode is read once here, at the moment the game boots — Phaser scenes
+    // mode is read once here, at the moment the game boots - Phaser scenes
     // pick camera/input config off the registry at create() and don't react
     // to it changing later (e.g. a tablet rotating mid-session)
     gameRef.current = new Phaser.Game(makeConfig(containerRef.current))
     gameRef.current.registry.set('mode', mode)
 
-    // loop.sleep() covers two independent reasons the canvas isn't visible —
-    // tab hidden, or a bottom sheet fully covering it — either can toggle
+    // loop.sleep() covers two independent reasons the canvas isn't visible -
+    // tab hidden, or a bottom sheet fully covering it - either can toggle
     // independently, so track both and only wake once neither holds
     let hidden = document.hidden
     let sheetFull = false
@@ -93,7 +93,7 @@ export default function WorldPage() {
     bus.on(EVENTS.SHEET_FULL, handleSheetFull)
 
     // iOS Safari fires 'resize' continuously while the toolbar collapses on
-    // scroll — debounce it, and read visualViewport (not innerWidth/Height,
+    // scroll - debounce it, and read visualViewport (not innerWidth/Height,
     // which can lag during that same animation) for the size to resize to
     let resizeTimer = null
     const handleResize = () => {

@@ -17,7 +17,7 @@ async function main() {
   }
 
   // 'contain' preserves the source aspect ratio and pads with transparency to
-  // hit the exact target canvas — 'fill' would stretch/squash (a 333x292 crop
+  // hit the exact target canvas - 'fill' would stretch/squash (a 333x292 crop
   // into a 96x80 box has a visibly different aspect ratio), which is wrong for
   // objects the atlas depends on being an undistorted, exact-size frame.
   const resized = await sharp(input)

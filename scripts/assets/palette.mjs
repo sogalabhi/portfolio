@@ -1,4 +1,4 @@
-// The locked palette from the asset generation guide — single source of truth.
+// The locked palette from the asset generation guide - single source of truth.
 // Paste PALETTE_PROMPT_BLOCK verbatim into every Gemini prompt so separate
 // generations still read as one set.
 

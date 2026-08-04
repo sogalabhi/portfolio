@@ -2,7 +2,7 @@
   {
     "id": "retail-lakehouse",
     "title": "Retail Lakehouse",
-    "tagline": "NEEDS_INPUT: one-line hook, ≤ 90 chars — what it does and for whom",
+    "tagline": "NEEDS_INPUT: one-line hook, ≤ 90 chars - what it does and for whom",
     "domain": "Data Engineering",
     "problem": "NEEDS_INPUT: 1-2 sentences on what was broken or missing",
     "whatIBuilt": [
@@ -10,7 +10,7 @@
       "NEEDS_INPUT: bullet starting with a verb",
       "NEEDS_INPUT: bullet starting with a verb"
     ],
-    "impact": "NEEDS_INPUT: a number — rows/sec, latency, % improvement, rank",
+    "impact": "NEEDS_INPUT: a number - rows/sec, latency, % improvement, rank",
     "stack": ["NEEDS_INPUT: e.g. Spark", "NEEDS_INPUT: e.g. Airflow", "NEEDS_INPUT: e.g. Delta Lake"],
     "links": { "github": "", "live": "", "demo": "", "playStore": "" },
     "media": [],
@@ -21,7 +21,7 @@
   {
     "id": "arjun-guruji",
     "title": "Arjun Guruji",
-    "tagline": "NEEDS_INPUT: one-line hook, ≤ 90 chars — what it does and for whom",
+    "tagline": "NEEDS_INPUT: one-line hook, ≤ 90 chars - what it does and for whom",
     "domain": "Mobile",
     "problem": "NEEDS_INPUT: 1-2 sentences on what was broken or missing",
     "whatIBuilt": [
@@ -40,7 +40,7 @@
   {
     "id": "syssight",
     "title": "SysSight",
-    "tagline": "NEEDS_INPUT: one-line hook, ≤ 90 chars — what it does and for whom",
+    "tagline": "NEEDS_INPUT: one-line hook, ≤ 90 chars - what it does and for whom",
     "domain": "Infra",
     "problem": "NEEDS_INPUT: 1-2 sentences on what was broken or missing",
     "whatIBuilt": [
@@ -48,7 +48,7 @@
       "NEEDS_INPUT: bullet starting with a verb",
       "NEEDS_INPUT: bullet starting with a verb"
     ],
-    "impact": "NEEDS_INPUT: a number — latency, uptime, concurrent connections",
+    "impact": "NEEDS_INPUT: a number - latency, uptime, concurrent connections",
     "stack": ["NEEDS_INPUT", "NEEDS_INPUT", "NEEDS_INPUT"],
     "links": { "github": "", "live": "", "demo": "", "playStore": "" },
     "media": [],

@@ -4,7 +4,7 @@ import { gsap, ScrollTrigger } from '../lib/gsap'
 import useReducedMotion from './useReducedMotion'
 
 // mirrors scrollTrigger's `start: 'top 85%'` so we can detect, at creation time,
-// whether a hard refresh already landed the page past a trigger's start line —
+// whether a hard refresh already landed the page past a trigger's start line -
 // ScrollTrigger's own position measurement is deferred a tick, too late to rely on here
 function isPastEightyFivePercent(el) {
   const top = el.getBoundingClientRect().top

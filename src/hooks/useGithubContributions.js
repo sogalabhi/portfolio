@@ -65,7 +65,7 @@ function writeCache(key, data) {
   try {
     localStorage.setItem(key, JSON.stringify({ data, cachedAt: Date.now() }))
   } catch {
-    // localStorage unavailable (private mode, quota) — skip caching silently
+    // localStorage unavailable (private mode, quota) - skip caching silently
   }
 }
 

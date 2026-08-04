@@ -10,7 +10,7 @@ export default function EducationBlock({ education }) {
           <ul className="mt-2 space-y-1 text-slate">
             {entry.degrees.map((degree) => (
               <li key={degree.label}>
-                {degree.label} — {degree.detail}
+                {degree.label} - {degree.detail}
               </li>
             ))}
           </ul>

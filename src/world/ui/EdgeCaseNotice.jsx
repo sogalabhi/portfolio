@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { X } from 'lucide-react'
 import { useLowFrameRate, useNarrowViewport } from '../useDeviceMode'
 
-// Genuine edge cases only — a viewport too narrow to lay anything out in, or
+// Genuine edge cases only - a viewport too narrow to lay anything out in, or
 // a device sustained below 30fps for 5+ seconds. Never auto-redirects; just
 // offers the opt-out.
 export default function EdgeCaseNotice() {

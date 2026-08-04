@@ -4,15 +4,15 @@ import { bus, EVENTS } from '../bus'
 
 const PEEK = 45
 const OPEN = 85
-const FULL = 96 // not 100 — leaves headroom so the handle clears env(safe-area-inset-top)
+const FULL = 96 // not 100 - leaves headroom so the handle clears env(safe-area-inset-top)
 const SNAPS = [PEEK, OPEN, FULL]
-const DISMISS_BELOW = 20 // heightPct — drag past here and it's a close, not a snap-to-peek
-const FLICK_VELOCITY = 0.6 // px/ms downward — a fast flick dismisses even above DISMISS_BELOW
+const DISMISS_BELOW = 20 // heightPct - drag past here and it's a close, not a snap-to-peek
+const FLICK_VELOCITY = 0.6 // px/ms downward - a fast flick dismisses even above DISMISS_BELOW
 const RUBBER_BAND = 0.3 // resistance factor for dragging past FULL
 
-// Hand-rolled rather than pulling in a modal/sheet library — pointer events
+// Hand-rolled rather than pulling in a modal/sheet library - pointer events
 // + a CSS height transition covers drag, rubber-band, and velocity-based
-// dismiss without another dependency. Opens at OPEN (85%), not PEEK — nobody
+// dismiss without another dependency. Opens at OPEN (85%), not PEEK - nobody
 // wants an extra gesture just to read the content that was tapped open.
 export default function BottomSheet({ title, onClose, onHeightChange, children }) {
   const [heightPct, setHeightPct] = useState(OPEN)

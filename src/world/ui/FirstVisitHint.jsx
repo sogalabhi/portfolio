@@ -19,11 +19,11 @@ export default function FirstVisitHint() {
     try {
       localStorage.setItem(STORAGE_KEY, '1')
     } catch {
-      // localStorage unavailable — just hide for this session
+      // localStorage unavailable - just hide for this session
     }
   }
 
-  // touch dismisses on the first tap anywhere, not just the close button —
+  // touch dismisses on the first tap anywhere, not just the close button -
   // never gate the world behind reading the hint
   useEffect(() => {
     if (dismissed || mode !== 'touch') return undefined

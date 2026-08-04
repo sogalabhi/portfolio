@@ -12,4 +12,5 @@ export const EVENTS = {
   PAUSE_INPUT: 'world:pauseInput',
   PROMPT_POS: 'world:promptPos',
   SHEET_FULL: 'world:sheetFull',
+  ZONE_LABELS: 'world:zoneLabels',
 }

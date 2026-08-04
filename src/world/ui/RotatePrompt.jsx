@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { RotateCw, X } from 'lucide-react'
 
-// Portrait only — landscape on a phone gives ~380px of height, worse than
+// Portrait only - landscape on a phone gives ~380px of height, worse than
 // portrait for a top-down game. The manifest's orientation lock only applies
 // to installed PWAs, so this covers the in-browser case. Dismissible: someone
 // who genuinely wants landscape shouldn't be trapped.

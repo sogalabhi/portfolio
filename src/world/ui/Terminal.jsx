@@ -10,7 +10,7 @@ const ZONE_IDS = ZONES.map((z) => z.id).filter((id) => id !== 'terminal')
 const COMMANDS = ['help', 'whoami', 'ls', 'cd', 'cat', 'contact', 'clear', 'sudo']
 const CAT_ARGS = ['resume']
 
-// The primary path on touch — commands are discoverable by tapping without
+// The primary path on touch - commands are discoverable by tapping without
 // having to know to type 'help' first. Full runnable strings, not bare verbs,
 // since 'cd' needs a zone argument (that's what the zone jump menu is for).
 const CHIP_COMMANDS = ['whoami', 'ls', 'cat resume', 'contact', 'help', 'clear', 'sudo hire-me']
@@ -107,7 +107,7 @@ export default function Terminal({ onClose }) {
         print(HELP_LINES.join('\n'))
         break
       case 'whoami':
-        print(`${profile.name} — ${profile.tagline}`)
+        print(`${profile.name} - ${profile.tagline}`)
         break
       case 'ls':
         print(ZONE_IDS.join('  '))
@@ -121,7 +121,7 @@ export default function Terminal({ onClose }) {
           bus.emit(EVENTS.TELEPORT, { id: target })
           setTimeout(onClose, 400)
         } else {
-          print(`no such zone: ${target} — try 'ls'`)
+          print(`no such zone: ${target} - try 'ls'`)
         }
         break
       }
@@ -151,7 +151,7 @@ export default function Terminal({ onClose }) {
         }
         break
       default:
-        print(`command not found: ${name} — try 'help'`)
+        print(`command not found: ${name} - try 'help'`)
     }
   }
 

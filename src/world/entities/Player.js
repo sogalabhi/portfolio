@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
 
-// 'char' is a single static 32x32 sprite (a "32x32 Battlers" pack frame — front-
+// 'char' is a single static 32x32 sprite (a "32x32 Battlers" pack frame - front-
 // facing only, no walk cycle), loaded by BootScene from world/char.png. It's a
-// quick real-art swap-in, not the deliberate LimeZu/Kenney walk-cycle pack call —
+// quick real-art swap-in, not the deliberate LimeZu/Kenney walk-cycle pack call -
 // see scripts/assets/README.md for that. With no frames to animate, we just flip
 // the sprite horizontally for left/right and hold the single pose otherwise.
 // Falls back to the placeholder 'player' texture/anim rig when 'char' isn't loaded.
@@ -118,7 +118,7 @@ export default class Player {
         if (moved < 0.5) {
           this.stuckSince = this.stuckSince ?? performance.now()
           if (performance.now() - this.stuckSince > STUCK_MS) {
-            // gave up short of the target — not a real arrival, don't fire onArrive
+            // gave up short of the target - not a real arrival, don't fire onArrive
             this.moveTarget = null
             this.moveArriveCallback = null
             vx = 0

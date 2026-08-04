@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { bus, EVENTS } from '../bus'
 
-// The touch escape hatch — every zone reachable in two taps without walking.
+// The touch escape hatch - every zone reachable in two taps without walking.
 // Visible from first load, not hidden behind an idle timer or an exploration
 // reward: desktop gets the same access via the terminal's `cd`, this is its
-// touch equivalent. Excludes 'spawn' — you already start there.
+// touch equivalent. Excludes 'spawn' - you already start there.
 const DESTINATIONS = [
   { id: 'workshop', title: 'Workshop', blurb: 'Projects' },
   { id: 'garden', title: 'Garden', blurb: 'Skills & activity' },

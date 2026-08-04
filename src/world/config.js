@@ -4,7 +4,7 @@ import WorldScene from './scenes/WorldScene'
 
 export const TILE = 16
 
-// visualViewport, not innerWidth/innerHeight — iOS Safari's innerHeight can
+// visualViewport, not innerWidth/innerHeight - iOS Safari's innerHeight can
 // lag or jump during toolbar expand/collapse; visualViewport tracks the true
 // visible area.
 export function getViewportSize() {
@@ -28,7 +28,7 @@ export function makeConfig(parent) {
       arcade: { gravity: { x: 0, y: 0 }, debug: false },
     },
     scale: {
-      // NONE, not RESIZE — Phaser's own RESIZE listener reacts to every
+      // NONE, not RESIZE - Phaser's own RESIZE listener reacts to every
       // 'resize' event immediately, which stutters through the whole
       // animation while the iOS toolbar collapses on scroll. We drive
       // scale.resize() ourselves instead, debounced (see WorldPage.jsx).

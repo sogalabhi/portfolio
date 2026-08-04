@@ -1,11 +1,11 @@
 import { bus, EVENTS } from '../bus'
 
 // Checked directly against player position once per render frame (not via
-// physics.add.overlap) — Phaser 4's Arcade physics runs a decoupled fixed-step
+// physics.add.overlap) - Phaser 4's Arcade physics runs a decoupled fixed-step
 // accumulator, so an overlap callback can fire 0 or 2+ times within a single
 // render frame. Bookkeeping "touched this frame" off that callback caused a
 // render frame with zero substeps to see no touch and fire a spurious
-// ZONE_EXIT, immediately followed by ZONE_ENTER on the next frame — the E
+// ZONE_EXIT, immediately followed by ZONE_ENTER on the next frame - the E
 // prompt flickering in every zone, even standing still at the center.
 export default class ZoneManager {
   constructor(scene, player, zones) {

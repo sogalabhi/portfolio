@@ -39,15 +39,11 @@ export default function FeaturedCard({ project, index }) {
         </h3>
         <p className="mt-3 text-slate">{project.tagline}</p>
 
-        {project.links.playStore && (
-          <div className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-moss/10 px-3 py-1.5 text-sm font-medium text-moss">
-            <Smartphone size={14} aria-hidden="true" />
+        {project.impact && (
+          <p className="mt-4 inline-flex items-center gap-2 font-mono text-sm text-moss">
+            {project.links.playStore && <Smartphone size={14} aria-hidden="true" />}
             {project.impact}
-          </div>
-        )}
-
-        {!project.links.playStore && project.impact && (
-          <p className="mt-4 font-mono text-sm text-moss">{project.impact}</p>
+          </p>
         )}
 
         <ul className="mt-4 space-y-2 text-slate">
@@ -59,16 +55,7 @@ export default function FeaturedCard({ project, index }) {
           ))}
         </ul>
 
-        <div className="mt-5 flex flex-wrap gap-2">
-          {project.stack.map((tech, i) => (
-            <span
-              key={i}
-              className="rounded-full bg-sand px-3 py-1 font-mono text-xs text-ink"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
+        <p className="mt-5 font-mono text-xs text-faint">{project.stack.join('  ·  ')}</p>
 
         <div className="mt-6 flex gap-4">
           {project.links.github && (

@@ -1,45 +1,36 @@
 {
-  "summary": "Finalist in all 4 hackathons entered",
+  "summary": "2 hackathon wins and an international selection, from 3 entries",
   "hackathons": [
-    {
-      "event": "EthGlobal New Delhi",
-      "date": "NEEDS_INPUT: YYYY-MM",
-      "result": "Finalist round",
-      "project": "NEEDS_INPUT: what was built",
-      "oneLiner": "NEEDS_INPUT",
-      "myRole": "NEEDS_INPUT: team size + your specific contribution",
-      "stack": ["NEEDS_INPUT"],
-      "links": { "github": "", "devpost": "", "demo": "" }
-    },
     {
       "event": "AssetHub Hackathon, Goa 2025",
       "date": "2025",
       "result": "3rd of 190+",
-      "project": "NEEDS_INPUT: what was built",
-      "oneLiner": "NEEDS_INPUT",
-      "myRole": "NEEDS_INPUT: team size + your specific contribution",
-      "stack": ["NEEDS_INPUT"],
-      "links": { "github": "", "devpost": "", "demo": "" }
+      "project": "Polkaflow -visual blockchain workflow builder for Polkadot",
+      "oneLiner": "Drag-and-drop flowchart to deployed smart contract, with AI code-gen, a hand-built logic engine, and automatic Solidity-to-Rust optimization for gas-heavy functions.",
+      "myRole": "NEEDS_INPUT: team size + your specific contribution -the repo (github.com/sogalabhi/Polkadot) is on your account, which suggests you led or built the core, but confirm what part was yours if it was a team effort",
+      "stack": ["React", "Solidity", "Rust", "PolkaVM", "AssetHub"],
+      "links": { "github": "https://github.com/sogalabhi/Polkadot", "devpost": "", "demo": "https://www.youtube.com/watch?v=1wMiRCPWYBE" }
     },
     {
-      "event": "Builder House Bengaluru",
+      "event": "Polkadot Builder House, Bengaluru",
       "date": "NEEDS_INPUT: YYYY-MM",
       "result": "3rd place",
-      "project": "INR ↔ Polkadot bridge",
-      "oneLiner": "NEEDS_INPUT",
-      "myRole": "NEEDS_INPUT: team size + your specific contribution",
-      "stack": ["NEEDS_INPUT"],
-      "links": { "github": "", "devpost": "", "demo": "" }
+      "project": "Polar Bridge -cross-chain lending, INR collateral to PAS tokens",
+      "oneLiner": "A fiat-to-Polkadot on-ramp -pay by UPI, borrow PAS tokens against INR collateral, no crypto knowledge needed.",
+      "myRole": "Web3 developer, 2-person team -built the smart contracts and the relayer service handling cross-chain event synchronization between the Stellar vault and the Paseo Asset Hub pool",
+      "stack": ["React", "Node.js", "Stellar Soroban", "Paseo Asset Hub", "Solidity", "Razorpay"],
+      "links": { "github": "https://github.com/sogalabhi/Polar", "devpost": "", "demo": "" }
     },
     {
-      "event": "NEEDS_INPUT: 4th hackathon name",
-      "date": "NEEDS_INPUT",
-      "result": "Finalist",
-      "project": "NEEDS_INPUT",
-      "oneLiner": "NEEDS_INPUT",
-      "myRole": "NEEDS_INPUT",
-      "stack": ["NEEDS_INPUT"],
-      "links": { "github": "", "devpost": "", "demo": "" }
+      "event": "ETHGlobal New Delhi",
+      "date": "NEEDS_INPUT: YYYY-MM",
+      "result": "Selected for the offline round in Delhi -international event",
+      "project": "PokeWars -multiplayer Pokémon shooting game with Web3 rewards on Polygon",
+      "oneLiner": "Wallet-authenticated multiplayer combat in Phaser, with NFT-owned Pokémon and daily on-chain rewards via the X402 protocol.",
+      "myRole": "NEEDS_INPUT: your specific contribution -repo is under teammate Kushagra1122's account, so this needs to be precise rather than \"we built.\" Which parts were yours -the Phaser combat loop, the WebSocket sync layer, something else?",
+      "stack": ["Phaser", "React", "Solidity", "Polygon", "MetaMask", "WebSockets"],
+      "links": { "github": "https://github.com/Kushagra1122/PokiWars", "devpost": "", "demo": "" }
     }
-  ]
+  ],
+  "note_to_self": "Three entries, no filler tier -dropped the plan to list non-placing hackathons as compact rows. If more hackathons come up later with a real result worth showing, add them in the same full-entry shape as these three, not as a lesser tier."
 }

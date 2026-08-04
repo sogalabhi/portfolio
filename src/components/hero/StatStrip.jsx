@@ -62,10 +62,7 @@ export default function StatStrip({ stats }) {
     >
       {stats.map((stat) => (
         <div key={stat.label}>
-          <dd
-            data-stat-value
-            className="font-display text-2xl font-semibold text-ink md:text-3xl"
-          >
+          <dd data-stat-value className="font-mono text-2xl font-medium text-ink md:text-3xl">
             {stat.value}
           </dd>
           <dt className="mt-1 text-sm text-faint">{stat.label}</dt>

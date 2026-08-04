@@ -1,9 +1,10 @@
 import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
-import { Download } from 'lucide-react'
+import { Download, Play } from 'lucide-react'
 import { track } from '@vercel/analytics'
 import { gsap } from '../../lib/gsap'
 import useReducedMotion from '../../hooks/useReducedMotion'
+import { useTourContext } from '../../hooks/TourContext'
 import profile from '../../content/profile.json'
 import { GithubIcon, LinkedinIcon } from '../misc/BrandIcons'
 import AvailabilityBadge from './AvailabilityBadge'
@@ -12,6 +13,12 @@ import StatStrip from './StatStrip'
 export default function Hero() {
   const scope = useRef(null)
   const reduced = useReducedMotion()
+  const { start } = useTourContext()
+
+  const handleStartTour = () => {
+    track('tour_started')
+    start()
+  }
 
   useGSAP(
     () => {
@@ -36,7 +43,15 @@ export default function Hero() {
 
   return (
     <section id="hero" ref={scope} className="scroll-mt-20 pt-40 pb-24 md:pt-48 md:pb-32">
-      <div className="mx-auto max-w-5xl px-6 md:px-10">
+      <div className="relative mx-auto max-w-5xl px-6 md:px-10">
+        <img
+          src="/world/char.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute right-6 top-1/2 hidden -translate-y-1/2 md:right-10 lg:block"
+          style={{ height: 220, width: 'auto', imageRendering: 'pixelated' }}
+        />
+
         <div data-hero-item>
           <AvailabilityBadge text={profile.availability} />
         </div>
@@ -79,6 +94,17 @@ export default function Hero() {
             LinkedIn
           </a>
         </div>
+
+        <button
+          type="button"
+          data-hero-item
+          data-tour-start
+          onClick={handleStartTour}
+          className="mt-6 inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-clay transition-colors duration-150 hover:text-clay/70"
+        >
+          <Play size={14} aria-hidden="true" />
+          First time here? Take the 60-second tour
+        </button>
 
         <div data-hero-item>
           <StatStrip stats={profile.stats} />

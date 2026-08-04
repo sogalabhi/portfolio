@@ -3,66 +3,73 @@
     {
       "org": "FOSSEE, IIT Bombay",
       "period": "May 2025 - Present",
-      "stack": ["React", "Django", "Redis", "WebSockets"],
+      "stack": ["React", "Django", "Redis", "WebSockets", "Three.js"],
       "roles": [
         { "title": "Web Lead", "period": "Nov 2025 - Present" },
         { "title": "Autumn Intern", "period": "Aug 2025 - Nov 2025" },
         { "title": "Summer Intern", "period": "May 2025 - Aug 2025" }
       ],
       "bullets": [
-        "NEEDS_INPUT: complete detail on leading a team of 4 - what was delivered, for whom, team size confirmation",
-        "NEEDS_INPUT: complete detail on architecting Redis caching + WebSocket infra - scale/latency numbers",
-        "NEEDS_INPUT: complete detail on load testing scripts + live CPU/RAM/core dashboard - thresholds, tooling"
+        "Led a team of 4, transitioning from frontend development into system design - NEEDS_INPUT: what specifically shipped under your lead, and for what part of Osdag",
+        "Architected Redis caching and WebSocket infrastructure to support real-time collaboration features in Osdag - NEEDS_INPUT: latency improvement, concurrent user count, or cache hit rate",
+        "Wrote load testing scripts and built a live dashboard tracking CPU, RAM, and core usage, deriving a recommended server configuration for production - NEEDS_INPUT: what load level was tested, what the recommendation actually was",
+        "Contributed to feature development and UX improvements for Osdag, an open-source structural steel design automation tool, during the Summer Internship - NEEDS_INPUT: one specific feature you shipped in this phase"
       ],
-      "note": "NEEDS_INPUT: reconcile résumé vs LinkedIn - Web Lead start date (May 2025 vs Nov 2025) and title (Web Lead vs Web Mentor). See prompt.md section 7."
+      "note": "Résumé says 'Web Lead' starting May 2025; LinkedIn shows the role as 'Web mentor' starting Nov 2025, with May–Nov 2025 as Summer then Autumn Intern. Using LinkedIn's structure (it's the more granular of the two) - confirm whether 'Web Lead' is the correct current title, or if it should read 'Web Mentor' to match LinkedIn exactly."
     },
     {
       "org": "IRIS, NITK",
-      "period": "NEEDS_INPUT",
-      "stack": ["NEEDS_INPUT"],
+      "period": "Nov 2024 - Present",
+      "stack": ["Flutter", "BLoC", "NoSQL", "Clean Architecture", "GitLab"],
       "roles": [
-        { "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" }
+        { "title": "App Developer", "period": "Feb 2025 - Present" },
+        { "title": "Code-in Intern, App Dev", "period": "Nov 2024 - Feb 2025" }
       ],
       "bullets": [
-        "NEEDS_INPUT: team size and your position",
-        "NEEDS_INPUT: 1 metric for this role",
+        "Building the Alumni Donations module, integrated with the BillDesk payment SDK, and currently working on a Service Requests module - NEEDS_INPUT: how far along, any usage numbers",
+        "Built an Event Management module for a sports portal - schedules, match results, and live points tables, with an admin panel to update all data",
+        "Built live hostel league tracking as part of IRIS's 55+ digitized processes - NEEDS_INPUT: what this replaced, how many students/hostels it serves",
+        "NEEDS_INPUT: team size and your position within it",
         "NEEDS_INPUT: one thing you're proud of that isn't on the résumé"
       ]
     },
     {
       "org": "Momento (Humora Technologies)",
-      "period": "NEEDS_INPUT: résumé says Nov 2025 - Feb 2026, LinkedIn says Oct 2025 - Jan 2026 - resolve",
-      "stack": ["NEEDS_INPUT"],
+      "period": "Nov 2025 - Feb 2026",
+      "stack": ["Flutter", "Riverpod", "Cloud Functions", "Firestore Security Rules"],
       "roles": [
-        { "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" }
+        { "title": "Flutter Dev Intern", "period": "NEEDS_INPUT: matches org period above" }
       ],
       "bullets": [
+        "Built a paginated home feed with status filters and notification subscriptions for an AI-based event management platform, a startup by third-year students from IIT Kharagpur and IIT Bombay",
+        "Implemented a permission system for admin promotion backed by Firestore Security Rules and Cloud Functions",
+        "Added functionality for participants to like photos and videos, with a filter allowing creators to sort and view media by who liked it",
         "NEEDS_INPUT: team size and your position",
-        "NEEDS_INPUT: 1 metric for this role",
-        "NEEDS_INPUT: one thing you're proud of that isn't on the résumé"
+        "NEEDS_INPUT: one number - feed load time, notification delivery rate, or user count if known"
       ]
     },
     {
       "org": "SNSDS Trust",
-      "period": "NEEDS_INPUT",
-      "stack": ["NEEDS_INPUT"],
+      "period": "Apr 2021 - Present",
+      "stack": ["Flutter", "BLoC", "Hive", "Firebase Cloud Messaging"],
       "roles": [
-        { "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" }
+        { "title": "App Developer (Freelance)", "period": "Apr 2021 - Present" }
       ],
       "bullets": [
-        "NEEDS_INPUT: team size and your position",
-        "NEEDS_INPUT: 1 metric for this role",
-        "NEEDS_INPUT: one thing you're proud of that isn't on the résumé"
+        "Built and have maintained Arjun Guruji continuously since 2021 - pivoted from native Java to Flutter, scaling to 2,000+ downloads and a 4.9★ rating on the Google Play Store",
+        "This is the longest-running engagement on the résumé - five years of shipping and maintaining production software, starting before university",
+        "NEEDS_INPUT: what does ongoing maintenance actually involve now - user support, feature requests, content updates?",
+        "NEEDS_INPUT: one thing you're proud of that isn't already covered in the Arjun Guruji project entry"
       ]
     }
   ],
   "tier2": [
-    { "org": "E-Cell NITK", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" },
-    { "org": "PACE NITK", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" },
-    { "org": "Kannada Vedike NITK", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" },
-    { "org": "Advista.live", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" },
-    { "org": "SriSadguru Hypertechnologies", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" },
-    { "org": "SriSadguru Hypertechnologies", "title": "NEEDS_INPUT (2nd stint)", "period": "NEEDS_INPUT" },
-    { "org": "Datta Web Designers", "title": "NEEDS_INPUT", "period": "NEEDS_INPUT" }
+    { "org": "E-Cell NITK", "title": "Technical Team Member", "period": "Oct 2024 - Oct 2025", "note": "Contributed to the E-Cell website and built the IPL Mock Auction website with real-time updates for all participants." },
+    { "org": "PACE NITK", "title": "Member - GIS Research", "period": "Jan 2025 - Present", "note": "Working under Prof. Prithviraj on a GIS project involving detailed spatial surveying of the NITK campus." },
+    { "org": "Kannada Vedike NITK", "title": "Technical Coordinator (Sep 2025 - Present); previously Technical Team Member", "period": "Feb 2024 - Present" },
+    { "org": "Advista.live", "title": "Frontend Developer (Part-time, on-site)", "period": "Jan 2025 - Mar 2025" },
+    { "org": "SriSadguru Hypertechnologies", "title": "Software Developer (Internship)", "period": "May 2024 - Jun 2024" },
+    { "org": "SriSadguru Hypertechnologies", "title": "Software Developer (Full-time, Sringeri) - earlier stint", "period": "Aug 2022 - Oct 2022" },
+    { "org": "Datta Web Designers", "title": "Software Developer (Freelance, Mysuru)", "period": "Sep 2021 - Aug 2022" }
   ]
 }

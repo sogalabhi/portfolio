@@ -1,4 +1,4 @@
-# Portfolio Build Spec — Abhijith Sogal V
+# Portfolio Build Spec - Abhijith Sogal V
 
 A complete brief for building a personal portfolio site. Hand this to Claude Code as the project spec.
 
@@ -13,7 +13,7 @@ This project has **two surfaces sharing one content source**:
 | `/` | Normal scrolling portfolio. Everything visible. | **Build first. Must be complete and deployed before anything else starts.** |
 | `/world` | Playable 2D pixel island (Phaser). Same content, explorable. | Build second. Optional. Never blocks `/`. |
 
-The game is a *flex you discover*, not a gate. No splash screen asking "explore or read?" — that taxes 100% of visitors to serve 20%. Default is the normal site; a persistent button offers the game.
+The game is a *flex you discover*, not a gate. No splash screen asking "explore or read?" - that taxes 100% of visitors to serve 20%. Default is the normal site; a persistent button offers the game.
 
 **Non-negotiable:** if the game is unfinished, `/` still works perfectly and the button is hidden.
 
@@ -32,7 +32,7 @@ react-router-dom  → just two routes
 
 **Deployment:** Vercel or Netlify. Custom domain if available.
 
-**Do not add:** a CMS, a component library (shadcn/MUI), framer-motion (GSAP handles motion), or any state manager. This is a static content site — `useState` and props are enough.
+**Do not add:** a CMS, a component library (shadcn/MUI), framer-motion (GSAP handles motion), or any state manager. This is a static content site - `useState` and props are enough.
 
 **Bundle rule:** Phaser must be code-split. `/` must never download the game engine.
 ```js
@@ -71,7 +71,7 @@ src/
 ## 3. Visual direction
 
 ### Mood
-Warm, confident, slightly playful — **not** the default dev-portfolio look (pure black background, neon accent, monospace everything, "> Hello World_" typing effect). Avoid all of that.
+Warm, confident, slightly playful - **not** the default dev-portfolio look (pure black background, neon accent, monospace everything, "> Hello World_" typing effect). Avoid all of that.
 
 Think: a well-designed technical magazine. Light background, warm paper tones, one strong accent, generous whitespace, real hierarchy.
 
@@ -79,14 +79,14 @@ Think: a well-designed technical magazine. Light background, warm paper tones, o
 
 ```js
 colors: {
-  ink:    '#1C1B19',  // primary text — warm near-black, never #000
+  ink:    '#1C1B19',  // primary text - warm near-black, never #000
   slate:  '#5A574F',  // secondary text
   faint:  '#8B8780',  // meta text, dates, captions
-  paper:  '#FAF7F0',  // page background — warm off-white
+  paper:  '#FAF7F0',  // page background - warm off-white
   card:   '#FFFFFF',  // raised surfaces
   line:   '#E4DFD4',  // hairline borders
-  clay:   '#C4552E',  // PRIMARY ACCENT — links, CTAs, active states
-  moss:   '#4A7C4E',  // secondary accent — "available", success, heatmap
+  clay:   '#C4552E',  // PRIMARY ACCENT - links, CTAs, active states
+  moss:   '#4A7C4E',  // secondary accent - "available", success, heatmap
   sand:   '#E8DCC4',  // tag/pill backgrounds
 }
 ```
@@ -98,9 +98,9 @@ Dark mode: optional, ship it later if at all. A great light site beats a mediocr
 ### Typography
 
 ```
-Display / headings : Bricolage Grotesque  (600) — distinctive, slightly quirky, not Inter
+Display / headings : Bricolage Grotesque  (600) - distinctive, slightly quirky, not Inter
 Body               : Inter                (400/500)
-Code / data        : JetBrains Mono       (400) — stack tags, metrics, heatmap labels only
+Code / data        : JetBrains Mono       (400) - stack tags, metrics, heatmap labels only
 ```
 
 Load via Google Fonts with `display=swap`. Preload the display weight.
@@ -124,7 +124,7 @@ Section rhythm py-24 md:py-32
 Card padding   p-6 md:p-8
 Grid gap       gap-6
 Radius         cards 16px · buttons 10px · pills 999px
-Border         1px solid line — no drop shadows on cards, borders only
+Border         1px solid line - no drop shadows on cards, borders only
 Shadow         only on hover, and only shadow-sm → shadow-md
 ```
 
@@ -145,7 +145,7 @@ Hover        150-200ms, color/border/shadow only
 
 ## 4. Page structure (`/`)
 
-Single scrolling page. No sub-routes. Order is deliberate — strongest evidence first.
+Single scrolling page. No sub-routes. Order is deliberate - strongest evidence first.
 
 ### 4.1 Nav (sticky)
 ```
@@ -181,7 +181,7 @@ Single scrolling page. No sub-routes. Order is deliberate — strongest evidence
 
 Left-aligned, not centered. Centered heroes feel like templates.
 
-### 4.3 Featured work — 3 large cards
+### 4.3 Featured work - 3 large cards
 Full-width stacked cards, alternating image side on desktop.
 
 ```
@@ -200,11 +200,11 @@ Full-width stacked cards, alternating image side on desktop.
 │                            │  [GitHub] [Live ↗]     │
 └────────────────────────────────────────────────────┘
 ```
-Order: **Retail Lakehouse → Arjun Guruji → SysSight** (data, mobile, infra — range on display).
+Order: **Retail Lakehouse → Arjun Guruji → SysSight** (data, mobile, infra - range on display).
 
 Arjun Guruji card must show the Play Store badge, download count, and rating prominently.
 
-### 4.4 More projects — compact grid
+### 4.4 More projects - compact grid
 `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`. Title, one-liner, 3 stack tags, links. Hackathon projects get a small clay `🏆 3rd place` style pill (as an icon + text, not emoji).
 
 ### 4.5 Skills
@@ -215,21 +215,21 @@ Cloud & Infra      [Azure] [Terraform] [Docker] [K8s] [GitHub Actions] [Linux]
 Full Stack         [FastAPI] [Django] [Flutter] [React] [Next.js] [Node] ...
 Tools              [Git] [Postman] [Figma] [TimescaleDB]
 ```
-Pills: `sand` bg, `ink` text, JetBrains Mono 13px, no icons. No proficiency bars — they're meaningless and everyone rates themselves 90%.
+Pills: `sand` bg, `ink` text, JetBrains Mono 13px, no icons. No proficiency bars - they're meaningless and everyone rates themselves 90%.
 
 **Below: GitHub contribution heatmap.** Fetch via `github-contributions-api` or render from a cached JSON. Use the `moss` ramp. Caption: total contributions + current streak.
 
-### 4.6 Experience — tiered timeline
+### 4.6 Experience - tiered timeline
 
 Vertical line on the left, cards to the right.
 
-**Tier 1 — four full cards** (org header + nested roles + bullets):
+**Tier 1 - four full cards** (org header + nested roles + bullets):
 1. FOSSEE, IIT Bombay
 2. IRIS, NITK
 3. Momento (Humora Technologies)
 4. SNSDS Trust
 
-Nested-role rendering matters — it shows promotion, not job-hopping:
+Nested-role rendering matters - it shows promotion, not job-hopping:
 ```
 ● FOSSEE, IIT Bombay                        May 2025 - Present
 │  React · Django · Redis · WebSockets
@@ -243,7 +243,7 @@ Nested-role rendering matters — it shows promotion, not job-hopping:
 │  • Load testing scripts + live dashboard (CPU/RAM/cores)...
 ```
 
-**Tier 2 — compact list**, one line each, no bullets:
+**Tier 2 - compact list**, one line each, no bullets:
 E-Cell NITK · PACE NITK · Kannada Vedike NITK · Advista.live · SriSadguru Hypertechnologies (×2) · Datta Web Designers
 
 Collapsed behind a `Show 7 more roles ↓` toggle. Everything present, nothing competing.
@@ -251,15 +251,15 @@ Collapsed behind a `Show 7 more roles ↓` toggle. Everything present, nothing c
 ### 4.7 Education
 ```
 National Institute of Technology Karnataka, Surathkal      2023 - Present
-B.Tech, Civil Engineering — CGPA 7.92
-Minor, Electronics & Communication — CGPA 7.25
+B.Tech, Civil Engineering - CGPA 7.92
+Minor, Electronics & Communication - CGPA 7.25
 ```
 
 ### 4.8 Achievements
 Small cards or a clean list:
-- EthGlobal New Delhi — finalist round
-- AssetHub Hackathon, Goa 2025 — 3rd of 190+
-- Builder House Bengaluru — 3rd, INR ↔ Polkadot bridge
+- EthGlobal New Delhi - finalist round
+- AssetHub Hackathon, Goa 2025 - 3rd of 190+
+- Builder House Bengaluru - 3rd, INR ↔ Polkadot bridge
 - Finalist in all 4 hackathons entered
 
 ### 4.9 Contact
@@ -270,7 +270,7 @@ abhijithsogal@gmail.com                    ← large, clay, mailto, click-to-cop
 GitHub · LinkedIn · Résumé (PDF)
 Mysuru, Karnataka, India
 ```
-**No phone number anywhere on the site.** It stays on the PDF only — a scraped number means permanent spam.
+**No phone number anywhere on the site.** It stays on the PDF only - a scraped number means permanent spam.
 
 Optional form only if a backend exists (Formspree/Resend). A broken form is worse than none.
 
@@ -279,11 +279,11 @@ Floating button, bottom-right: `▶ Take the tour`.
 
 On click: GSAP ScrollTo walks section to section, pausing ~4s each, with a small annotation card in the corner showing Abhijith's own one-line take on that section. Esc, manual scroll, or `×` exits. Progress dots show position.
 
-This is narration, not a gimmick — it's the "let me walk you through it" that a portfolio normally can't do.
+This is narration, not a gimmick - it's the "let me walk you through it" that a portfolio normally can't do.
 
 ---
 
-## 5. `/world` — the game (phase 3)
+## 5. `/world` - the game (phase 3)
 
 Six zones around a central spawn. Small enough that nothing is more than ~5 seconds away.
 
@@ -301,7 +301,7 @@ Six zones around a central spawn. Small enough that nothing is more than ~5 seco
    heatmap)                       education)
 ```
 
-**Division of responsibility — get this right or the build gets painful:**
+**Division of responsibility - get this right or the build gets painful:**
 
 | Layer | Owns |
 |---|---|
@@ -320,19 +320,19 @@ panel #2B2438   text   #F4EDE2   prompt #F2A65A   link #E86A6A
 
 **Typography:** pixel font (Silkscreen / Press Start 2P) for UI chrome and labels **only**. All body copy in Inter 16px+. Pixel fonts at paragraph length are unreadable and will cost interviews.
 
-**Controls:** WASD/arrows **plus click-to-move** — a large share of visitors won't try the keyboard. Interact prompt = a bobbing clay `[E]` above interactables, which teaches the mechanic with zero tutorial text.
+**Controls:** WASD/arrows **plus click-to-move** - a large share of visitors won't try the keyboard. Interact prompt = a bobbing clay `[E]` above interactables, which teaches the mechanic with zero tutorial text.
 
 **Mobile:** don't build a joystick. Detect touch → redirect to `/` with a small toast: "The world is best on desktop." Pixel worlds on a 380px screen are a bad experience.
 
 **Zone metaphors** (these earn their place, they aren't labelled rooms):
-- **Workshop** — projects as objects on workbenches
-- **Garden** — skills as plants at growth stages; **GitHub heatmap as a tilled crop field**, each contribution square a plot
-- **Archive** — experience as dated crates, chronological left → right
-- **Shrine** — hackathon trophies
-- **Tower** — contact, styled as sending a signal
-- **Terminal PC** — `whoami`, `ls`, `cd garden`, `sudo hire-me` (→ confetti + copies email)
+- **Workshop** - projects as objects on workbenches
+- **Garden** - skills as plants at growth stages; **GitHub heatmap as a tilled crop field**, each contribution square a plot
+- **Archive** - experience as dated crates, chronological left → right
+- **Shrine** - hackathon trophies
+- **Tower** - contact, styled as sending a signal
+- **Terminal PC** - `whoami`, `ls`, `cd garden`, `sudo hire-me` (→ confetti + copies email)
 
-**Assets:** use Kenney.nl (CC0) or a single cohesive itch.io top-down pack. **Stay inside one pack** — mixing packs is what makes pixel sites look amateur.
+**Assets:** use Kenney.nl (CC0) or a single cohesive itch.io top-down pack. **Stay inside one pack** - mixing packs is what makes pixel sites look amateur.
 
 ---
 
@@ -340,7 +340,7 @@ panel #2B2438   text   #F4EDE2   prompt #F2A65A   link #E86A6A
 
 Fill these into `content/*.json`. Everything not listed here is already in the résumé and can be lifted directly.
 
-### 6.1 For every project — required fields
+### 6.1 For every project - required fields
 
 ```json
 {
@@ -360,17 +360,17 @@ Fill these into `content/*.json`. Everything not listed here is already in the r
 ```
 
 **Send me / write down for each project:**
-1. Repo link (public? if private, say so — it changes the card)
+1. Repo link (public? if private, say so - it changes the card)
 2. Live URL or demo video
 3. **At least one number.** Rows processed, latency, users, uptime, % improvement, leaderboard rank. A project without a number reads as a tutorial follow-along.
 4. One screenshot or architecture diagram (this matters more than the copy)
-5. Was it solo or team? If team — what was *your* part specifically?
+5. Was it solo or team? If team - what was *your* part specifically?
 6. What was the hardest technical problem, and how did you solve it? (One sentence. This is what gets asked in interviews and it's what makes a card memorable.)
 
 **Already have enough for:** Retail Lakehouse, SysSight, Arjun Guruji.
 **Still needed:** every other personal project + all hackathon builds.
 
-### 6.2 For every hackathon — required
+### 6.2 For every hackathon - required
 
 ```json
 {
@@ -385,11 +385,11 @@ Fill these into `content/*.json`. Everything not listed here is already in the r
 }
 ```
 
-You mentioned 5-6 hackathons, 2 wins. Send details for all — even non-placing ones, if the build was interesting.
+You mentioned 5-6 hackathons, 2 wins. Send details for all - even non-placing ones, if the build was interesting.
 
 Known so far: EthGlobal New Delhi (finalist round), AssetHub Goa 2025 (3rd/190+), Builder House Bengaluru (3rd, INR↔Polkadot bridge). **Three more missing.**
 
-### 6.3 Experience — needed per Tier-1 role
+### 6.3 Experience - needed per Tier-1 role
 
 Résumé bullets are a starting point but are compressed. For each of FOSSEE, IRIS, Momento, SNSDS, supply:
 - Team size and your position in it
@@ -398,29 +398,29 @@ Résumé bullets are a starting point but are compressed. For each of FOSSEE, IR
 
 ### 6.4 Assets & links needed
 - [ ] Résumé PDF, final version → `public/resume.pdf`
-- [ ] A photo (optional but recommended — a real face outperforms an avatar)
+- [ ] A photo (optional but recommended - a real face outperforms an avatar)
 - [ ] Play Store link for Arjun Guruji + 2-3 app screenshots
 - [ ] Favicon
-- [ ] OG image, 1200×630 — name + tagline. Controls how the link looks when shared. Do not skip.
+- [ ] OG image, 1200×630 - name + tagline. Controls how the link looks when shared. Do not skip.
 - [ ] Any live project URLs
 
 ### 6.5 Copy you need to write yourself
-- [ ] **Hero tagline** — one sentence. Draft: *"Civil engineering student at NITK who builds production systems — distributed data pipelines, Flutter apps with 2,000+ users, and real-time web infrastructure."*
-- [ ] **Availability line** — exact role types + grad year
-- [ ] **Tour annotations** — one line per section, in your own voice
+- [ ] **Hero tagline** - one sentence. Draft: *"Civil engineering student at NITK who builds production systems - distributed data pipelines, Flutter apps with 2,000+ users, and real-time web infrastructure."*
+- [ ] **Availability line** - exact role types + grad year
+- [ ] **Tour annotations** - one line per section, in your own voice
 
 ---
 
 ## 7. Data to fix before building
 
-These are real inconsistencies between the résumé and LinkedIn. Pick one source of truth — recruiters cross-check.
+These are real inconsistencies between the résumé and LinkedIn. Pick one source of truth - recruiters cross-check.
 
 | Item | Résumé | LinkedIn | Action |
 |---|---|---|---|
 | Momento / Humora dates | Nov 2025 - Feb 2026 | Oct 2025 - Jan 2026 | Resolve |
 | Osdag "Web Lead" start | May 2025 | Nov 2025 (Web Mentor) | Resolve |
 | Osdag role title | Web Lead | Web mentor | Pick one |
-| LinkedIn Autumn Intern blurb | — | "Will work on UI revamp" | Rewrite in past tense — the role is finished |
+| LinkedIn Autumn Intern blurb | - | "Will work on UI revamp" | Rewrite in past tense - the role is finished |
 
 ---
 
@@ -433,7 +433,7 @@ Do not consider a phase done until all of these pass.
 - [ ] Visible focus ring on every interactive element (clay, 2px offset)
 - [ ] Every image has meaningful alt text
 - [ ] Tab order matches visual order
-- [ ] `prefers-reduced-motion` respected — animations become instant, not slower
+- [ ] `prefers-reduced-motion` respected - animations become instant, not slower
 - [ ] Icon-only buttons have `aria-label`
 
 **Interaction**
@@ -470,11 +470,11 @@ Do not consider a phase done until all of these pass.
 
 ## 9. Build phases
 
-**Phase 1 — the real portfolio.** Content JSON → layout → all sections → responsive → a11y → deploy. *Ship this before starting anything else. A live, complete, plain portfolio beats an unfinished clever one every single time.*
+**Phase 1 - the real portfolio.** Content JSON → layout → all sections → responsive → a11y → deploy. *Ship this before starting anything else. A live, complete, plain portfolio beats an unfinished clever one every single time.*
 
-**Phase 2 — polish.** GSAP reveals, tour mode, GitHub heatmap, OG image, 404, analytics.
+**Phase 2 - polish.** GSAP reveals, tour mode, GitHub heatmap, OG image, 404, analytics.
 
-**Phase 3 — `/world`.** Read-mode-complete is a hard prerequisite. Build: Phaser scene + movement + collision → event bus → Workshop zone fully wired → remaining zones (mostly repetition) → terminal easter egg → footprints and polish.
+**Phase 3 - `/world`.** Read-mode-complete is a hard prerequisite. Build: Phaser scene + movement + collision → event bus → Workshop zone fully wired → remaining zones (mostly repetition) → terminal easter egg → footprints and polish.
 
 ---
 

@@ -1,18 +1,10 @@
 export default function SkillGroup({ group, skills }) {
   return (
-    <div>
-      <h3 className="font-display text-base font-semibold text-ink">{group}</h3>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {skills.map((skill, i) => (
-          <span
-            key={i}
-            data-reveal
-            className="rounded-full bg-sand px-3 py-1.5 font-mono text-[13px] text-ink"
-          >
-            {skill}
-          </span>
-        ))}
-      </div>
+    <div data-reveal className="flex flex-col gap-2 py-5 sm:flex-row sm:items-baseline sm:gap-8">
+      <h3 className="shrink-0 font-mono text-xs uppercase tracking-[0.08em] text-faint sm:w-44">
+        {group}
+      </h3>
+      <p className="font-mono text-[15px] leading-relaxed text-ink">{skills.join('  ·  ')}</p>
     </div>
   )
 }

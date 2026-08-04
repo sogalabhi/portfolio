@@ -4,32 +4,24 @@ import { GithubIcon } from '../misc/BrandIcons'
 
 export default function ProjectCard({ project }) {
   return (
-    <article
-      data-reveal
-      className="flex flex-col rounded-2xl border border-line bg-card p-6 transition-shadow duration-150 hover:shadow-sm"
-    >
-      {project.hackathon && (
-        <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-clay/10 px-3 py-1 text-xs font-medium text-clay">
-          <Trophy size={12} aria-hidden="true" />
-          {project.hackathon}
-        </span>
-      )}
-
-      <h3 className="font-display text-lg font-semibold text-ink">{project.title}</h3>
-      <p className="mt-2 flex-1 text-sm text-slate">{project.tagline}</p>
-
-      <div className="mt-4 flex flex-wrap gap-2">
-        {project.stack.slice(0, 3).map((tech, i) => (
-          <span
-            key={i}
-            className="rounded-full bg-sand px-2.5 py-1 font-mono text-xs text-ink"
-          >
-            {tech}
-          </span>
-        ))}
+    <li data-reveal className="flex flex-wrap items-start justify-between gap-x-6 gap-y-3 py-6">
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-baseline gap-x-3">
+          <h3 className="font-display text-lg font-semibold text-ink">{project.title}</h3>
+          {project.hackathon && (
+            <span className="inline-flex items-center gap-1 font-mono text-xs text-clay">
+              <Trophy size={11} aria-hidden="true" />
+              {project.hackathon}
+            </span>
+          )}
+        </div>
+        <p className="mt-1 text-sm text-slate">{project.tagline}</p>
+        {project.stack.length > 0 && (
+          <p className="mt-2 font-mono text-xs text-faint">{project.stack.slice(0, 3).join('  ·  ')}</p>
+        )}
       </div>
 
-      <div className="mt-5 flex gap-4">
+      <div className="flex shrink-0 items-center gap-4">
         {project.links.github && (
           <a
             href={project.links.github}
@@ -55,6 +47,6 @@ export default function ProjectCard({ project }) {
           </a>
         )}
       </div>
-    </article>
+    </li>
   )
 }

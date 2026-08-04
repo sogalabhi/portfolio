@@ -1,11 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { Play, Pause, ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { track } from '@vercel/analytics'
-import useTour from '../../hooks/useTour'
+import { useTourContext } from '../../hooks/TourContext'
 
 export default function TourController() {
-  const { state, index, stops, start, exit, pause, resume, next, prev, goTo } = useTour()
-  const launchRef = useRef(null)
+  const { state, index, stops, exit, pause, resume, next, prev, goTo } = useTourContext()
   const cardRef = useRef(null)
   const hasRunRef = useRef(false)
 
@@ -16,7 +14,9 @@ export default function TourController() {
       hasRunRef.current = true
       cardRef.current?.focus()
     } else if (hasRunRef.current) {
-      launchRef.current?.focus()
+      // the launcher lives in Hero now, not here - same data-tour-start
+      // attribute KeyboardShortcuts already uses to trigger it via 't'
+      document.querySelector('[data-tour-start]')?.focus()
     }
   }, [active])
 
@@ -31,25 +31,7 @@ export default function TourController() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [active, exit])
 
-  const handleStart = () => {
-    track('tour_started')
-    start()
-  }
-
-  if (!active) {
-    return (
-      <button
-        type="button"
-        ref={launchRef}
-        data-tour-start
-        onClick={handleStart}
-        className="fixed bottom-6 right-6 z-40 inline-flex cursor-pointer items-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-medium text-paper shadow-md transition-colors duration-150 hover:bg-ink/90 print:hidden"
-      >
-        <Play size={14} aria-hidden="true" />
-        Take the tour
-      </button>
-    )
-  }
+  if (!active) return null
 
   const current = stops[index]
   const isFirst = index === 0

@@ -2,17 +2,24 @@
   {
     "id": "retail-lakehouse",
     "title": "Retail Lakehouse",
-    "tagline": "NEEDS_INPUT: one-line hook, ≤ 90 chars - what it does and for whom",
+    "tagline": "An end-to-end retail data platform - batch and streaming ingestion through to a churn model served back into CRM.",
     "domain": "Data Engineering",
-    "problem": "NEEDS_INPUT: 1-2 sentences on what was broken or missing",
+    "problem": "Object storage can't do random writes, which breaks the upsert patterns retail analytics depends on. Batch and streaming pipelines are usually built as two disconnected systems, so the same business logic gets written twice and drifts apart.",
     "whatIBuilt": [
-      "NEEDS_INPUT: bullet starting with a verb",
-      "NEEDS_INPUT: bullet starting with a verb",
-      "NEEDS_INPUT: bullet starting with a verb"
+      "Designed a medallion architecture (bronze/silver/gold) on MinIO object storage, using Delta Lake for ACID-compliant upserts to solve the object-storage random-write antipattern",
+      "Built orchestrated batch ingestion with Apache Airflow alongside a real-time streaming pipeline on Redpanda and Spark Structured Streaming, using watermarking and checkpointing for fault-tolerant exactly-once processing",
+      "Developed three-stage transformations in PySpark and dbt-core with data quality gates enforced by Great Expectations",
+      "Trained a customer churn model on RFM features, served it via FastAPI, and set up reverse ETL back into the operational CRM",
+      "Deployed the full cloud infrastructure on Azure (ADLS Gen2, ADF, Event Hubs) with Terraform IaC, plus end-to-end lineage and cataloguing through OpenMetadata and GitHub Actions CI"
     ],
-    "impact": "NEEDS_INPUT: a number - rows/sec, latency, % improvement, rank",
-    "stack": ["NEEDS_INPUT: e.g. Spark", "NEEDS_INPUT: e.g. Airflow", "NEEDS_INPUT: e.g. Delta Lake"],
-    "links": { "github": "", "live": "", "demo": "", "playStore": "" },
+    "impact": "NEEDS_INPUT: one number - rows processed, ingestion throughput, pipeline runtime, or churn model accuracy",
+    "stack": ["Apache Spark", "Airflow", "Delta Lake", "dbt-core", "Redpanda", "MinIO", "Great Expectations", "Azure", "Terraform", "FastAPI", "OpenMetadata"],
+    "links": {
+      "github": "NEEDS_INPUT: repo URL, or set to \"\" if private",
+      "live": "",
+      "demo": "",
+      "playStore": ""
+    },
     "media": [],
     "featured": true,
     "order": 1,
@@ -21,55 +28,213 @@
   {
     "id": "arjun-guruji",
     "title": "Arjun Guruji",
-    "tagline": "NEEDS_INPUT: one-line hook, ≤ 90 chars - what it does and for whom",
+    "tagline": "A Kannada devotional app with offline books, synced-lyric audio, and event updates for a 2,000-strong community.",
     "domain": "Mobile",
-    "problem": "NEEDS_INPUT: 1-2 sentences on what was broken or missing",
+    "problem": "A devotional community had no single place for its texts, chants, and event announcements - content was scattered across social posts and required a connection to reach. The original app was native Java and couldn't scale to the feature set the community needed.",
     "whatIBuilt": [
-      "NEEDS_INPUT: bullet starting with a verb",
-      "NEEDS_INPUT: bullet starting with a verb",
-      "NEEDS_INPUT: bullet starting with a verb"
+      "Pivoted the app from native Java to Flutter and rebuilt it on TDD Clean Architecture with BLoC state management and GetIt dependency injection",
+      "Built an audio player with synced lyrics, persistent background playback, and a global Now Playing mini-player overlay",
+      "Implemented a Hive local caching layer synchronised against Firestore, giving full offline access to the books and Astottaras library",
+      "Added Kannada script typography using Noto Sans and Noto Serif Kannada, with global reading settings for font size (16–32px), three themes, and classic/modern font toggles",
+      "Integrated Firebase Cloud Messaging for content and event alerts, plus UPI donation flows and links to the community's social channels"
     ],
-    "impact": "2,000+ downloads · 4.9★ on the Play Store",
-    "stack": ["Flutter", "NEEDS_INPUT", "NEEDS_INPUT"],
-    "links": { "github": "", "live": "", "demo": "", "playStore": "NEEDS_INPUT: Play Store URL" },
+    "impact": "2,000+ downloads and a 4.9★ rating on the Google Play Store",
+    "stack": ["Flutter", "BLoC", "Clean Architecture", "Hive", "Firebase Cloud Messaging", "Firestore", "GetIt", "UPI"],
+    "links": {
+      "github": "https://github.com/sogalabhi/arjun_guruji",
+      "live": "",
+      "demo": "",
+      "playStore": "https://play.google.com/store/apps/details?id=org.snsds.arjunguruji"
+    },
     "media": [],
     "featured": true,
     "order": 2,
     "date": "NEEDS_INPUT: YYYY-MM"
   },
   {
-    "id": "syssight",
-    "title": "SysSight",
-    "tagline": "NEEDS_INPUT: one-line hook, ≤ 90 chars - what it does and for whom",
-    "domain": "Infra",
-    "problem": "NEEDS_INPUT: 1-2 sentences on what was broken or missing",
+    "id": "polar-bridge",
+    "title": "Polar Bridge",
+    "tagline": "A fiat-to-Polkadot on-ramp - pay by UPI, borrow PAS tokens against INR collateral, no crypto knowledge needed.",
+    "domain": "Blockchain",
+    "problem": "Indian users wanting Polkadot ecosystem tokens have to navigate exchanges and bridges before they can hold anything. There was no path from a UPI payment to a token in your own wallet, and no way to borrow against fiat holdings without selling them.",
     "whatIBuilt": [
-      "NEEDS_INPUT: bullet starting with a verb",
-      "NEEDS_INPUT: bullet starting with a verb",
-      "NEEDS_INPUT: bullet starting with a verb"
+      "Built a cross-chain collateralised lending protocol spanning a Stellar Soroban vault for XLM collateral and a Paseo Asset Hub EVM pool for PAS liquidity",
+      "Wrote a relayer service that polls Stellar lock events and maintains a processed-events ledger, so a vault lock reliably triggers PAS release without duplicate processing",
+      "Implemented the lending engine - duration-based tiers (7/30/90 days at 12/8/6% APY), 75% max LTV, 85% liquidation threshold, and a health-factor formula driving automatic liquidation",
+      "Added a 3-day grace period and live price feeds so XLM volatility couldn't trigger sudden liquidations without giving users time to top up collateral",
+      "Integrated Razorpay webhooks (UPI, card, netbanking) to auto-credit INR wallets, converting to collateral at market rate at loan creation"
     ],
-    "impact": "NEEDS_INPUT: a number - latency, uptime, concurrent connections",
-    "stack": ["NEEDS_INPUT", "NEEDS_INPUT", "NEEDS_INPUT"],
-    "links": { "github": "", "live": "", "demo": "", "playStore": "" },
+    "impact": "3rd place, Polkadot Builder House Bengaluru",
+    "stack": ["React", "Vite", "Tailwind", "Node.js", "Express", "Supabase", "Stellar Soroban", "Paseo Asset Hub", "Solidity", "Razorpay"],
+    "links": {
+      "github": "https://github.com/sogalabhi/Polar",
+      "live": "",
+      "demo": "",
+      "playStore": ""
+    },
     "media": [],
     "featured": true,
+    "hackathon": "3rd place · Polkadot Builder House Bengaluru",
+    "teamSize": 2,
+    "myRole": "Web3 developer - smart contracts, relayer service, and cross-chain event synchronisation",
     "order": 3,
     "date": "NEEDS_INPUT: YYYY-MM"
   },
   {
-    "id": "polkadot-bridge",
-    "title": "NEEDS_INPUT: project name (INR ↔ Polkadot bridge, Builder House Bengaluru)",
-    "tagline": "NEEDS_INPUT: one-line hook, ≤ 90 chars",
-    "domain": "Blockchain",
-    "problem": "NEEDS_INPUT",
-    "whatIBuilt": ["NEEDS_INPUT", "NEEDS_INPUT"],
-    "impact": "3rd place, Builder House Bengaluru",
-    "stack": ["NEEDS_INPUT"],
-    "links": { "github": "", "live": "", "demo": "", "playStore": "" },
+    "id": "syssight",
+    "title": "SysSight",
+    "tagline": "A distributed infrastructure monitor - lightweight agents, time-series storage, and Discord alerts on threshold breach.",
+    "domain": "Infrastructure",
+    "problem": "Monitoring multiple hosts usually means either a heavyweight commercial agent or a stack of disconnected scripts. Neither gives you configurable thresholds and alerts that reach you where you actually are.",
+    "whatIBuilt": [
+      "Built lightweight Python agents that collect CPU, memory, disk, network, and load metrics every 10 seconds and ship them to a FastAPI server",
+      "Deployed TimescaleDB to handle high-frequency time-series ingestion from multiple distributed hosts in real time",
+      "Implemented an event-driven alerting system with threshold detection, alert persistence, and rich Discord embed notifications with severity colour coding",
+      "Built a React and TypeScript dashboard with live metrics, interactive historical graphs, an on-demand paginated process viewer, and a UI for managing thresholds dynamically"
+    ],
+    "impact": "10-second metric collection across distributed hosts, with threshold changes propagating to agents within 20 seconds",
+    "stack": ["FastAPI", "TimescaleDB", "SQLAlchemy", "Pydantic", "psutil", "React", "TypeScript", "Chart.js", "Docker"],
+    "links": {
+      "github": "https://github.com/sogalabhi/syssight",
+      "live": "",
+      "demo": "https://drive.google.com/file/d/19mqFjbhBrghrIJcMFxcmGHI4u8wZWqrY/view?usp=sharing",
+      "playStore": ""
+    },
     "media": [],
     "featured": false,
-    "hackathon": "3rd place",
     "order": 4,
+    "date": "NEEDS_INPUT: YYYY-MM"
+  },
+  {
+    "id": "polkaflow",
+    "title": "Polkaflow",
+    "tagline": "A visual workflow builder that turns drag-and-drop flowcharts into deployable Polkadot smart contracts.",
+    "domain": "Blockchain",
+    "problem": "Writing smart contracts for DeFi, DAOs, or cross-chain flows requires Solidity fluency before you can test whether an idea even works. Gas inefficiency then compounds the problem, and there's no easy path from a designed process to a deployed contract.",
+    "whatIBuilt": [
+      "Built a drag-and-drop workflow canvas with three entry points - AI prompt-to-flowchart, manual node editing, and pre-built templates",
+      "Wrote a custom logic engine that compiles a visual workflow into Solidity, alongside an AI code-generation path, giving developers a transparent alternative to black-box output",
+      "Added hybrid contract optimisation: the system detects gas-heavy functions, auto-generates equivalent Rust contracts, and embeds them into the Solidity flow, with a dual-mode editor for viewing and compiling both",
+      "Integrated AssetHub natively for creating, freezing, and tracking assets from inside a workflow, with one-click deployment to PolkaVM",
+      "Added a Telegram bot node that pushes real-time compile and deploy notifications with contract address, transaction hash, and gas usage"
+    ],
+    "impact": "3rd place of 190+ entrants, AssetHub Hackathon, Goa 2025",
+    "stack": ["React", "Solidity", "Rust", "PolkaVM", "AssetHub", "solc", "resolc", "Telegram API"],
+    "links": {
+      "github": "https://github.com/sogalabhi/Polkadot",
+      "live": "",
+      "demo": "https://www.youtube.com/watch?v=1wMiRCPWYBE",
+      "playStore": ""
+    },
+    "media": [],
+    "featured": true,
+    "hackathon": "3rd place of 190+ · AssetHub Hackathon, Goa 2025",
+    "order": 5,
+    "date": "NEEDS_INPUT: YYYY-MM"
+  },
+  {
+    "id": "eta-predictor",
+    "title": "Intelligent ETA Predictor",
+    "tagline": "A multi-output neural network that splits food delivery ETA into kitchen prep time and rider travel time.",
+    "domain": "Machine Learning",
+    "problem": "Delivery ETAs are usually a single opaque number, which hides whether a delay is the kitchen's or the rider's. Predicting them separately needs a model that learns shared urban-logistics friction while branching to two distinct outputs.",
+    "whatIBuilt": [
+      "Designed a custom multi-input multi-output neural network - 18 features through a shared dense trunk, branching to separate linear outputs for prep time and travel time",
+      "Served the model through FastAPI, rebuilding the exact 18-column one-hot encoded schema at request time from a joblib-exported column manifest to fix a shape mismatch between the 8-field API payload and the trained scaler",
+      "Diagnosed a silent Pandas dtype filter that was dropping every boolean one-hot column plus Age and Rating, and fixed the pipeline with explicit numeric coercion before filtering",
+      "Replaced brittle exact-match category lookups with substring matching to handle the dataset's inconsistent labels and trailing whitespace",
+      "Identified the model's extrapolation failure - predicting bicycles as faster than motorcycles on long jammed routes - and specified business-logic guardrails in the API layer rather than trusting the model blindly"
+    ],
+    "impact": "NEEDS_INPUT: model accuracy, MAE on prep/travel time, or training set size",
+    "stack": ["Python", "TensorFlow", "Keras", "Scikit-Learn", "Pandas", "FastAPI", "Tailwind"],
+    "links": {
+      "github": "https://github.com/sogalabhi/delivery-time-predictor",
+      "live": "",
+      "demo": "",
+      "playStore": ""
+    },
+    "media": [],
+    "featured": false,
+    "order": 6,
+    "date": "NEEDS_INPUT: YYYY-MM"
+  },
+  {
+    "id": "slope-stability",
+    "title": "Slope Stability Analyzer",
+    "tagline": "An object-oriented Python wrapper for slope stability analysis using Bishop's Simplified Method of Slices.",
+    "domain": "Engineering Tools",
+    "problem": "Slope stability analysis usually means driving GUI software one scenario at a time, which makes batch comparison and version-controlled configuration effectively impossible.",
+    "whatIBuilt": [
+      "Built a fluent, method-chaining API for defining 2D slope models with height, steepness, and infinite horizontal soil layers",
+      "Implemented automatic critical slip circle search via Bishop's Simplified Method of Slices",
+      "Added support for external loading (UDL and line loads) and water table effects on stability",
+      "Designed the library around SOLID and DRY principles with comprehensive input validation, batch scenario processing, and JSON config export/import"
+    ],
+    "impact": "NEEDS_INPUT: scenarios analysed per run, or speedup vs. manual GUI workflow",
+    "stack": ["Python", "Object-Oriented Design", "Bishop's Method"],
+    "links": {
+      "github": "https://github.com/sogalabhi/mini-project-2",
+      "live": "",
+      "demo": "",
+      "playStore": ""
+    },
+    "media": [],
+    "featured": false,
+    "order": 7,
+    "date": "NEEDS_INPUT: YYYY-MM"
+  },
+  {
+    "id": "paladin-sdk",
+    "title": "Paladin Java SDK",
+    "tagline": "A proof-of-concept Java SDK for Paladin, built around a fluent transaction builder with automatic idempotency recovery.",
+    "domain": "Developer Tools",
+    "problem": "In distributed financial systems, network failures cause duplicate transaction submissions, which Paladin nodes reject with an idempotency clash error. Every calling application then has to implement its own retry logic against raw RPC maps.",
+    "whatIBuilt": [
+      "Built a fluent, chainable TxBuilder giving compile-time safety, deferred validation, and a self-documenting API for private transaction construction",
+      "Implemented transparent PD012220 idempotency-clash recovery - on detection the client automatically resolves the existing transaction ID, so callers see a success with no retry code of their own",
+      "Demonstrated the payoff with higher-level domain helpers that reduce a cross-node transfer to a single typed call",
+      "Wrote a deterministic test suite using MockWebServer to simulate the error path without requiring a live Paladin node"
+    ],
+    "impact": "Proof of concept submitted for the LFX Mentorship programme (Jun–Nov 2026)",
+    "stack": ["Java", "Maven", "MockWebServer", "JSON-RPC"],
+    "links": {
+      "github": "https://github.com/sogalabhi/paladin-poc",
+      "live": "",
+      "demo": "",
+      "playStore": ""
+    },
+    "media": [],
+    "featured": false,
+    "order": 8,
+    "date": "2026-05"
+  },
+  {
+    "id": "pokiwars",
+    "title": "PokeWars",
+    "tagline": "A multiplayer Pokémon shooting game with wallet-based login, NFT ownership, and real-time on-chain rewards.",
+    "domain": "Game / Web3",
+    "problem": "Crypto onramp and reward flows are usually dry balance screens, and multiplayer web games rarely tie player-owned assets to real gameplay stakes. Wanted to make the boring parts - connecting a wallet, watching a reward accrue - feel like play instead of paperwork.",
+    "whatIBuilt": [
+      "Built the 2D battle arena in Phaser - shooting mechanics, animations, and real-time multiplayer combat where players control on-chain Pokémon and fight in a shared arena",
+      "Wrote Solidity contracts on Polygon tying Pokémon ownership to NFTs, and integrated the X402 protocol for transparent, tamper-proof daily on-chain rewards",
+      "Added MetaMask authentication and transaction signing for wallet login and reward claims",
+      "Built a Node.js backend handling off-chain coordination and WebSocket messaging, syncing player state with the smart contracts for real-time health, attacks, and position updates",
+      "Built an optimistic WebSocket layer so players see instant feedback before on-chain confirmation lands, keeping combat responsive despite blockchain latency",
+      "Built the React frontend - menus, lobbies, matchmaking, and player dashboards around the Phaser canvas"
+    ],
+    "impact": "Built at ETHGlobal New Delhi",
+    "stack": ["Phaser", "React", "Solidity", "Polygon", "MetaMask", "WebSockets", "Node.js", "X402"],
+    "links": {
+      "github": "https://github.com/Kushagra1122/PokiWars",
+      "live": "",
+      "demo": "",
+      "playStore": ""
+    },
+    "media": [],
+    "featured": false,
+    "teamProject": true,
+    "myRole": "NEEDS_INPUT: your specific contribution - the repo is under a teammate's account (Kushagra1122), so worth being precise about which parts were yours",
+    "order": 9,
     "date": "NEEDS_INPUT: YYYY-MM"
   }
 ]

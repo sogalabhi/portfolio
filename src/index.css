@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* self-hosted - Departure Mono isn't on Google Fonts. OFL 1.1, Helena Zhang;
+   license copy at public/fonts/DepartureMono-LICENSE.txt */
+@font-face {
+  font-family: "Departure Mono";
+  src: url("/fonts/DepartureMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-ink: #1C1B19;
   --color-slate: #5A574F;
@@ -11,9 +21,9 @@
   --color-moss: #4A7C4E;
   --color-sand: #E8DCC4;
 
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Newsreader", ui-serif, Georgia, serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-mono: "Departure Mono", ui-monospace, monospace;
 
   --container-content: 64rem;
 }
@@ -48,12 +58,12 @@
   h1, h2, h3 {
     font-family: var(--font-display);
     font-weight: 600;
+    font-optical-sizing: auto;
   }
 
   h1 {
     font-size: clamp(2.75rem, 6vw, 4.5rem);
     line-height: 1.05;
-    letter-spacing: -0.02em;
   }
 
   h2 {

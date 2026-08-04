@@ -1,9 +1,38 @@
 import Phaser from 'phaser'
 import { bus, EVENTS } from '../bus'
-import { buildMap, TILE_PATH, TILE_SAND } from '../data/mapLayout'
+import { buildMap, TILE_PATH, TILE_SAND, TILE_GRASS } from '../data/mapLayout'
 import { SPAWN_POINT, ZONES, TILE } from '../data/zones'
 import Player from '../entities/Player'
 import ZoneManager from '../entities/Zone'
+
+// nature scatter - packed into the atlas by the asset pipeline (scripts/assets/README.md's
+// Tier D) but never actually placed anywhere until now. Curated props (fences, lamp posts,
+// benches, barrels, lanterns) are left out on purpose: those read as placed-with-intent next
+// to a path or building, not scattered - a randomly-dropped bench looks like a bug, not decor.
+const SCATTER_DEFS = [
+  { frame: 'tree_large_a', height: 64 },
+  { frame: 'tree_large_b', height: 64 },
+  { frame: 'tree_small_a', height: 40 },
+  { frame: 'tree_small_b', height: 40 },
+  { frame: 'bush_a', height: 20 },
+  { frame: 'bush_b', height: 20 },
+  { frame: 'bush_c', height: 20 },
+  { frame: 'rock_a', height: 16 },
+  { frame: 'rock_b', height: 16 },
+  { frame: 'rock_c', height: 16 },
+  { frame: 'flowers_blue', height: 16 },
+  { frame: 'flowers_red', height: 16 },
+  { frame: 'flowers_white', height: 16 },
+]
+const SCATTER_DENSITY = 0.04
+
+// deterministic per-tile pseudo-random, not Math.random() - same island every
+// load, reproducible for screenshots/debugging instead of shuffling underfoot
+function tileHash(x, y, seed) {
+  let h = Math.imul(x, 374761393) + Math.imul(y, 668265263) + seed
+  h = Math.imul(h ^ (h >>> 13), 1274126177)
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967295
+}
 
 const ZOOM = { pointer: 1.5, touch: 1 }
 const LERP = { pointer: 0.1, touch: 0.15 }
@@ -88,6 +117,8 @@ export default class WorldScene extends Phaser.Scene {
       }
     }
     collisionLayer.setCollisionByExclusion([-1])
+
+    this.placeScatter(mapData)
 
     this.player = new Player(this, SPAWN_POINT.x, SPAWN_POINT.y)
     this.physics.add.collider(this.player.sprite, collisionLayer)
@@ -227,6 +258,44 @@ export default class WorldScene extends Phaser.Scene {
       }
     })
     bus.emit(EVENTS.ZONE_LABELS, labels)
+  }
+
+  // Grass tiles only (excludes paths/sand clearings/zones by construction -
+  // no separate distance math needed) and only when the real atlas is
+  // loaded - pure decoration, so it's fine to just skip it rather than draw
+  // placeholder rects like the props do.
+  placeScatter(mapData) {
+    if (!this.textures.exists('objects')) return
+    const atlas = this.textures.get('objects')
+    const available = SCATTER_DEFS.filter((d) => atlas.has(d.frame))
+    if (!available.length) return
+
+    for (let y = 1; y < mapData.rows - 1; y++) {
+      for (let x = 1; x < mapData.cols - 1; x++) {
+        if (mapData.ground[y][x] !== TILE_GRASS) continue
+        if (tileHash(x, y, 1337) > SCATTER_DENSITY) continue
+
+        const pick = available[Math.floor(tileHash(x, y, 91) * available.length)]
+        const tilesTall = Math.ceil(pick.height / TILE)
+
+        // clearance: the sprite is bottom-anchored, so it extends upward
+        // from this tile - and a tile wider than 16px can spill into its
+        // left/right neighbor, so check those too
+        let clear = true
+        for (let dy = 0; dy < tilesTall && clear; dy++) {
+          const ty = y - dy
+          if (ty < 1 || mapData.ground[ty][x] !== TILE_GRASS) clear = false
+        }
+        if (clear && (mapData.ground[y][x - 1] !== TILE_GRASS || mapData.ground[y][x + 1] !== TILE_GRASS)) {
+          clear = false
+        }
+        if (!clear) continue
+
+        const px = x * TILE + TILE / 2
+        const py = y * TILE + TILE
+        this.add.image(px, py, 'objects', pick.frame).setOrigin(0.5, 1).setDepth(py)
+      }
+    }
   }
 
   // Tap target, not player proximity - a finger is imprecise, so touch gets

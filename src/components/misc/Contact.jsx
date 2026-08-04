@@ -3,6 +3,7 @@ import { Copy, Check, FileText } from 'lucide-react'
 import { track } from '@vercel/analytics'
 import profile from '../../content/profile.json'
 import sections from '../../content/sections.json'
+import SectionIcon from '../layout/SectionIcon'
 import { GithubIcon, LinkedinIcon } from './BrandIcons'
 
 export default function Contact() {
@@ -17,7 +18,10 @@ export default function Contact() {
 
   return (
     <div>
-      <h2 className="text-ink">{sections.contact.heading}</h2>
+      <div className="flex items-center gap-4">
+        <SectionIcon src="/world/sprites/tower.png" />
+        <h2 className="text-ink">{sections.contact.heading}</h2>
+      </div>
 
       <div className="mt-8 flex flex-wrap items-center gap-3">
         <a

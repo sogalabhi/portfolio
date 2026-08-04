@@ -7,9 +7,7 @@ export default function CompactRoleList({ roles }) {
   if (roles.length === 0) return null
 
   return (
-    <div data-reveal className="relative pl-8">
-      <span className="absolute left-[-5px] top-1.5 h-2.5 w-2.5 rounded-full bg-line" aria-hidden="true" />
-
+    <div data-reveal className="border-b border-line py-6">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -34,7 +32,7 @@ export default function CompactRoleList({ roles }) {
               {role.title !== 'NEEDS_INPUT' ? `${role.title} · ` : ''}
               {role.org}
             </span>
-            <span className="text-faint">{role.period}</span>
+            <span className="font-mono text-xs text-faint">{role.period}</span>
           </li>
         ))}
       </ul>

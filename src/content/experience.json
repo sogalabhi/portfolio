@@ -3,19 +3,19 @@
     {
       "org": "FOSSEE, IIT Bombay",
       "period": "May 2025 - Present",
-      "stack": ["React", "Django", "Redis", "WebSockets", "Three.js"],
+      "stack": ["React", "Django", "Redis", "Celery", "WebSockets", "Three.js", "Nginx"],
       "roles": [
         { "title": "Web Lead", "period": "Nov 2025 - Present" },
         { "title": "Autumn Intern", "period": "Aug 2025 - Nov 2025" },
         { "title": "Summer Intern", "period": "May 2025 - Aug 2025" }
       ],
       "bullets": [
-        "Led a team of 4, transitioning from frontend development into system design - NEEDS_INPUT: what specifically shipped under your lead, and for what part of Osdag",
-        "Architected Redis caching and WebSocket infrastructure to support real-time collaboration features in Osdag - NEEDS_INPUT: latency improvement, concurrent user count, or cache hit rate",
-        "Wrote load testing scripts and built a live dashboard tracking CPU, RAM, and core usage, deriving a recommended server configuration for production - NEEDS_INPUT: what load level was tested, what the recommendation actually was",
-        "Contributed to feature development and UX improvements for Osdag, an open-source structural steel design automation tool, during the Summer Internship - NEEDS_INPUT: one specific feature you shipped in this phase"
-      ],
-      "note": "Résumé says 'Web Lead' starting May 2025; LinkedIn shows the role as 'Web mentor' starting Nov 2025, with May–Nov 2025 as Summer then Autumn Intern. Using LinkedIn's structure (it's the more granular of the two) - confirm whether 'Web Lead' is the correct current title, or if it should read 'Web Mentor' to match LinkedIn exactly."
+        "Led a 4-member web team on production modules (Tension Members, Base Plate Connection) and a frontend/backend refactor that was adopted as the team standard",
+        "Architected Redis caching and async CAD computation with Celery, plus WebSocket infrastructure for real-time job status and collaboration",
+        "Owned the bare-metal deployment at IIT Bombay - Nginx, SSL, and CI/CD",
+        "Wrote load-testing scripts and a live CPU/RAM/core dashboard, coordinating 20+ members to stress-test 200+ concurrent requests, and used the results to document the recommended production server configuration",
+        "Contributed features and UX improvements to Osdag, an open-source structural steel design automation tool, during the Summer Internship - the UI redesign was chosen over other interns' designs"
+      ]
     },
     {
       "org": "IRIS, NITK",
@@ -26,11 +26,9 @@
         { "title": "Code-in Intern, App Dev", "period": "Nov 2024 - Feb 2025" }
       ],
       "bullets": [
-        "Building the Alumni Donations module, integrated with the BillDesk payment SDK, and currently working on a Service Requests module - NEEDS_INPUT: how far along, any usage numbers",
-        "Built an Event Management module for a sports portal - schedules, match results, and live points tables, with an admin panel to update all data",
-        "Built live hostel league tracking as part of IRIS's 55+ digitized processes - NEEDS_INPUT: what this replaced, how many students/hostels it serves",
-        "NEEDS_INPUT: team size and your position within it",
-        "NEEDS_INPUT: one thing you're proud of that isn't on the résumé"
+        "Extended IRIS, NITK's student-built ERP with 55+ digitized processes, by shipping 4 missing modules: Event Management, Alumni Donations, live Hostel League tracking, and Service Requests",
+        "Architected the Event Management module - schedules, match results, and live points tables, with an admin panel - using Clean Architecture and BLoC for layered, testable code",
+        "Integrated the BillDesk payment SDK for alumni donations, and built real-time hostel league tracking for students"
       ]
     },
     {
@@ -38,14 +36,12 @@
       "period": "Nov 2025 - Feb 2026",
       "stack": ["Flutter", "Riverpod", "Cloud Functions", "Firestore Security Rules"],
       "roles": [
-        { "title": "Flutter Dev Intern", "period": "NEEDS_INPUT: matches org period above" }
+        { "title": "Flutter Dev Intern", "period": "Nov 2025 - Feb 2026" }
       ],
       "bullets": [
-        "Built a paginated home feed with status filters and notification subscriptions for an AI-based event management platform, a startup by third-year students from IIT Kharagpur and IIT Bombay",
-        "Implemented a permission system for admin promotion backed by Firestore Security Rules and Cloud Functions",
-        "Added functionality for participants to like photos and videos, with a filter allowing creators to sort and view media by who liked it",
-        "NEEDS_INPUT: team size and your position",
-        "NEEDS_INPUT: one number - feed load time, notification delivery rate, or user count if known"
+        "Built a paginated event feed with real-time status filters and per-author notification subscriptions for an AI-based event management platform, a startup by third-year students from IIT Kharagpur and IIT Bombay",
+        "Implemented multi-level role-based access with Firestore Security Rules, enforcing admin promotion server-side",
+        "Added photo and video likes with a creator filter to sort media by who liked it, using Riverpod for state"
       ]
     },
     {
@@ -57,9 +53,7 @@
       ],
       "bullets": [
         "Built and have maintained Arjun Guruji continuously since 2021 - pivoted from native Java to Flutter, scaling to 2,000+ downloads and a 4.9★ rating on the Google Play Store",
-        "This is the longest-running engagement on the résumé - five years of shipping and maintaining production software, starting before university",
-        "NEEDS_INPUT: what does ongoing maintenance actually involve now - user support, feature requests, content updates?",
-        "NEEDS_INPUT: one thing you're proud of that isn't already covered in the Arjun Guruji project entry"
+        "The longest-running engagement - five years of shipping and maintaining production software, starting before university"
       ]
     }
   ],

@@ -7,13 +7,13 @@
       "result": "3rd of 190+",
       "project": "Polkaflow -visual blockchain workflow builder for Polkadot",
       "oneLiner": "Drag-and-drop flowchart to deployed smart contract, with AI code-gen, a hand-built logic engine, and automatic Solidity-to-Rust optimization for gas-heavy functions.",
-      "myRole": "NEEDS_INPUT: team size + your specific contribution -the repo (github.com/sogalabhi/Polkadot) is on your account, which suggests you led or built the core, but confirm what part was yours if it was a team effort",
+      "myRole": "",
       "stack": ["React", "Solidity", "Rust", "PolkaVM", "AssetHub"],
       "links": { "github": "https://github.com/sogalabhi/Polkadot", "devpost": "", "demo": "https://www.youtube.com/watch?v=1wMiRCPWYBE" }
     },
     {
       "event": "Polkadot Builder House, Bengaluru",
-      "date": "NEEDS_INPUT: YYYY-MM",
+      "date": "2025-12",
       "result": "3rd place",
       "project": "Polar Bridge -cross-chain lending, INR collateral to PAS tokens",
       "oneLiner": "A fiat-to-Polkadot on-ramp -pay by UPI, borrow PAS tokens against INR collateral, no crypto knowledge needed.",
@@ -23,13 +23,13 @@
     },
     {
       "event": "ETHGlobal New Delhi",
-      "date": "NEEDS_INPUT: YYYY-MM",
+      "date": "2025-09",
       "result": "Selected for the offline round in Delhi -international event",
       "project": "PokeWars -multiplayer Pokémon shooting game with Web3 rewards on Polygon",
       "oneLiner": "Wallet-authenticated multiplayer combat in Phaser, with NFT-owned Pokémon and daily on-chain rewards via the X402 protocol.",
-      "myRole": "NEEDS_INPUT: your specific contribution -repo is under teammate Kushagra1122's account, so this needs to be precise rather than \"we built.\" Which parts were yours -the Phaser combat loop, the WebSocket sync layer, something else?",
+      "myRole": "",
       "stack": ["Phaser", "React", "Solidity", "Polygon", "MetaMask", "WebSockets"],
-      "links": { "github": "https://github.com/Kushagra1122/PokiWars", "devpost": "", "demo": "" }
+      "links": { "github": "", "devpost": "", "demo": "" }
     }
   ],
   "note_to_self": "Three entries, no filler tier -dropped the plan to list non-placing hackathons as compact rows. If more hackathons come up later with a real result worth showing, add them in the same full-entry shape as these three, not as a lesser tier."

@@ -12,10 +12,10 @@
       "Trained a customer churn model on RFM features, served it via FastAPI, and set up reverse ETL back into the operational CRM",
       "Deployed the full cloud infrastructure on Azure (ADLS Gen2, ADF, Event Hubs) with Terraform IaC, plus end-to-end lineage and cataloguing through OpenMetadata and GitHub Actions CI"
     ],
-    "impact": "NEEDS_INPUT: one number - rows processed, ingestion throughput, pipeline runtime, or churn model accuracy",
+    "impact": "One codebase, two deployments - a local open-source stack and managed Azure",
     "stack": ["Apache Spark", "Airflow", "Delta Lake", "dbt-core", "Redpanda", "MinIO", "Great Expectations", "Azure", "Terraform", "FastAPI", "OpenMetadata"],
     "links": {
-      "github": "NEEDS_INPUT: repo URL, or set to \"\" if private",
+      "github": "https://github.com/sogalabhi/openlake_project",
       "live": "",
       "demo": "",
       "playStore": ""
@@ -23,7 +23,7 @@
     "media": [],
     "featured": true,
     "order": 1,
-    "date": "NEEDS_INPUT: YYYY-MM"
+    "date": "2026-07"
   },
   {
     "id": "arjun-guruji",
@@ -49,7 +49,7 @@
     "media": [],
     "featured": true,
     "order": 2,
-    "date": "NEEDS_INPUT: YYYY-MM"
+    "date": "2021-04"
   },
   {
     "id": "polar-bridge",
@@ -78,7 +78,31 @@
     "teamSize": 2,
     "myRole": "Web3 developer - smart contracts, relayer service, and cross-chain event synchronisation",
     "order": 3,
-    "date": "NEEDS_INPUT: YYYY-MM"
+    "date": "2025-12"
+  },
+  {
+    "id": "process-mining",
+    "title": "Process Mining & Analytics Platform",
+    "tagline": "Discovers how a business process really runs from raw event logs - bottlenecks, rework, and where cases drift from the expected flow.",
+    "domain": "Backend",
+    "problem": "An order process is supposed to run Created → Payment → Packed → Shipped → Delivered, but real cases skip, repeat, and reorder steps. Without mining the event logs, nobody can see where the time and money actually go.",
+    "whatIBuilt": [
+      "Built a Spring Boot backend that ingests CSV event logs into PostgreSQL (2,500+ cases, 16K+ events) and uses hash-based grouping, sorting, and graph construction to discover Directly-Follows Graphs and process variants",
+      "Exposed 8+ REST analytics APIs for P50/P90/P95 latency, throughput, bottlenecks, and rework",
+      "Implemented conformance checking with dynamic-programming edit-distance alignment and traceback, flagging skipped, extra, repeated, and out-of-order activities and computing case-level fitness"
+    ],
+    "impact": "Recovered the patterns planted in a 2,500-case test log, including a ~7.7-hour payment-to-packing bottleneck and ~22% rework",
+    "stack": ["Java", "Spring Boot", "PostgreSQL", "JPA", "Hibernate", "React"],
+    "links": {
+      "github": "https://github.com/sogalabhi/process-mining",
+      "live": "",
+      "demo": "",
+      "playStore": ""
+    },
+    "media": [],
+    "featured": false,
+    "order": 4,
+    "date": "2026-09"
   },
   {
     "id": "syssight",
@@ -102,8 +126,8 @@
     },
     "media": [],
     "featured": false,
-    "order": 4,
-    "date": "NEEDS_INPUT: YYYY-MM"
+    "order": 5,
+    "date": "2025-10"
   },
   {
     "id": "polkaflow",
@@ -129,8 +153,8 @@
     "media": [],
     "featured": true,
     "hackathon": "3rd place of 190+ · AssetHub Hackathon, Goa 2025",
-    "order": 5,
-    "date": "NEEDS_INPUT: YYYY-MM"
+    "order": 6,
+    "date": "2025-06"
   },
   {
     "id": "eta-predictor",
@@ -145,7 +169,7 @@
       "Replaced brittle exact-match category lookups with substring matching to handle the dataset's inconsistent labels and trailing whitespace",
       "Identified the model's extrapolation failure - predicting bicycles as faster than motorcycles on long jammed routes - and specified business-logic guardrails in the API layer rather than trusting the model blindly"
     ],
-    "impact": "NEEDS_INPUT: model accuracy, MAE on prep/travel time, or training set size",
+    "impact": "",
     "stack": ["Python", "TensorFlow", "Keras", "Scikit-Learn", "Pandas", "FastAPI", "Tailwind"],
     "links": {
       "github": "https://github.com/sogalabhi/delivery-time-predictor",
@@ -155,8 +179,8 @@
     },
     "media": [],
     "featured": false,
-    "order": 6,
-    "date": "NEEDS_INPUT: YYYY-MM"
+    "order": 7,
+    "date": "2026-05"
   },
   {
     "id": "slope-stability",
@@ -170,7 +194,7 @@
       "Added support for external loading (UDL and line loads) and water table effects on stability",
       "Designed the library around SOLID and DRY principles with comprehensive input validation, batch scenario processing, and JSON config export/import"
     ],
-    "impact": "NEEDS_INPUT: scenarios analysed per run, or speedup vs. manual GUI workflow",
+    "impact": "",
     "stack": ["Python", "Object-Oriented Design", "Bishop's Method"],
     "links": {
       "github": "https://github.com/sogalabhi/mini-project-2",
@@ -180,8 +204,8 @@
     },
     "media": [],
     "featured": false,
-    "order": 7,
-    "date": "NEEDS_INPUT: YYYY-MM"
+    "order": 8,
+    "date": "2026-02"
   },
   {
     "id": "paladin-sdk",
@@ -205,7 +229,7 @@
     },
     "media": [],
     "featured": false,
-    "order": 8,
+    "order": 9,
     "date": "2026-05"
   },
   {
@@ -225,7 +249,7 @@
     "impact": "Built at ETHGlobal New Delhi",
     "stack": ["Phaser", "React", "Solidity", "Polygon", "MetaMask", "WebSockets", "Node.js", "X402"],
     "links": {
-      "github": "https://github.com/Kushagra1122/PokiWars",
+      "github": "",
       "live": "",
       "demo": "",
       "playStore": ""
@@ -233,8 +257,8 @@
     "media": [],
     "featured": false,
     "teamProject": true,
-    "myRole": "NEEDS_INPUT: your specific contribution - the repo is under a teammate's account (Kushagra1122), so worth being precise about which parts were yours",
-    "order": 9,
-    "date": "NEEDS_INPUT: YYYY-MM"
+    "myRole": "",
+    "order": 10,
+    "date": "2025-09"
   }
 ]

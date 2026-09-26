@@ -163,7 +163,7 @@ export default class WorldScene extends Phaser.Scene {
       const hitZone = this.mode === 'touch' ? this.zoneAt(pointer.worldX, pointer.worldY) : null
 
       this.player.moveTo(pointer.worldX, pointer.worldY, {
-        onArrive: hitZone ? () => bus.emit(EVENTS.INTERACT, { id: hitZone.id }) : null,
+        onArrive: hitZone ? () => bus.emit(EVENTS.INTERACT, { id: hitZone.id, source: 'tap' }) : null,
       })
     })
 
@@ -222,7 +222,7 @@ export default class WorldScene extends Phaser.Scene {
         Phaser.Input.Keyboard.JustDown(space) ||
         Phaser.Input.Keyboard.JustDown(enter)
       ) {
-        bus.emit(EVENTS.INTERACT, { id: this.zoneManager.activeZone })
+        bus.emit(EVENTS.INTERACT, { id: this.zoneManager.activeZone, source: 'keyboard' })
       }
 
       if (!this.lastPromptEmit || time - this.lastPromptEmit > 66) {

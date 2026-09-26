@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { track } from '@vercel/analytics'
 import { bus, EVENTS } from '../bus'
 import { useMode } from '../DeviceModeContext'
 import WorldNav from './WorldNav'
@@ -30,7 +31,10 @@ export default function WorldOverlay() {
       setPromptPos(null)
     }
     const handlePrompt = (pos) => setPromptPos(pos)
-    const handleInteract = ({ id }) => {
+    // the one place every zone open lands, whichever emitter sent it - so
+    // tracking here covers keyboard, tap, prompt click and the touch menu alike
+    const handleInteract = ({ id, source }) => {
+      track('world_zone_open', { zone: id, source: source ?? 'unknown' })
       setOpenZone(id)
       bus.emit(EVENTS.PAUSE_INPUT, true)
     }

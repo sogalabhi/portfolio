@@ -23,7 +23,7 @@ export default function ZoneMenu() {
   const select = (id) => {
     bus.emit(EVENTS.TELEPORT, { id })
     setOpen(false)
-    setTimeout(() => bus.emit(EVENTS.INTERACT, { id }), ARRIVE_DELAY_MS)
+    setTimeout(() => bus.emit(EVENTS.INTERACT, { id, source: 'menu' }), ARRIVE_DELAY_MS)
   }
 
   return (

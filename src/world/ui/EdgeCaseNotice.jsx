@@ -18,7 +18,7 @@ export default function EdgeCaseNotice() {
     : 'This device is struggling to keep up with the world.'
 
   return (
-    <div className="fixed inset-x-4 top-4 z-40 flex items-center gap-3 rounded-lg border-2 border-[#2B2438] bg-[#F4EDE2] px-4 py-2.5 text-sm text-[#2B2438] shadow-md">
+    <div data-world-hud className="fixed inset-x-4 top-4 z-40 flex items-center gap-3 rounded-lg border-2 border-[#2B2438] bg-[#F4EDE2] px-4 py-2.5 text-sm text-[#2B2438] shadow-md">
       <p className="flex-1">{message}</p>
       <Link
         to="/"

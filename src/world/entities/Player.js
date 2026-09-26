@@ -25,10 +25,15 @@ export default class Player {
       this.sprite.body.setSize(8, 6)
       this.sprite.body.setOffset(2, 10)
     }
-    this.sprite.setDepth(y)
+    // sorted by the feet (bottom of the physics body), the same "where it meets
+    // the ground" rule the buildings and scatter use - the sprite's centre sits
+    // ~14px above the feet, so standing at a door would otherwise tuck the
+    // player behind the wall
+    this.sprite.setDepth(this.sprite.body.bottom)
 
     this.facing = 'down'
     this.moveTarget = null
+    this.waypoints = []
     this.moveArriveCallback = null
     this.moving = false
     this.stuckSince = null
@@ -61,15 +66,28 @@ export default class Player {
     })
   }
 
-  moveTo(x, y, { onArrive } = {}) {
-    this.moveTarget = { x, y }
+  moveTo(x, y, opts) {
+    this.moveAlong([{ x, y }], opts)
+  }
+
+  // walks the points in order (a route from WorldScene.findPath); onArrive
+  // fires only on reaching the last one
+  moveAlong(points, { onArrive } = {}) {
+    const [first, ...rest] = points
+    this.moveTarget = first
+    this.waypoints = rest
     this.moveArriveCallback = onArrive || null
     this.stuckSince = null
   }
 
-  stop() {
+  clearRoute() {
     this.moveTarget = null
+    this.waypoints = []
     this.moveArriveCallback = null
+  }
+
+  stop() {
+    this.clearRoute()
     this.sprite.body.setVelocity(0, 0)
   }
 
@@ -77,7 +95,7 @@ export default class Player {
     if (pauseInput) {
       this.sprite.body.setVelocity(0, 0)
       if (!this.usingCharArt) this.sprite.anims.play(`idle-${this.facing}`, true)
-      this.sprite.setDepth(this.sprite.y)
+      this.sprite.setDepth(this.sprite.body.bottom)
       return
     }
 
@@ -95,20 +113,18 @@ export default class Player {
     if (down) vy += 1
 
     const usingKeyboard = vx !== 0 || vy !== 0
-    if (usingKeyboard) {
-      this.moveTarget = null
-      this.moveArriveCallback = null
-    }
+    if (usingKeyboard) this.clearRoute()
 
     if (!usingKeyboard && this.moveTarget) {
       const dx = this.moveTarget.x - this.sprite.x
       const dy = this.moveTarget.y - this.sprite.y
       const dist = Math.hypot(dx, dy)
 
-      if (dist < ARRIVE_DIST) {
-        this.moveTarget = null
+      if (dist < ARRIVE_DIST && this.waypoints.length) {
+        this.moveTarget = this.waypoints.shift()
+      } else if (dist < ARRIVE_DIST) {
         const onArrive = this.moveArriveCallback
-        this.moveArriveCallback = null
+        this.clearRoute()
         if (onArrive) onArrive()
       } else {
         vx = dx / dist
@@ -119,8 +135,7 @@ export default class Player {
           this.stuckSince = this.stuckSince ?? performance.now()
           if (performance.now() - this.stuckSince > STUCK_MS) {
             // gave up short of the target - not a real arrival, don't fire onArrive
-            this.moveTarget = null
-            this.moveArriveCallback = null
+            this.clearRoute()
             vx = 0
             vy = 0
           }
@@ -148,6 +163,6 @@ export default class Player {
       this.moving = false
     }
 
-    this.sprite.setDepth(this.sprite.y)
+    this.sprite.setDepth(this.sprite.body.bottom)
   }
 }

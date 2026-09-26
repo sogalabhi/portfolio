@@ -7,7 +7,7 @@ export default function WorldNav() {
 
   return (
     <>
-      <div className="fixed left-4 top-4 z-30">
+      <div data-world-hud className="fixed left-4 top-4 z-30">
         <Link
           to="/"
           className="inline-flex items-center gap-2 rounded-lg border-2 border-[#2B2438] bg-[#F4EDE2] px-3 py-2 text-xs text-[#2B2438] shadow-md transition-transform duration-150 hover:scale-[1.03]"
@@ -17,7 +17,7 @@ export default function WorldNav() {
         </Link>
       </div>
 
-      <div className="fixed right-4 top-4 z-30">
+      <div data-world-hud className="fixed right-4 top-4 z-30">
         <button
           type="button"
           onClick={() => setShowHelp((v) => !v)}

@@ -21,8 +21,10 @@ export default class ZoneManager {
 
   update() {
     const { x, y } = this.player.sprite
+    // the trigger strip in front of each door (see WorldScene.resolveZone),
+    // not the building itself - that's solid now
     const zone = this.zones.find(
-      (z) => Math.abs(x - z.x) <= z.width / 2 && Math.abs(y - z.y) <= z.height / 2
+      ({ trigger: t }) => Math.abs(x - t.x) <= t.width / 2 && Math.abs(y - t.y) <= t.height / 2
     )
     const id = zone ? zone.id : null
 

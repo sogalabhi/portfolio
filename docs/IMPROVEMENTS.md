@@ -112,19 +112,19 @@ The skin values were sampled from the photo and brightened slightly, because the
 
 ## Part 2: Task list
 
-### P0: fix what's broken (about 1 day, no inputs needed)
+### P0: fix what's broken ✅ done 2026-09-26
 
 - [x] **Placeholders**: filled from the résumé or hidden. 0 visible on `/`, and the broken repo link is fixed (see 1.2).
 - [x] **Résumé**: added `public/resume.pdf` (moved from `assets/`).
 - [x] **LinkedIn**: set the URL in `profile.json` and `index.html`.
-- [ ] **Spawn position**: move the spawn point off the signpost. Right now the player starts hidden behind it (`zones.js` `SPAWN_POINT`).
-- [ ] **Spawn prompt**: don't show the "E" prompt on the very first frame.
-- [ ] **Building collision**: give each building a static collision box along its base. Only the map border collides today, so the player walks through walls (`WorldScene.js`).
-- [ ] **Interaction trigger**: move each zone's trigger to just in front of the building's door instead of its centre (`zones.js`).
-- [ ] **Whole-number zoom**: pick 2× or 3× from the screen height. The current zoom of 1.5 makes pixels render unevenly, as described in [Part 3](#part-3-technical-notes) (`WorldScene.js` `ZOOM`).
-- [ ] **Phone void**: fix the empty strip under the map on phones. The map is 640 px tall at 1× zoom but the screen is 844 px.
-- [ ] **Label overlap**: keep zone labels clear of the top-left and top-right buttons. Today the Workshop label hides under "← Portfolio" (`ZoneLabels.jsx`).
-- [ ] **Label wording**: rename the "Spawn" label to "Welcome" (`zones.js`).
+- [x] **Spawn position**: the player starts in the plaza and the Welcome sign stands beside it.
+- [x] **Spawn prompt**: the spawn point is outside every trigger, so there's no E prompt on the first frame.
+- [x] **Building collision**: each building has a static box along its drawn base, and its roof stays walk-behind. The player now sorts by its feet, so it draws in front of a building at the door and behind it past the roof. Click/tap moves route around buildings with A* (`src/world/pathfinding.js`).
+- [x] **Interaction trigger**: each trigger is a strip in front of the door. Clicking or tapping a building walks to its door and opens it, from any side. Teleports park the player at the door.
+- [x] **Whole-number zoom**: `pickZoom` gives 2 on laptops and phones, 3 on 1080p and 4 on 1440p, and re-picks it on resize.
+- [x] **Phone void**: the zoom never goes below what it takes to fill the viewport with map.
+- [x] **Label overlap**: labels fade out while under any `data-world-hud` control.
+- [x] **Label wording**: the label now reads "Welcome". The zone id stays `spawn` for analytics and the terminal.
 
 ### P1: art that looks like a real game
 

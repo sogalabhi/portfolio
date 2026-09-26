@@ -28,7 +28,7 @@ export default function ZoneMenu() {
 
   return (
     <>
-      <div className="fixed right-4 top-16 z-30">
+      <div data-world-hud className="fixed right-4 top-16 z-30">
         <button
           type="button"
           onClick={() => setOpen(true)}

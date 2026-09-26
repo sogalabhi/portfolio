@@ -72,7 +72,7 @@ export function buildMap() {
   ZONES.forEach((zone) => {
     const zx = toTile(zone.x)
     const zy = toTile(zone.y)
-    clear(zx, zy, Math.round(zone.width / TILE / 2) + 1)
+    clear(zx, zy, zone.clearing)
     carvePath(ground, spawnTile.x, spawnTile.y, zx, zy)
   })
 

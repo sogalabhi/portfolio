@@ -162,7 +162,7 @@ These are sent with `track()` from `@vercel/analytics`:
 | `project_link_click` | `project`, `type`: `github`/`live` | `FeaturedCard`, `ProjectCard` |
 | `contact_email_click` | `method`: `copy`/`mailto` | `Contact` |
 | `tour_started` | none | `Hero` |
-| `world_zone_open` | `zone`: zone id; `source`: `keyboard`, `prompt`, `tap`, `menu` | `WorldOverlay` (the single handler for every zone open in `/world`) |
+| `world_zone_open` | `zone`: zone id; `source`: `keyboard`, `prompt`, `click`, `tap`, `menu` | `WorldOverlay` (the single handler for every zone open in `/world`) |
 
 When you add a new entry point to an existing action, give it a new `source` value rather than a new event name.
 
@@ -213,7 +213,14 @@ In dev builds, `window.__worldBus` and `window.__worldScene` are exposed for pok
   - blocking tiles around the border
   - a sand clearing under spawn and under each zone
   - 3-wide L-shaped paths from spawn to every zone
-- `zones.js` lists the zones: centre point, size and title. It's the single place to move or add a zone. After a change there, update the per-zone maps in `WorldScene.js` (`BUILDING_HEIGHT_BY_ZONE`, `PROP_BY_ZONE`, `ATLAS_FRAME_BY_ZONE`) and in the UI (`ZONE_TITLES` and `CONTENT_BY_ZONE` in `ZonePanel.jsx`, and `DESTINATIONS` in `ZoneMenu.jsx`).
+- `zones.js` lists the zones. It's the single place to move or add a zone. Each entry has:
+  - `x`/`y`: the building's **base-centre**; the sprite is drawn bottom-anchored there
+  - `depth`: how far back from the base the building is solid
+  - `solidW`: optional collision width
+  - `doorDx`: the door's offset from `x`
+  - `clearing`: the sand clearing radius in tiles
+
+  `WorldScene.resolveZone()` measures the drawn art at runtime and derives everything else from these numbers. Atlas frames are trimmed, so the drawn box can be smaller than the frame. After a change to `zones.js`, update the per-zone maps in `WorldScene.js` (`PROP_BY_ZONE`, `ATLAS_FRAME_BY_ZONE`) and in the UI (`ZONE_TITLES` and `CONTENT_BY_ZONE` in `ZonePanel.jsx`, and `DESTINATIONS` in `ZoneMenu.jsx`).
 - Scatter (trees, bushes, rocks, flowers) is placed on grass tiles with a seeded `tileHash`. The island looks the same on every load. Scatter only appears when the real atlas has loaded.
 
 | Zone | Building sprite | Shows | Content source |
@@ -228,22 +235,45 @@ In dev builds, `window.__worldBus` and `window.__worldScene` are exposed for pok
 
 ### 7.5 Player and zones
 
-- `Player.js`: moves at 130 px/s. You can steer with WASD or the arrow keys (diagonal movement is normalised), or click/tap a point to walk there.
-  - When walking to a point, the player gives up if it's stuck for 300 ms, and in that case `onArrive` does **not** fire.
+- `Player.js`: moves at 130 px/s. You can steer with WASD or the arrow keys (diagonal movement is normalised), or click/tap to walk somewhere.
+  - Click/tap moves follow a route of waypoints (`moveAlong`) from the pathfinder, described below.
+  - The player gives up if it's stuck for 300 ms, and in that case `onArrive` does **not** fire.
   - `char.png` is a single front-facing 32×32 frame with no walk cycle, so the sprite just flips horizontally for left and right.
-  - Depth is set to `y` so the player sorts correctly against props.
-- `Zone.js` (ZoneManager): checks the player's position against every zone once per render frame.
+- **Draw order**: everything sorts by where it meets the ground.
+  - The player's depth is its feet (`body.bottom`).
+  - Buildings and scatter use their drawn base.
+  - So the player draws in front of a building at its door and behind it when walking past its roof.
+- **Collision**: the map's border tiles, plus a static box along each building's base (`resolveZone().solid`). The roof above that box stays walk-behind.
+- **Triggers**: each zone's trigger is a strip in front of its **door**, not the building itself.
+  - `Zone.js` (ZoneManager) checks the player's position against those strips once per render frame.
   - It deliberately doesn't use Arcade overlap callbacks. Phaser 4's fixed-step physics can fire those 0 or 2+ times per frame, which made the prompt flicker.
+- **Click/tap routing** (`pathfinding.js`): A* on the 16 px tile grid.
+  - It avoids the same boxes the colliders use, grown by the player's body size plus 3 px of clearance, then string-pulled into a few straight segments.
+  - Clicking or tapping a building (its drawn art or the strip in front of its door) walks to the door and opens the zone on arrival, from any side.
+  - Teleports (terminal `cd`, the touch menu) also park the player at the door (`walkTo`), never inside the walls.
 
 ### 7.6 Input and device modes
 
-`useDeviceMode()` returns `'touch'` only when the device has a coarse pointer **and** the viewport is ≤ 900 px wide. Everything else, including touch laptops and landscape iPads, counts as `'pointer'`. The mode is read **once** at boot and stored in the Phaser registry, so rotating the device doesn't reconfigure the camera.
+`useDeviceMode()` returns `'touch'` only when the device has a coarse pointer **and** the viewport is ≤ 900 px wide. Everything else, including touch laptops and landscape iPads, counts as `'pointer'`. The mode is read **once** at boot and stored in the Phaser registry, so rotating the device doesn't change the input style.
+
+**Zoom is always a whole number**, and it's re-picked on every resize (`pickZoom` in `WorldScene.js`). A zoom like 1.5 draws art pixels unevenly. The zoom is the larger of these two:
+- about 320 world px visible vertically
+- the smallest zoom at which the map still covers the whole viewport, so there's never empty space past the map edge
+
+Some examples:
+
+| Viewport | Zoom |
+|---|---|
+| 1280×800 laptop | 2 |
+| Phone | 2 |
+| 1080p screen | 3 |
+| 1440p screen | 4 |
 
 | | Pointer (desktop) | Touch (phone) |
 |---|---|---|
-| Camera zoom / lerp | 1.5 / 0.1 | 1 / 0.15, follow offset +40 px |
+| Camera zoom / lerp | Whole-number zoom (see above) / 0.1 | Same zoom / 0.15, follow offset +40 px |
 | Move | WASD / arrows / click | Tap |
-| Open zone | Walk in, then `E` / `Space` / `Enter` (floating prompt) | Tap the building. The player walks there and it opens on arrival (hit area padded by 20 px) |
+| Open zone | Walk to the door, then `E` / `Space` / `Enter` (floating prompt), or click the building | Tap the building. The player walks to its door and it opens on arrival (hit area padded by 20 px) |
 | Panel | `ZonePanel`: right-side dialog, `Esc` closes | `BottomSheet`: draggable, snaps at 45/85/96%, flick or drag below 20% to dismiss |
 | Jump anywhere | Terminal `cd <zone>` | `ZoneMenu` (☰): teleports, then opens the zone after 400 ms |
 | Hint | "WASD or click to move · E to interact" | Tap-to-move copy. Any tap dismisses it |
@@ -251,6 +281,8 @@ In dev builds, `window.__worldBus` and `window.__worldScene` are exposed for pok
 The first-visit hint stores `world-hint-seen` in localStorage.
 
 **Key-capture gotcha:** Phaser calls `preventDefault` on the keys it registers (WASD, arrows, E, Space, Enter) for the whole page. That would stop you typing into the terminal. `WorldScene` therefore removes the capture whenever `pauseInput` is true and adds it back afterwards. Any new text input rendered over the canvas has to emit `PAUSE_INPUT` for the same reason.
+
+**HUD gotcha:** give any new fixed control over the canvas a `data-world-hud` attribute. `ZoneLabels` fades out any label that would sit under a HUD element, so without the attribute, labels slide underneath the control.
 
 ### 7.7 Terminal zone
 
@@ -279,8 +311,8 @@ The first-visit hint stores `world-hint-seen` in localStorage.
 | Add a project | Append to `projects.json` with a unique `id`, then set `featured` and `order` |
 | Add or edit a tour stop | `tour.json`. The `target` must match an element id on `/` |
 | Change colours or fonts | The `@theme` block in `src/index.css`, and the font links in `index.html` |
-| Move a zone or building | `src/world/data/zones.js`. Paths and clearings regenerate automatically |
-| Add a new zone | `zones.js`, then the three maps in `WorldScene.js`, then `ZONE_TITLES`/`CONTENT_BY_ZONE` in `ZonePanel.jsx` and `DESTINATIONS` in `ZoneMenu.jsx` |
+| Move a zone or building | `src/world/data/zones.js`. Paths, clearings, collision, triggers and routing all regenerate automatically |
+| Add a new zone | `zones.js`, then the two maps in `WorldScene.js`, then `ZONE_TITLES`/`CONTENT_BY_ZONE` in `ZonePanel.jsx` and `DESTINATIONS` in `ZoneMenu.jsx` |
 | Replace or add sprites | Follow the §5.8 pipeline, then rerun `pack-atlas.mjs`. Frame names must match the `ATLAS_FRAME_BY_ZONE` and `SCATTER_DEFS` entries |
 | Add a real walk cycle | Add a spritesheet at `public/world/char.png` and add anims in `Player.js` (the placeholder code shows the pattern) |
 | Add a terminal command | Update `COMMANDS`, `HELP_LINES`, the `switch` and, optionally, `CHIP_COMMANDS` in `Terminal.jsx` |

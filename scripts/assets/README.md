@@ -21,7 +21,7 @@ Gemini (external)              This pipeline (Node/sharp)
                               npm run assets:slice    → assets/cut/<sheet>/obj_00.png ...
                               (rename obj_NN.png by eye, per the inventory table below)
                               npm run assets:downscale → public/world/sprites/<name>.png
-                              npx free-tex-packer-cli  → public/world/atlas/{atlas.png,atlas.json}
+                              npm run world:build      → roofs, code-drawn sprites, atlas, terrain, map
 ```
 
 ## Commands
@@ -40,17 +40,40 @@ npm run assets:slice -- assets/cut/buildings-clean.png assets/cut/buildings
 npm run assets:downscale -- assets/cut/buildings/workshop.png public/world/sprites/workshop.png 96 80
 ```
 
-Then pack `public/world/sprites/*.png` into an atlas:
+Then rebuild everything downstream of the sprite PNGs:
 
 ```bash
-npx free-tex-packer-cli --project atlas.ftpp --output public/world/atlas
+npm run world:build
 ```
 
-`BootScene.js` already attempts to load `world/atlas/atlas.png` +
-`world/atlas/atlas.json` and falls back to the current placeholder rectangles
-if those files 404 - so none of this is load-bearing until you actually drop
-files in. See `src/world/scenes/BootScene.js` and the `useAtlasFrame` helper
-in `src/world/scenes/WorldScene.js`.
+That runs, in order (each is also its own npm script):
+
+| step | script | what it does |
+|---|---|---|
+| `assets:pixel` | `build-pixel.mjs` + `svg-to-png.mjs` | code-drawn sprites: `assets/pixel/*.mjs` grids → `assets/svg/*.svg` → `public/world/sprites/*.png` |
+| `assets:roofs` | `recolor-roofs.mjs` | swaps the shared terracotta roof for one colour per building |
+| `assets:pack` | `pack-atlas.mjs` | packs `public/world/sprites/*.png` into `public/world/atlas/` (free-tex-packer-core) |
+| `world:terrain` | `../world/build-terrain.mjs` | ground tileset + water strip → `public/world/tiles/` |
+| `world:map` | `../world/build-map.mjs` | the island → `public/world/map/island.json` (Tiled format) |
+
+Re-run it after `assets:downscale`/`batch-downscale` - those regenerate the
+sprites from the Gemini cut-outs, which undoes the roof colours and replaces
+the code-drawn rocks. The whole build is deterministic.
+
+`BootScene.js` loads `world/atlas/atlas.png` + `atlas.json` and falls back to
+placeholder rectangles for the buildings if they 404.
+
+## Art authored in code (`assets/pixel/`)
+
+For sprites that don't need generating - small, simple, or needing exact
+control (the rocks replaced three Gemini blobs that palette-snapped flat).
+Each module exports a list of `{ name, palette, frames }`: `palette` maps
+characters to hex colours (`.` is transparent), each frame is an array of
+equal-length strings, one character per pixel. Multiple frames are laid out
+side by side as a strip. `svg-to-png.mjs` refuses output with antialiased
+pixels, so shapes stay on the pixel grid; a hand-written SVG dropped into
+`assets/svg/` goes through the same check. Colours outside the locked
+Gemini palette live in `EXTRA_HEX` (`palette.mjs`).
 
 ## Target sizes (buildings - Tier B)
 

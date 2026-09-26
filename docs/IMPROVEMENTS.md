@@ -126,22 +126,22 @@ The skin values were sampled from the photo and brightened slightly, because the
 - [x] **Label overlap**: labels fade out while under any `data-world-hud` control.
 - [x] **Label wording**: the label now reads "Welcome". The zone id stays `spawn` for analytics and the terminal.
 
-### P1: art that looks like a real game
+### P1: art that looks like a real game ✅ done 2026-09-26 (except the character, scheduled last)
 
-- [ ] **Art pipeline**: build the pixel-SVG pipeline described in [Part 3](#part-3-technical-notes) (`scripts/assets/svg-to-png.mjs` plus an npm script).
+- [x] **Art pipeline**: `assets/pixel/*.mjs` grids go to `assets/svg/`, then `public/world/sprites/` (`npm run assets:pixel`). `npm run world:build` rebuilds all art and the map, deterministically.
 - [ ] **Player character**: about 16×24 px, 4 directions × 4 walk frames plus an idle frame, drawn from [1.4](#14-avatar-reference). Wire it into `Player.js` with real animations. *Scheduled after the other improvements.*
-- [ ] **Ground tiles**: grass, sand, path and water, with smooth transitions between them (a 16- or 47-tile edge set), 3–4 grass variations and a stone plaza at spawn.
-- [ ] **Island shape**: an organic outline with a beach ring and animated water. The water replaces the row of dark border boxes and the empty teal area.
-- [ ] **Map rebuild**: curved paths and varied building positions, stored as Tiled-format JSON.
-- [ ] **Place the 17 props that are never used**:
-  - [ ] Workshop: workbench, `crates_two`, `crates_three`, `crate_open`, barrel
-  - [ ] Garden: `soil_bed` with `plant_stage1`–`4` (the stage could show skill level), fence posts and segments
-  - [ ] Shrine: `trophy_pedestal`, with `stone_lantern`s along the path
-  - [ ] Tower: `dish`
-  - [ ] Plaza and paths: bench, `lamp_post`s
-- [ ] **Shadows**: a soft ellipse under every sprite (player, buildings, props, trees).
-- [ ] **Roof colours**: a distinct colour per building.
-- [ ] **Scatter cleanup**: fix the scatter sprites that look like flat blobs (the beige rocks and cone-like stones) or redraw them.
+- [x] **Ground tiles**: a corner-based set (15 edge tiles per overlay) for sand, grass, dirt and stone flagstones, drawn procedurally with rims, a foam line and ledge shadows. It has 4 grass variants and a stone plaza at spawn (`scripts/world/build-terrain.mjs`).
+- [x] **Island shape**: a wobbly-ellipse coast with bays, a beach ring, and 3-frame animated water. The shore is the new boundary.
+- [x] **Map rebuild**: an 80×56 Tiled-format map (`public/world/map/island.json`) generated from `scripts/world/layout.mjs`, with Catmull-Rom dirt paths from the plaza to each door. It includes wang sets for Tiled's terrain brush.
+- [x] **Place the 17 props that are never used** (all solid except the plants):
+  - [x] Workshop: workbench, `crates_two`, `crates_three`, `crate_open`, barrel
+  - [x] Garden: four `soil_bed`s with `plant_stage1`–`4`, and a fence along the top
+  - [x] Shrine: `trophy_pedestal`, and two `stone_lantern`s by the door
+  - [x] Tower: `dish`
+  - [x] Plaza and paths: 2 benches and 8 `lamp_post`s
+- [x] **Shadows**: a crisp pixel ellipse under every standing sprite. The player's shadow follows it.
+- [x] **Roof colours**: workshop terracotta, tower slate, shrine teal, archive moss, garden shed straw (`scripts/assets/recolor-roofs.mjs`).
+- [x] **Scatter cleanup**: `rock_a`/`b`/`c` redrawn as shaded pixel art (`assets/pixel/rocks.mjs`). Scatter is now generated into the map with clearances around paths, buildings, doors and props. Trees, bushes and rocks are solid at their base.
 
 ### P2: life and game feel
 

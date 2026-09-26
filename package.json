@@ -11,7 +11,14 @@
     "assets:process": "node scripts/assets/process.mjs",
     "assets:slice": "node scripts/assets/slice.mjs",
     "assets:downscale": "node scripts/assets/downscale.mjs",
-    "assets:contact-sheet": "node scripts/assets/contact-sheet.mjs"
+    "assets:contact-sheet": "node scripts/assets/contact-sheet.mjs",
+    "assets:pixel": "node scripts/assets/build-pixel.mjs && node scripts/assets/svg-to-png.mjs",
+    "assets:svg": "node scripts/assets/svg-to-png.mjs",
+    "assets:roofs": "node scripts/assets/recolor-roofs.mjs",
+    "assets:pack": "node scripts/assets/pack-atlas.mjs",
+    "world:terrain": "node scripts/world/build-terrain.mjs",
+    "world:map": "node scripts/world/build-map.mjs",
+    "world:build": "npm run assets:pixel && npm run assets:roofs && npm run assets:pack && npm run world:terrain && npm run world:map"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

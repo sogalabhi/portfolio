@@ -1,6 +1,7 @@
-// Click/tap-to-move routing around solid things (building bases, the map
-// border). Plain A* over the tile grid, then string-pulled down to a few
-// straight segments so the walk doesn't zigzag tile by tile.
+// Click/tap-to-move routing around solid things (blocked tiles at the water's
+// edge, building bases, props, tree trunks). Plain A* over the tile grid, then
+// string-pulled down to a few straight segments so the walk doesn't zigzag
+// tile by tile.
 //
 // Everything here is in *sprite-position* space: a point is free when the
 // player's physics body, placed with its sprite at that point, overlaps no
@@ -26,10 +27,21 @@ function inflate(rects, body) {
   }))
 }
 
-export function createPathfinder({ cols, rows, tile, obstacles, body }) {
+// blockedTiles: Uint8Array(cols * rows), 1 = solid tile; obstacles: extra
+// solid rects in world px
+export function createPathfinder({ cols, rows, tile, blockedTiles, obstacles, body }) {
   const blocked = inflate(obstacles, body)
-  const isFree = (x, y) =>
-    !blocked.some((r) => x > r.left && x < r.right && y > r.top && y < r.bottom)
+  const tileBlocked = (c, r) => c < 0 || r < 0 || c >= cols || r >= rows || blockedTiles[r * cols + c] === 1
+  const isFree = (x, y) => {
+    // every tile the body (plus clearance) would overlap must be open...
+    const c0 = Math.floor((x + body.left - CLEARANCE) / tile)
+    const c1 = Math.floor((x + body.right + CLEARANCE - 0.001) / tile)
+    const r0 = Math.floor((y + body.top - CLEARANCE) / tile)
+    const r1 = Math.floor((y + body.bottom + CLEARANCE - 0.001) / tile)
+    for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) if (tileBlocked(c, r)) return false
+    // ...and it must clear every solid rect
+    return !blocked.some((o) => x > o.left && x < o.right && y > o.top && y < o.bottom)
+  }
 
   const centre = (c) => c * tile + tile / 2
   const free = new Uint8Array(cols * rows)

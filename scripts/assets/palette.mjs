@@ -85,3 +85,55 @@ export function nearestPaletteColor(r, g, b) {
   }
   return PALETTE_RGB[best]
 }
+
+// --- Extended colours ---------------------------------------------------------
+// Not for Gemini prompts (PALETTE_HEX above stays the locked generation palette
+// and nearestPaletteColor keeps snapping to it). These are for art authored in
+// code - terrain, water, redrawn scatter, per-building roofs - where the locked
+// 13 have no ramp for the job (no blues for water, no dirt, no stone).
+export const EXTRA_HEX = {
+  // water, deep to foam
+  waterDeep: '#4F96A2',
+  water: '#5EA9B3',
+  waterLight: '#86C6C6',
+  foam: '#F4EDE2',
+  // beach sand
+  sand: '#ECD6A4',
+  sandSpeck: '#D9C08C',
+  sandLight: '#F6E6C0',
+  sandWet: '#D2BC8A',
+  sandShadow: '#BFA46E',
+  // grass (leaf green #5FA65A is the base)
+  grassDark: '#4E9150',
+  grassLight: '#76B86A',
+  grassRim: '#3E7A44',
+  // dirt path
+  dirt: '#D2B07C',
+  dirtSpeck: '#BE9A66',
+  dirtPebble: '#A88657',
+  dirtLight: '#E0C597',
+  dirtRim: '#B8955F',
+  // stone plaza
+  stone: '#CFC6B4',
+  stoneMortar: '#A69C88',
+  stoneLight: '#E2DBCB',
+  stoneShadow: '#6F6656',
+  // rocks
+  rockHighlight: '#EDE4D0',
+  rockLight: '#D8CCB2',
+  rockDark: '#A89A7C',
+  rockDeep: '#857960',
+  // per-building roof ramps (mid, shade, dark) - see recolor-roofs.mjs
+  roofSlate: '#5B6E9C',
+  roofSlateShade: '#45557D',
+  roofSlateDark: '#323E5E',
+  roofTeal: '#3F8C87',
+  roofTealShade: '#2F6E6A',
+  roofTealDark: '#22504D',
+  roofMoss: '#4F8453',
+  roofMossShade: '#3E6A42',
+  roofMossDark: '#2B4A2E',
+  roofStraw: '#D9974A',
+  roofStrawShade: '#B37636',
+  roofStrawDark: '#7A4E22',
+}

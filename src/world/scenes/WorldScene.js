@@ -1,39 +1,14 @@
 import Phaser from 'phaser'
 import { bus, EVENTS } from '../bus'
-import { buildMap, TILE_PATH, TILE_SAND, TILE_GRASS } from '../data/mapLayout'
-import { SPAWN_POINT, ZONES, TILE } from '../data/zones'
+import { ZONES } from '../data/zones'
 import Player from '../entities/Player'
 import ZoneManager from '../entities/Zone'
 import { createPathfinder } from '../pathfinding'
 
-// nature scatter - packed into the atlas by the asset pipeline (scripts/assets/README.md's
-// Tier D) but never actually placed anywhere until now. Curated props (fences, lamp posts,
-// benches, barrels, lanterns) are left out on purpose: those read as placed-with-intent next
-// to a path or building, not scattered - a randomly-dropped bench looks like a bug, not decor.
-const SCATTER_DEFS = [
-  { frame: 'tree_large_a', height: 64 },
-  { frame: 'tree_large_b', height: 64 },
-  { frame: 'tree_small_a', height: 40 },
-  { frame: 'tree_small_b', height: 40 },
-  { frame: 'bush_a', height: 20 },
-  { frame: 'bush_b', height: 20 },
-  { frame: 'bush_c', height: 20 },
-  { frame: 'rock_a', height: 16 },
-  { frame: 'rock_b', height: 16 },
-  { frame: 'rock_c', height: 16 },
-  { frame: 'flowers_blue', height: 16 },
-  { frame: 'flowers_red', height: 16 },
-  { frame: 'flowers_white', height: 16 },
-]
-const SCATTER_DENSITY = 0.04
-
-// deterministic per-tile pseudo-random, not Math.random() - same island every
-// load, reproducible for screenshots/debugging instead of shuffling underfoot
-function tileHash(x, y, seed) {
-  let h = Math.imul(x, 374761393) + Math.imul(y, 668265263) + seed
-  h = Math.imul(h ^ (h >>> 13), 1274126177)
-  return ((h ^ (h >>> 16)) >>> 0) / 4294967295
-}
+// Draw order: water, the ground overlays, things lying flat on the ground,
+// footprints and shadows - then everything that stands, sorted by where it
+// meets the ground (its drawn base; the player's feet)
+const DEPTH = { water: -300, ground: -200, groundProp: -150, footprint: -120, shadow: -100 }
 
 const LERP = { pointer: 0.1, touch: 0.15 }
 const FOLLOW_OFFSET_Y = { pointer: 0, touch: 40 }
@@ -42,6 +17,7 @@ const ZONE_HIT_PAD = { pointer: 4, touch: 20 }
 const FOOTPRINT_THROTTLE_MS = 180
 const LABEL_THROTTLE_MS = 66
 const LABEL_MARGIN = 10
+const WATER_FRAME_MS = 420
 
 // Whole-number zoom only - at 1.5 every art pixel was drawn alternately 1
 // and 2 screen px wide, which reads as lumpy texture and shimmers while the
@@ -62,6 +38,45 @@ const WALK_TO_GAP = 14 // where taps and teleports park the player, in front of 
 const SOLID_INSET = 4 // collision a touch narrower than the art, so corners don't snag
 const PROMPT_RISE = 32 // E prompt height above the base
 
+// ground overlays in public/world/map/island.json, bottom to top
+// (see scripts/world/terrain-spec.mjs)
+const SURFACES = ['sand', 'grass', 'path', 'stone']
+const FOOTPRINT_SURFACES = new Set(['sand', 'path'])
+
+// Collision for props and scatter: [width, height] of a box along the drawn
+// base - the trunk, the crate's footprint. Anything not listed (flowers) is
+// walk-through.
+const SOLID_BY_FRAME = {
+  workbench: [40, 10],
+  barrel: [18, 8],
+  crates_three: [28, 12],
+  crates_two: [20, 10],
+  crate_open: [28, 10],
+  dish: [22, 10],
+  lamp_post: [6, 5],
+  trophy_pedestal: [22, 10],
+  stone_lantern: [14, 7],
+  soil_bed: [44, 28],
+  fence_post: [6, 5],
+  fence_segment: [16, 5],
+  bench: [36, 7],
+  tree_large_a: [12, 7],
+  tree_large_b: [12, 7],
+  tree_small_a: [8, 6],
+  tree_small_b: [8, 6],
+  bush_a: [16, 7],
+  bush_b: [16, 7],
+  bush_c: [16, 7],
+  rock_a: [16, 7],
+  rock_b: [16, 8],
+  rock_c: [18, 7],
+}
+// lying flat, so sorted under everything standing (crops in a bed draw over it)
+const GROUND_FRAMES = new Set(['soil_bed'])
+// flat things, and ones too thin to cast a readable shadow
+const NO_SHADOW = new Set(['soil_bed', 'flowers_blue', 'flowers_red', 'flowers_white', 'fence_segment', 'fence_post'])
+const SHADOW_RGBA = [43, 36, 56, 64] // deep plum, ~25%
+
 const PROP_BY_ZONE = {
   workshop: 'prop-workbench',
   garden: 'prop-plant',
@@ -70,18 +85,6 @@ const PROP_BY_ZONE = {
   tower: 'prop-antenna',
   terminal: 'prop-terminal',
   spawn: 'prop-signpost',
-}
-
-// atlas frame names these placeholders become once scripts/assets/README.md's
-// pipeline has produced public/world/atlas/{atlas.png,atlas.json}
-const ATLAS_FRAME_BY_ZONE = {
-  workshop: 'workshop',
-  garden: 'shed',
-  archive: 'archive',
-  shrine: 'shrine',
-  tower: 'tower',
-  terminal: 'terminal_desk',
-  spawn: 'signpost',
 }
 
 // falls back to the placeholder texture whenever the real atlas (or a given
@@ -135,6 +138,13 @@ function resolveZone(zone, art) {
   }
 }
 
+const toRect = (s) => ({
+  left: s.x - s.width / 2,
+  right: s.x + s.width / 2,
+  top: s.y - s.height / 2,
+  bottom: s.y + s.height / 2,
+})
+
 export default class WorldScene extends Phaser.Scene {
   constructor() {
     super('World')
@@ -148,28 +158,26 @@ export default class WorldScene extends Phaser.Scene {
     // mid-session (e.g. a tablet rotating), matching how Player/WorldScene
     // pick their art/behavior once at create
     this.mode = this.registry.get('mode') || 'pointer'
-
-    const mapData = buildMap()
-
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    const map = this.make.tilemap({ data: mapData.ground, tileWidth: TILE, tileHeight: TILE })
-    const tileset = map.addTilesetImage('tiles', 'tileset', TILE, TILE, 0, 0)
-    this.groundLayer = map.createLayer(0, tileset, 0, 0)
-
-    const collisionLayer = map.createBlankLayer('collision', tileset, 0, 0)
-    for (let y = 0; y < mapData.rows; y++) {
-      for (let x = 0; x < mapData.cols; x++) {
-        const idx = mapData.collision[y][x]
-        if (idx >= 0) collisionLayer.putTileAt(idx, x, y)
-      }
-    }
+    // the island: public/world/map/island.json, built by scripts/world/build-map.mjs
+    const map = this.make.tilemap({ key: 'island' })
+    const terrain = map.addTilesetImage('terrain', 'terrain')
+    this.water = this.add
+      .tileSprite(0, 0, map.widthInPixels, map.heightInPixels, 'water', 0)
+      .setOrigin(0, 0)
+      .setDepth(DEPTH.water)
+    this.surfaces = Object.fromEntries(
+      SURFACES.map((name) => [name, map.createLayer(name, terrain).setDepth(DEPTH.ground)])
+    )
+    const collisionLayer = map.createLayer('collision', terrain).setVisible(false)
     collisionLayer.setCollisionByExclusion([-1])
 
-    this.placeScatter(mapData)
-
-    this.player = new Player(this, SPAWN_POINT.x, SPAWN_POINT.y)
+    const spawn = map.findObject('markers', (o) => o.name === 'spawn')
+    this.spawnPoint = { x: spawn.x, y: spawn.y }
+    this.player = new Player(this, spawn.x, spawn.y)
     this.physics.add.collider(this.player.sprite, collisionLayer)
+    this.playerShadow = this.add.image(0, 0, this.shadowTexture(18, 5)).setDepth(DEPTH.shadow)
 
     this.mapSize = { width: map.widthInPixels, height: map.heightInPixels }
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
@@ -184,51 +192,65 @@ export default class WorldScene extends Phaser.Scene {
     // off the new viewport whenever it does
     this.scale.on(Phaser.Scale.Events.RESIZE, this.applyZoom, this)
 
+    // buildings stand at the "zones" points in the map
+    const placed = Object.fromEntries(map.getObjectLayer('zones').objects.map((o) => [o.name, o]))
     this.zones = ZONES.map((zone) => {
-      const tex = resolvePropTexture(this, PROP_BY_ZONE[zone.id], ATLAS_FRAME_BY_ZONE[zone.id])
-      const prop = this.add.image(zone.x, zone.y, tex.key, tex.frame)
+      const { x, y } = placed[zone.id]
+      const tex = resolvePropTexture(this, PROP_BY_ZONE[zone.id], zone.frame)
+      const image = this.add.image(x, y, tex.key, tex.frame)
       // real generated art is authored bottom-anchored (feet at sprite.y) so it
       // sorts correctly against the player; placeholder rects stay center-anchored
-      if (tex.isReal) prop.setOrigin(0.5, 1)
-      const resolved = resolveZone(zone, artBox(prop))
+      if (tex.isReal) image.setOrigin(0.5, 1)
+      const resolved = resolveZone({ ...zone, x, y }, artBox(image))
       // sorted by where it meets the ground, same as the player's feet
-      prop.setDepth(resolved.base)
+      image.setDepth(resolved.base)
+      this.addShadow(resolved.art, { widthRatio: 0.95, maxHeight: 12 })
       return resolved
     })
 
     // Only the map border collided before, so the player walked through walls
     // and stood on roofs. Each building gets a box along its base; the roof
     // above it stays walk-behind, with depth sorting hiding the player there.
-    const solids = this.zones.map(({ solid }) => {
-      const block = this.add.zone(solid.x, solid.y, solid.width, solid.height)
+    // Props and scatter get the same treatment at their trunks and feet.
+    const solids = this.zones.map(({ solid }) => solid)
+    const atlas = this.textures.exists('objects') && this.textures.get('objects')
+    for (const layer of ['props', 'scatter']) {
+      for (const { name: frame, x, y } of map.getObjectLayer(layer).objects) {
+        if (!atlas || !atlas.has(frame)) continue
+        const image = this.add.image(x, y, 'objects', frame).setOrigin(0.5, 1)
+        const art = artBox(image)
+        image.setDepth(GROUND_FRAMES.has(frame) ? DEPTH.groundProp : art.bottom)
+        if (!NO_SHADOW.has(frame)) this.addShadow(art)
+        const size = SOLID_BY_FRAME[frame]
+        if (size) {
+          const [width, height] = size
+          solids.push({ x: (art.left + art.right) / 2, y: art.bottom - height / 2, width, height })
+        }
+      }
+    }
+    const blocks = solids.map((s) => {
+      const block = this.add.zone(s.x, s.y, s.width, s.height)
       this.physics.add.existing(block, true)
       return block
     })
-    this.physics.add.collider(this.player.sprite, solids)
+    this.physics.add.collider(this.player.sprite, blocks)
 
-    // Click/tap routing around the same things the colliders stop: building
-    // bases plus the map's collision tiles. Without it a tap on a building
+    // Click/tap routing around the same things the colliders stop: the tiles
+    // at the water's edge plus every solid box. Without it a tap on a building
     // from behind walked straight into its back wall and gave up there.
-    const obstacles = this.zones.map(({ solid: s }) => ({
-      left: s.x - s.width / 2,
-      right: s.x + s.width / 2,
-      top: s.y - s.height / 2,
-      bottom: s.y + s.height / 2,
-    }))
-    for (let y = 0; y < mapData.rows; y++) {
-      for (let x = 0; x < mapData.cols; x++) {
-        if (mapData.collision[y][x] < 0) continue
-        obstacles.push({ left: x * TILE, right: (x + 1) * TILE, top: y * TILE, bottom: (y + 1) * TILE })
-      }
-    }
+    const blockedTiles = new Uint8Array(map.width * map.height)
+    collisionLayer.forEachTile((t) => {
+      if (t.index > 0) blockedTiles[t.y * map.width + t.x] = 1
+    })
     const { sprite } = this.player
     const bodyLeft = sprite.body.offset.x - sprite.displayOriginX
     const bodyTop = sprite.body.offset.y - sprite.displayOriginY
     this.findPath = createPathfinder({
-      cols: mapData.cols,
-      rows: mapData.rows,
-      tile: TILE,
-      obstacles,
+      cols: map.width,
+      rows: map.height,
+      tile: map.tileWidth,
+      blockedTiles,
+      obstacles: solids.map(toRect),
       body: {
         left: bodyLeft,
         right: bodyLeft + sprite.body.width,
@@ -238,6 +260,18 @@ export default class WorldScene extends Phaser.Scene {
     })
 
     this.zoneManager = new ZoneManager(this, this.player, this.zones)
+
+    if (!this.reducedMotion) {
+      let frame = 0
+      this.time.addEvent({
+        delay: WATER_FRAME_MS,
+        loop: true,
+        callback: () => {
+          frame = (frame + 1) % this.textures.get('water').frameTotal
+          this.water.setFrame(frame)
+        },
+      })
+    }
 
     this.cursors = this.input.keyboard.createCursorKeys()
     this.wasd = this.input.keyboard.addKeys({
@@ -295,7 +329,7 @@ export default class WorldScene extends Phaser.Scene {
     // spawn means the plaza start point; any other zone parks the player in
     // front of its door - its base-centre is inside the building's collision now
     const handleTeleport = ({ id }) => {
-      const target = id === 'spawn' ? SPAWN_POINT : this.zones.find((z) => z.id === id)?.walkTo
+      const target = id === 'spawn' ? this.spawnPoint : this.zones.find((z) => z.id === id)?.walkTo
       if (!target) return
       this.player.stop()
       this.player.sprite.body.reset(target.x, target.y)
@@ -313,6 +347,8 @@ export default class WorldScene extends Phaser.Scene {
 
   update(time, delta) {
     this.player.update(delta, this.cursors, this.wasd, this.pauseInput)
+    const { sprite } = this.player
+    this.playerShadow.setPosition(sprite.x, sprite.body.bottom - 1)
     this.zoneManager.update()
     this.updateFootprints(time)
     this.emitZoneLabels(time)
@@ -361,42 +397,42 @@ export default class WorldScene extends Phaser.Scene {
     bus.emit(EVENTS.ZONE_LABELS, labels)
   }
 
-  // Grass tiles only (excludes paths/sand clearings/zones by construction -
-  // no separate distance math needed) and only when the real atlas is
-  // loaded - pure decoration, so it's fine to just skip it rather than draw
-  // placeholder rects like the props do.
-  placeScatter(mapData) {
-    if (!this.textures.exists('objects')) return
-    const atlas = this.textures.get('objects')
-    const available = SCATTER_DEFS.filter((d) => atlas.has(d.frame))
-    if (!available.length) return
-
-    for (let y = 1; y < mapData.rows - 1; y++) {
-      for (let x = 1; x < mapData.cols - 1; x++) {
-        if (mapData.ground[y][x] !== TILE_GRASS) continue
-        if (tileHash(x, y, 1337) > SCATTER_DENSITY) continue
-
-        const pick = available[Math.floor(tileHash(x, y, 91) * available.length)]
-        const tilesTall = Math.ceil(pick.height / TILE)
-
-        // clearance: the sprite is bottom-anchored, so it extends upward
-        // from this tile - and a tile wider than 16px can spill into its
-        // left/right neighbor, so check those too
-        let clear = true
-        for (let dy = 0; dy < tilesTall && clear; dy++) {
-          const ty = y - dy
-          if (ty < 1 || mapData.ground[ty][x] !== TILE_GRASS) clear = false
-        }
-        if (clear && (mapData.ground[y][x - 1] !== TILE_GRASS || mapData.ground[y][x + 1] !== TILE_GRASS)) {
-          clear = false
-        }
-        if (!clear) continue
-
-        const px = x * TILE + TILE / 2
-        const py = y * TILE + TILE
-        this.add.image(px, py, 'objects', pick.frame).setOrigin(0.5, 1).setDepth(py)
+  // A flat pixel ellipse (no antialiasing, to match the art), one texture per
+  // size, cached. Canvas-drawn rather than a Graphics ellipse, which would come
+  // out smoothed.
+  shadowTexture(width, height) {
+    const key = `shadow-${width}x${height}`
+    if (this.textures.exists(key)) return key
+    const texture = this.textures.createCanvas(key, width, height)
+    const ctx = texture.getContext()
+    const pixels = ctx.createImageData(width, height)
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const nx = (x + 0.5 - width / 2) / (width / 2)
+        const ny = (y + 0.5 - height / 2) / (height / 2)
+        if (nx * nx + ny * ny <= 1) pixels.data.set(SHADOW_RGBA, (y * width + x) * 4)
       }
     }
+    ctx.putImageData(pixels, 0, 0)
+    texture.refresh()
+    return key
+  }
+
+  // soft ellipse under something standing, centred on its drawn base
+  addShadow(art, { widthRatio = 0.8, maxHeight = 8 } = {}) {
+    const width = Math.max(6, Math.round((art.right - art.left) * widthRatio))
+    const height = Math.max(3, Math.min(maxHeight, Math.round(width * 0.3)))
+    return this.add
+      .image((art.left + art.right) / 2, art.bottom - 1, this.shadowTexture(width, height))
+      .setDepth(DEPTH.shadow)
+  }
+
+  // topmost ground overlay with a tile under a point
+  surfaceAt(x, y) {
+    for (let i = SURFACES.length - 1; i >= 0; i--) {
+      if (this.surfaces[SURFACES[i]].hasTileAtWorldXY(x, y)) return SURFACES[i]
+    }
+    return 'water'
   }
 
   // Tap/click target, not player proximity: the building's drawn art or the
@@ -424,12 +460,12 @@ export default class WorldScene extends Phaser.Scene {
     const throttle = this.mode === 'touch' ? FOOTPRINT_THROTTLE_MS * 2 : FOOTPRINT_THROTTLE_MS
     if (this.lastFootprintAt && time - this.lastFootprintAt < throttle) return
 
-    const { x, y } = this.player.sprite
-    const tile = this.groundLayer.getTileAtWorldXY(x, y)
-    if (!tile || (tile.index !== TILE_PATH && tile.index !== TILE_SAND)) return
+    const { x } = this.player.sprite
+    const feet = this.player.sprite.body.bottom
+    if (!FOOTPRINT_SURFACES.has(this.surfaceAt(x, feet))) return
 
     this.lastFootprintAt = time
-    const print = this.add.image(x, y + 6, 'footprint').setDepth(y - 1).setAlpha(0.5)
+    const print = this.add.image(x, feet - 2, 'footprint').setDepth(DEPTH.footprint).setAlpha(0.5)
     this.tweens.add({
       targets: print,
       alpha: 0,

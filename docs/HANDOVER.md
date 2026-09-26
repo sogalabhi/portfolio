@@ -50,10 +50,15 @@ src/
   lib/gsap.js           GSAP plugin registration + reduced-motion defaults
   world/                everything for /world (Phaser + React overlay)
 scripts/assets/         sprite pipeline (see §5.8)
+scripts/world/          terrain tileset + island map generators (see §7.4)
 assets/cut/             intermediate sliced sprites + manifests (pipeline output)
+assets/pixel/           art authored in code: text-grid sprites (rocks so far)
+assets/svg/             those grids as SVGs (build output, also usable on `/`)
 public/
   world/sprites/*.png   individual sprites (also reused by `/` for decoration)
   world/atlas/          packed atlas.png + atlas.json that Phaser loads
+  world/map/island.json the island, Tiled format (generated; editable in Tiled)
+  world/tiles/          terrain.png ground tileset + water.png animation strip
   world/char.png        player sprite
   fonts/                Departure Mono + license
   og-image.png, favicons, robots.txt, sitemap.xml, site.webmanifest
@@ -144,10 +149,22 @@ Shortcuts are ignored while you're typing in a field or holding a modifier key.
 
 ### 5.8 Asset pipeline
 
-This is shared with `/world`. For the full walkthrough see `scripts/assets/README.md`. In short: generate sprite sheets outside this repo (Gemini), then run `process` (magenta key and palette snap), `slice`, rename the files by hand, `downscale`/`batch-downscale` (target sizes are in `sizes.mjs`), and finally `node scripts/assets/pack-atlas.mjs` to write `public/world/atlas/`.
+This is shared with `/world`. For the full walkthrough see `scripts/assets/README.md`.
 
-- The README's step 4 still mentions `free-tex-packer-cli`. The script that actually works is `pack-atlas.mjs`, which uses `free-tex-packer-core`.
-- `pack-atlas` has no npm script, so run it with `node`.
+**Where the art comes from:**
+- **Generated art** (buildings, props, trees): sheets are made outside this repo (Gemini), then processed with `process`, `slice`, renaming by hand, and `downscale`/`batch-downscale` (target sizes are in `sizes.mjs`).
+- **Art authored as code**: text grids in `assets/pixel/*.mjs` become SVGs in `assets/svg/` and then PNGs (`npm run assets:pixel`). A hand-written SVG in `assets/svg/` works too (`npm run assets:svg`).
+
+**Rebuilding:** `npm run world:build` rebuilds everything downstream of the sprite PNGs, in order:
+1. the code-authored sprites
+2. the roof colours (`assets:roofs`)
+3. the atlas (`assets:pack`)
+4. the ground tileset and water (`world:terrain`)
+5. the island map (`world:map`)
+
+It's deterministic: two runs give identical files.
+
+**Gotcha:** `batch-downscale` regenerates `public/world/sprites/` from the Gemini cut-outs. That overwrites the per-building roof colours and the redrawn rocks, so run `npm run world:build` after it.
 
 ---
 
@@ -201,27 +218,37 @@ In dev builds, `window.__worldBus` and `window.__worldScene` are exposed for pok
 
 ### 7.3 Boot and assets (`BootScene.js`)
 
-- BootScene draws **placeholder textures at runtime**: a 4-tile tileset (grass, path, sand, block), a coloured-box player with a 4×4 walk cycle, and a coloured rectangle for each prop.
-- It then tries to load the real art: `world/atlas/atlas.{png,json}` (key `objects`) and `world/char.png` (key `char`).
-- If either file 404s, the game quietly falls back to the placeholders. `resolvePropTexture()` in `WorldScene` and `Player`'s `usingCharArt` check pick whichever texture is available.
-- **Current state:** both the real atlas and `char.png` are committed. The ground tiles are still the flat-colour placeholders because there's no tileset art yet.
+- BootScene loads:
+  - the island map (`world/map/island.json`, key `island`)
+  - the ground tileset (`world/tiles/terrain.png`) and the water strip (`world/tiles/water.png`, 3 frames of 32 px)
+  - the sprite atlas (`world/atlas/atlas.{png,json}`, key `objects`) and `world/char.png` (key `char`)
+- The loading bar follows the loader's real progress.
+- BootScene also draws **placeholder textures at runtime**: a coloured-box player with a 4×4 walk cycle, and a coloured rectangle for each building. If the atlas or `char.png` 404s, the game falls back to those. `resolvePropTexture()` in `WorldScene` and `Player`'s `usingCharArt` check pick whichever texture is available. The map and tiles have no fallback.
 
-### 7.4 Map (`data/mapLayout.js`, `data/zones.js`)
+- The island is a **Tiled-format map**, `public/world/map/island.json`: 80×56 tiles at 16 px, so 1280×896 world px.
+  - `scripts/world/build-map.mjs` generates it from the design in `scripts/world/layout.mjs`: the island shape, plaza, building positions, path waypoints, props and scatter settings.
+  - You can also open it in the free Tiled editor and edit it by hand. Regenerating overwrites hand edits, so pick one way per change.
+- **Terrain is corner-based.** Each grid vertex is one of: water, sand, grass, path, stone.
+  - Every level above water is its own overlay tile layer (`sand`, `grass`, `path`, `stone`), drawn bottom to top over animated water. The tileset has 15 edge tiles per overlay, plus variants.
+  - The tileset is drawn procedurally by `scripts/world/build-terrain.mjs`. Its layout lives in `terrain-spec.mjs`.
+  - It also carries Tiled "wang sets", so Tiled's terrain brush paints the right edges.
+  - A hidden `collision` layer blocks every tile that touches water.
+- **Object layers**:
 
-- The map is 60×40 tiles at 16 px, so 960×640 world pixels. `buildMap()` generates it in code rather than loading a Tiled file:
-  - an all-grass base
-  - blocking tiles around the border
-  - a sand clearing under spawn and under each zone
-  - 3-wide L-shaped paths from spawn to every zone
-- `zones.js` lists the zones. It's the single place to move or add a zone. Each entry has:
-  - `x`/`y`: the building's **base-centre**; the sprite is drawn bottom-anchored there
+  | Layer | Contents |
+  |---|---|
+  | `zones` | One point per zone id, at the building's base-centre |
+  | `props` | The placed props (point name = atlas frame) |
+  | `scatter` | Trees, bushes, rocks and flowers, seeded, so the same island every build |
+  | `markers` | `spawn` |
+
+- `zones.js` holds per-building data the map can't express:
+  - `frame`: the atlas frame
   - `depth`: how far back from the base the building is solid
   - `solidW`: optional collision width
-  - `doorDx`: the door's offset from `x`
-  - `clearing`: the sand clearing radius in tiles
+  - `doorDx`: the door's offset from the map point
 
-  `WorldScene.resolveZone()` measures the drawn art at runtime and derives everything else from these numbers. Atlas frames are trimmed, so the drawn box can be smaller than the frame. After a change to `zones.js`, update the per-zone maps in `WorldScene.js` (`PROP_BY_ZONE`, `ATLAS_FRAME_BY_ZONE`) and in the UI (`ZONE_TITLES` and `CONTENT_BY_ZONE` in `ZonePanel.jsx`, and `DESTINATIONS` in `ZoneMenu.jsx`).
-- Scatter (trees, bushes, rocks, flowers) is placed on grass tiles with a seeded `tileHash`. The island looks the same on every load. Scatter only appears when the real atlas has loaded.
+  `WorldScene.resolveZone()` measures the drawn art at runtime and derives everything else. Atlas frames are trimmed, so the drawn box can be smaller than the frame. For a new zone, also update `PROP_BY_ZONE` in `WorldScene.js` and the UI (`ZONE_TITLES` and `CONTENT_BY_ZONE` in `ZonePanel.jsx`, and `DESTINATIONS` in `ZoneMenu.jsx`).
 
 | Zone | Building sprite | Shows | Content source |
 |---|---|---|---|
@@ -239,16 +266,26 @@ In dev builds, `window.__worldBus` and `window.__worldScene` are exposed for pok
   - Click/tap moves follow a route of waypoints (`moveAlong`) from the pathfinder, described below.
   - The player gives up if it's stuck for 300 ms, and in that case `onArrive` does **not** fire.
   - `char.png` is a single front-facing 32×32 frame with no walk cycle, so the sprite just flips horizontally for left and right.
-- **Draw order**: everything sorts by where it meets the ground.
-  - The player's depth is its feet (`body.bottom`).
-  - Buildings and scatter use their drawn base.
-  - So the player draws in front of a building at its door and behind it when walking past its roof.
-- **Collision**: the map's border tiles, plus a static box along each building's base (`resolveZone().solid`). The roof above that box stays walk-behind.
+- **Draw order** (the `DEPTH` constants in `WorldScene.js`), bottom to top:
+  1. water
+  2. the ground overlays
+  3. flat props (soil beds)
+  4. footprints
+  5. shadows
+  6. everything standing, sorted by where it meets the ground
+
+  The player's depth is its feet (`body.bottom`); buildings, props and scatter use their drawn base. So the player draws in front of a building at its door and behind it when walking past its roof.
+- **Shadows**: every standing sprite gets a flat pixel-ellipse shadow at its base. They're drawn on a canvas (`shadowTexture`) and cached per size, so they stay crisp. The player's shadow follows it.
+- **Collision** has three sources:
+  - the `collision` tile layer at the water's edge
+  - a static box along each building's base (`resolveZone().solid`); the roof above it stays walk-behind
+  - a box at the trunk or feet of each prop and scatter item (`SOLID_BY_FRAME`); flowers are walk-through
+- **Footprints** only appear on sand and dirt (`surfaceAt()` finds the topmost ground overlay under a point).
 - **Triggers**: each zone's trigger is a strip in front of its **door**, not the building itself.
   - `Zone.js` (ZoneManager) checks the player's position against those strips once per render frame.
   - It deliberately doesn't use Arcade overlap callbacks. Phaser 4's fixed-step physics can fire those 0 or 2+ times per frame, which made the prompt flicker.
 - **Click/tap routing** (`pathfinding.js`): A* on the 16 px tile grid.
-  - It avoids the same boxes the colliders use, grown by the player's body size plus 3 px of clearance, then string-pulled into a few straight segments.
+  - It avoids the collision tiles and the same boxes the colliders use, grown by the player's body size plus 3 px of clearance, then string-pulled into a few straight segments.
   - Clicking or tapping a building (its drawn art or the strip in front of its door) walks to the door and opens the zone on arrival, from any side.
   - Teleports (terminal `cd`, the touch menu) also park the player at the door (`walkTo`), never inside the walls.
 
@@ -298,7 +335,8 @@ The first-visit hint stores `world-hint-seen` in localStorage.
 - Resizing uses `Scale.NONE` with a debounced (150 ms) manual `scale.resize()` based on `visualViewport`. This avoids jank while the iOS Safari toolbar animates. Don't switch it to `Scale.RESIZE`.
 - `EdgeCaseNotice` appears when the viewport is under 340 px or the frame rate stays below 30 fps for 5 s or more. It offers a way back to the portfolio but never redirects on its own.
 - `RotatePrompt` asks phone users in landscape (height under 500 px) to rotate to portrait. It can be dismissed.
-- Reduced motion turns off camera lerp (the camera snaps) and footprints.
+- Reduced motion turns off camera lerp (the camera snaps), footprints and the water animation.
+- The scene has about 650 display objects: the tile layers, roughly 230 scatter sprites, shadows and physics blocks. In a CPU-only headless browser it ran at about 32 fps, which is enough to trip the low-fps notice now and then. Real GPUs aren't expected to notice, but check a low-end phone.
 - The world loads the Press Start 2P font on demand and removes it on unmount.
 
 ---
@@ -311,9 +349,13 @@ The first-visit hint stores `world-hint-seen` in localStorage.
 | Add a project | Append to `projects.json` with a unique `id`, then set `featured` and `order` |
 | Add or edit a tour stop | `tour.json`. The `target` must match an element id on `/` |
 | Change colours or fonts | The `@theme` block in `src/index.css`, and the font links in `index.html` |
-| Move a zone or building | `src/world/data/zones.js`. Paths, clearings, collision, triggers and routing all regenerate automatically |
-| Add a new zone | `zones.js`, then the two maps in `WorldScene.js`, then `ZONE_TITLES`/`CONTENT_BY_ZONE` in `ZonePanel.jsx` and `DESTINATIONS` in `ZoneMenu.jsx` |
-| Replace or add sprites | Follow the §5.8 pipeline, then rerun `pack-atlas.mjs`. Frame names must match the `ATLAS_FRAME_BY_ZONE` and `SCATTER_DEFS` entries |
+| Move a building | `BUILDINGS` (and its path's waypoints in `PATHS`) in `scripts/world/layout.mjs`, then `npm run world:map`. Collision, triggers, labels and routing follow automatically |
+| Add or move a prop | `PROPS` in `layout.mjs`, then `npm run world:map`. The generator warns if a prop lands on a path, a building or the water. Give it collision in `SOLID_BY_FRAME` (`WorldScene.js`) |
+| Change the island's shape or scatter | `ISLAND` and `SCATTER` in `layout.mjs`, then `npm run world:map` |
+| Change ground or water colours | `EXTRA_HEX` in `scripts/assets/palette.mjs`, then `npm run world:terrain` |
+| Add a new zone | `zones.js`, plus `layout.mjs` (`BUILDINGS`, `PATHS`), `PROP_BY_ZONE` in `WorldScene.js`, `ZONE_TITLES`/`CONTENT_BY_ZONE` in `ZonePanel.jsx` and `DESTINATIONS` in `ZoneMenu.jsx` |
+| Draw a sprite in code | Add a grid module in `assets/pixel/` (see `rocks.mjs`), then `npm run world:build` |
+| Replace or add sprites | Follow the §5.8 pipeline, then `npm run world:build` |
 | Add a real walk cycle | Add a spritesheet at `public/world/char.png` and add anims in `Player.js` (the placeholder code shows the pattern) |
 | Add a terminal command | Update `COMMANDS`, `HELP_LINES`, the `switch` and, optionally, `CHIP_COMMANDS` in `Terminal.jsx` |
 
@@ -323,9 +365,7 @@ The first-visit hint stores `world-hint-seen` in localStorage.
 
 - **The résumé** lives at `public/resume.pdf`. Every résumé link (nav, hero, contact, `R`, terminal `cat resume`) points there, so replace that file to update it. It's a LaTeX export, and the printed LinkedIn text on it is missing `/in/` (the clickable link is correct).
 - **Content details still open**: two impact numbers, hackathon roles, a few experience numbers and guessed dates. The full list is in `docs/IMPROVEMENTS.md` §1.2.
-- **Ground tiles** are still the flat colours generated in BootScene. Real tile art (or a Tiled map export) is the next big visual upgrade.
 - **The player sprite** is a single static frame with no walk animation.
 - **The Archive zone** shows only org and period for each role. `/` shows much more detail there.
 - **`README.md`** is still the default Vite template. Replace it or point it at this doc.
-- **`scripts/assets/README.md`** atlas step still refers to the CLI instead of `pack-atlas.mjs`.
 - **No tests or CI.** Before you push, run `npm run build` and `npm run lint`, then check `/` and `/world` at phone width by hand.

@@ -1,0 +1,67 @@
+{
+  "description": "A site plan of the island from the interactive version of this portfolio. Each building holds one section of the page.",
+  "hint": "Move across the drawing to build it.",
+  "hintTouch": "Tap the drawing to build it.",
+  "buildAll": "Build it all",
+  "clear": "Back to the drawing",
+  "legend": {
+    "heading": "Key",
+    "label": "Key to the site plan"
+  },
+  "north": "N",
+  "scale": [
+    "0",
+    "5",
+    "10 m"
+  ],
+  "titleBlock": {
+    "drawingLabel": "Drawing",
+    "drawing": "Site plan, as built",
+    "sheetLabel": "Sheet",
+    "sheet": "01 / 06"
+  },
+  "labels": [
+    {
+      "zone": "workshop",
+      "tag": "A",
+      "name": "Workshop",
+      "section": "Work",
+      "href": "#work"
+    },
+    {
+      "zone": "archive",
+      "tag": "B",
+      "name": "Archive",
+      "section": "Experience",
+      "href": "#experience"
+    },
+    {
+      "zone": "garden",
+      "tag": "C",
+      "name": "Garden",
+      "section": "Skills",
+      "href": "#skills"
+    },
+    {
+      "zone": "shrine",
+      "tag": "D",
+      "name": "Shrine",
+      "section": "Achievements",
+      "href": "#achievements"
+    },
+    {
+      "zone": "tower",
+      "tag": "E",
+      "name": "Tower",
+      "section": "Contact",
+      "href": "#contact"
+    },
+    {
+      "zone": "terminal",
+      "tag": "F",
+      "name": "Terminal",
+      "section": "Play it",
+      "href": "/world"
+    }
+  ]
+}

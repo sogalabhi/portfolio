@@ -15,81 +15,26 @@
 //
 // Usage: node scripts/world/build-map.mjs   (or npm run world:map)
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { writeFileSync, mkdirSync } from 'node:fs'
 import { hash2 } from '../assets/pixel.mjs'
 import { EXTRA_HEX, PALETTE_HEX } from '../assets/palette.mjs'
-import { ZONES } from '../../src/world/data/zones.js'
 import {
   TILE, COLUMNS, ROWS, LEVEL, OVERLAYS, FULL, edgeTile, FULL_VARIANTS, WATER_TILE, BLOCK_TILE,
 } from './terrain-spec.mjs'
 import {
-  MAP, ISLAND, PLAZA, SPAWN, BUILDINGS, PATH_HALF_WIDTH, YARD_RADIUS, PATHS, PROPS, SCATTER,
+  MAP, PLAZA, SPAWN, BUILDINGS, PATH_HALF_WIDTH, YARD_RADIUS, PROPS, SCATTER,
 } from './layout.mjs'
+import { artBox, islandE, beachAt, buildingBox, approach, pathLines } from './shape.mjs'
 
 const OUT = 'public/world/map/island.json'
 const W = MAP.cols * TILE
 const H = MAP.rows * TILE
 
-// --- atlas frame boxes (trimmed art within the source frame) ------------------
-const atlas = JSON.parse(readFileSync('public/world/atlas/atlas.json', 'utf8'))
-const FRAMES = Object.fromEntries(
-  atlas.textures[0].frames.map((f) => [f.filename, { source: f.sourceSize, trim: f.spriteSourceSize }])
-)
-// drawn box of a frame placed bottom-anchored at (x, y) - same maths as
-// WorldScene's artBox
-function artBox(frame, x, y) {
-  const f = FRAMES[frame]
-  if (!f) throw new Error(`no atlas frame '${frame}'`)
-  const left = x - f.source.w / 2 + f.trim.x
-  const top = y - f.source.h + f.trim.y
-  return { left, top, right: left + f.trim.w, bottom: top + f.trim.h }
-}
 const overlaps = (a, b, pad = 0) =>
   a.left < b.right + pad && a.right > b.left - pad && a.top < b.bottom + pad && a.bottom > b.top - pad
 
-// --- island shape --------------------------------------------------------------
-const wave = (theta, [freq, phase, amp]) => amp * Math.sin(freq * theta + phase)
-// < 1 on the island; sand from 1 - beach(theta) outward
-function islandE(x, y) {
-  const dx = (x - ISLAND.cx) / ISLAND.rx
-  const dy = (y - ISLAND.cy) / ISLAND.ry
-  const theta = Math.atan2(dy, dx)
-  const wobble = 1 + ISLAND.wobble.reduce((s, w) => s + wave(theta, w), 0)
-  return { e: Math.hypot(dx, dy) / wobble, theta }
-}
-const beachAt = (theta) => ISLAND.beach + wave(theta, ISLAND.beachWobble)
-
 // --- paths ----------------------------------------------------------------------
-const zoneById = Object.fromEntries(ZONES.map((z) => [z.id, z]))
-const buildingBox = Object.fromEntries(
-  Object.entries(BUILDINGS).map(([id, { x, y }]) => [id, artBox(zoneById[id].frame, x, y)])
-)
-// where a path ends: just in front of the door, below the drawn base
-const approach = Object.fromEntries(
-  Object.entries(BUILDINGS).map(([id, { x }]) => [id, { x: x + zoneById[id].doorDx, y: buildingBox[id].bottom + 22 }])
-)
-
-function catmullRom(points, samplesPerSegment = 16) {
-  const pts = [points[0], ...points, points[points.length - 1]]
-  const out = []
-  for (let i = 1; i < pts.length - 2; i++) {
-    const [p0, p1, p2, p3] = [pts[i - 1], pts[i], pts[i + 1], pts[i + 2]]
-    for (let s = 0; s < samplesPerSegment; s++) {
-      const t = s / samplesPerSegment
-      const t2 = t * t
-      const t3 = t2 * t
-      const at = (k) =>
-        0.5 * (2 * p1[k] + (-p0[k] + p2[k]) * t + (2 * p0[k] - 5 * p1[k] + 4 * p2[k] - p3[k]) * t2 + (-p0[k] + 3 * p1[k] - 3 * p2[k] + p3[k]) * t3)
-      out.push([at(0), at(1)])
-    }
-  }
-  out.push(points[points.length - 1])
-  return out
-}
-
-const polylines = Object.entries(PATHS).map(([id, via]) =>
-  catmullRom([[PLAZA.x, PLAZA.y], ...via, [approach[id].x, approach[id].y]])
-)
+const polylines = Object.values(pathLines)
 
 function distToSegment(px, py, [ax, ay], [bx, by]) {
   const dx = bx - ax

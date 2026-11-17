@@ -35,7 +35,7 @@ export default function WorldMiniBanner() {
       to="/world"
       onClick={() => track('world_explore_click', { source: 'mini_banner' })}
       aria-label="Visit the interactive world"
-      className="fixed bottom-6 right-6 z-30 flex items-center gap-2 rounded-lg border-2 border-[#2B2438] bg-[#5FA65A] px-4 py-3 font-mono text-xs uppercase tracking-wide text-[#F4EDE2] shadow-md transition-colors duration-150 hover:bg-[#4A7C4E] print:hidden"
+      className="fixed bottom-6 right-6 z-30 hidden items-center gap-2 rounded-lg border-2 border-[#2B2438] bg-[#5FA65A] px-4 py-3 font-mono text-xs uppercase tracking-wide text-[#F4EDE2] shadow-md transition-colors duration-150 hover:bg-[#4A7C4E] md:flex print:hidden"
       style={{ transform: 'scale(0)', opacity: 0 }}
     >
       Explore my world →

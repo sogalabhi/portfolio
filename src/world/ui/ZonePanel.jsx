@@ -6,6 +6,7 @@ import skills from '../../content/skills.json'
 import experience from '../../content/experience.json'
 import education from '../../content/education.json'
 import achievements from '../../content/achievements.json'
+import { skillsForRole } from '../../lib/skills'
 import useGithubContributions from '../../hooks/useGithubContributions'
 
 export const ZONE_TITLES = {
@@ -86,6 +87,7 @@ function WorkshopContent() {
 }
 
 const CROP_COLORS = ['bg-[#5A4632]', 'bg-[#3E7A44]/30', 'bg-[#3E7A44]/55', 'bg-[#3E7A44]/80', 'bg-[#3E7A44]']
+const allSkills = skillsForRole(skills)
 
 function GardenContent() {
   const heatmap = useGithubContributions()
@@ -101,7 +103,7 @@ function GardenContent() {
   return (
     <div>
       <div className="space-y-4">
-        {skills.map((group) => (
+        {allSkills.map((group) => (
           <div key={group.group}>
             <p className="text-xs uppercase tracking-wide text-[#F4EDE2]/50">{group.group}</p>
             <div className="mt-2 flex flex-wrap gap-2">

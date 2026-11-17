@@ -10,7 +10,7 @@
 // bottom: 14 } for a 20x14 body hanging below the sprite centre).
 
 const SQRT2 = Math.SQRT2
-const SAMPLE_STEP = 4 // px between line-of-sight samples; below the 14px body height
+const SAMPLE_STEP = 4 // px between line-of-sight samples; below the player's 6px body height
 // Breathing room kept from every wall. A route that merely touches a corner
 // snags on it: arrival at a waypoint is only accurate to a few px, so the
 // body clips the corner by a fraction of a pixel and Arcade blocks it there.

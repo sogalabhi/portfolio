@@ -136,4 +136,16 @@ export const EXTRA_HEX = {
   roofStraw: '#D9974A',
   roofStrawShade: '#B37636',
   roofStrawDark: '#7A4E22',
+  // the avatar (assets/pixel/avatar.mjs) - the locked 13 have no skin, hair
+  // or denim; the polo itself is deep plum from the main palette
+  skinLight: '#D49A66',
+  skin: '#B97A4A',
+  skinShadow: '#8A5533',
+  hair: '#1C1B19',
+  hairLight: '#3D3833',
+  poloLight: '#40364F',
+  collarBlue: '#7A86D8',
+  denim: '#43527C',
+  denimShadow: '#2F3A5C',
+  sole: '#5A574F',
 }

@@ -177,7 +177,7 @@ export default class WorldScene extends Phaser.Scene {
     this.spawnPoint = { x: spawn.x, y: spawn.y }
     this.player = new Player(this, spawn.x, spawn.y)
     this.physics.add.collider(this.player.sprite, collisionLayer)
-    this.playerShadow = this.add.image(0, 0, this.shadowTexture(18, 5)).setDepth(DEPTH.shadow)
+    this.playerShadow = this.add.image(0, 0, this.shadowTexture(12, 4)).setDepth(DEPTH.shadow)
 
     this.mapSize = { width: map.widthInPixels, height: map.heightInPixels }
     this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)

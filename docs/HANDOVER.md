@@ -4,7 +4,7 @@ This covers the whole repo: the scrolling portfolio at `/` and the explorable pi
 
 - **Live:** https://sogalabhi.vercel.app (Vercel)
 - **Owner:** Abhijith Sogal V (`sogalabhi`)
-- **Status:** `/` and `/world` both ship. The content is filled in from the résumé; a few details are still open (see `docs/IMPROVEMENTS.md` §1.2). The planned game improvements are in the same doc.
+- **Status:** `/` and `/world` both ship. The home page now leads with civil engineering, shows four featured projects plus a disclosure, and has compact Experience and Skills sections. Artwork, avatar, and island changes are deferred to Claude; the existing character, banners, and margin decorations remain in place.
 
 ---
 
@@ -46,7 +46,7 @@ src/
   index.css             Tailwind @theme tokens, fonts, base styles
   content/*.json        ALL displayed copy (the single source of truth)
   components/           `/` page components (layout, hero, work, skills, exp, misc)
-  hooks/                useGsapReveal, useTour + TourContext, useReducedMotion, useGithubContributions
+  hooks/                useGsapReveal, useReducedMotion, useGithubContributions
   lib/gsap.js           GSAP plugin registration + reduced-motion defaults
   world/                everything for /world (Phaser + React overlay)
 scripts/assets/         sprite pipeline (see §5.8)
@@ -74,11 +74,11 @@ Every visible string comes from `src/content/*.json`. Components don't hardcode 
 | `projects.json` | Projects. `featured: true` puts one in the big cards and `order` sorts them. Links: `github`, `live`, `demo`, `playStore` |
 | `experience.json` | `tier1` (timeline cards) and `tier2` (compact role list) |
 | `education.json` | Education block, plus the Archive zone in the game |
-| `skills.json` | `[{ group, skills[] }]` for `/` Skills and the Garden zone |
+| `skills-summary.json` | Four curated skill rows on `/` |
+| `skills.json` | Complete skills list for the Garden zone; `skillsForRole` accepts string and role-tagged entries |
 | `achievements.json` | `summary` and `hackathons[]` for `/` Achievements and the Shrine zone |
 | `sections.json` | Section headings and the 404 page copy |
 | `nav.json` | Nav items and button labels |
-| `tour.json` | Guided-tour stops (`target` is a CSS selector on the page) |
 
 **Watch out for what gets rendered.** `experience.json` `tier1[].note` shows publicly under the card (`TimelineCard.jsx`), so never put a note-to-self there. Fields that are *not* rendered anywhere today: project `date` and `myRole`, and hackathon `date`, `myRole` and `links`. An empty string hides optional fields like `impact` and `links.*`.
 
@@ -95,13 +95,13 @@ Unfinished copy used to be marked with the literal `NEEDS_INPUT`, and none is le
 1. Skip link, then `Nav` (sticky, turns solid on scroll, mobile overlay menu, Résumé and Explore buttons)
 2. `PageScatter`: pixel trees, rocks and flowers placed deterministically down both margins
 3. `MarginCharacter`: a `position: fixed` sprite that walks down the left margin as the page scrolls (scrubbed by ScrollTrigger; disabled under reduced motion)
-4. `Hero`: availability pill, name, tagline, CTAs, the tour launcher (`data-tour-start`) and `StatStrip`
+4. `Hero`: availability pill, name, civil-engineering intro, Résumé and Explore buttons, GitHub/LinkedIn icons, and `StatStrip`
 5. `IslandDivider`: a large pixel-art banner that links to `/world` (`#world-banner`)
-6. `#work`: `FeaturedCard` × featured projects, then `ProjectGrid` for the rest
-7. `#skills`: `SkillGroup` per group, then `GithubHeatmap`
-8. `#experience`: `TimelineCard` (tier 1), `CompactRoleList` (tier 2), `EducationBlock`
+6. `#work`: four featured cards, then a "Show 21 more" disclosure; see `docs/project-selection.md`
+7. `#experience`: `TimelineCard` (at most two bullets per organisation), `CompactRoleList` (tier 2), `EducationBlock`
+8. `#skills`: `SkillsSummary` with four `SkillGroup` rows, then `GithubHeatmap`
 9. `#about`: `#achievements` then `#contact`
-10. `Footer`, `WorldMiniBanner` and `TourController`
+10. `Footer` and `WorldMiniBanner`
 
 `ScrollProgressBar`, `KeyboardShortcuts` and `<Analytics/>` sit outside the routes, so they appear on every page.
 
@@ -121,18 +121,15 @@ Two game colours are also available as rare accents: `panel #2B2438` (the footer
 - `lib/gsap.js` sets every GSAP duration to 0 under `prefers-reduced-motion`. `index.css` also removes CSS transitions in that case.
 - `index.html` forces `history.scrollRestoration = 'manual'` so reveals behave the same on every load. `App.jsx` calls `ScrollTrigger.refresh()` after fonts and `load` finish.
 
-### 5.4 Guided tour
+### 5.4 Guided tour removal
 
-- `useTour` (state `idle | running | paused`) walks through `tour.json` stops. It GSAP-scrolls to each `target`, waits 5 s, then advances.
-- If you scroll by hand more than 40 px during the tour, it exits.
-- `TourContext` shares the tour state between `Hero` (the launcher) and `TourController` (the floating card with play/pause/prev/next/close). Clicking outside the card exits the tour.
-- The tour `note` strings were drafted from résumé facts on 2026-09-26. They're meant to be rewritten in the owner's own voice.
+The guided tour, its content, context, controller, and `T` shortcut have been
+removed. The hero's secondary action links directly to `/world`.
 
 ### 5.5 Keyboard shortcuts (`/`)
 
 | Key | Action |
 |---|---|
-| `T` | Start the tour (clicks `[data-tour-start]`) |
 | `R` | Download the résumé |
 | `?` | Show or hide the shortcuts dialog |
 | `Esc` | Close the dialog |
@@ -174,11 +171,11 @@ These are sent with `track()` from `@vercel/analytics`:
 
 | Event | Props | Fired from |
 |---|---|---|
-| `world_explore_click` | `source`: `nav`, `nav_mobile`, `island_divider`, `mini_banner` | Every link to `/world` |
+| `world_explore_click` | `source`: `hero`, `nav`, `nav_mobile`, `island_divider`, `mini_banner` | Every link to `/world` |
 | `resume_download` | `source`: `nav`, `nav_mobile`, `hero`, `contact`, `keyboard_shortcut`, `world_terminal` | Every résumé link |
-| `project_link_click` | `project`, `type`: `github`/`live` | `FeaturedCard`, `ProjectCard` |
+| `project_link_click` | `project`, `type`: `github`/`live`/`screenshot` | `ProjectCard` |
+| `more_projects_toggle` | `expanded`: boolean | Additional projects disclosure |
 | `contact_email_click` | `method`: `copy`/`mailto` | `Contact` |
-| `tour_started` | none | `Hero` |
 | `world_zone_open` | `zone`: zone id; `source`: `keyboard`, `prompt`, `click`, `tap`, `menu` | `WorldOverlay` (the single handler for every zone open in `/world`) |
 
 When you add a new entry point to an existing action, give it a new `source` value rather than a new event name.
@@ -347,7 +344,7 @@ The first-visit hint stores `world-hint-seen` in localStorage.
 |---|---|
 | Change any copy | `src/content/*.json` only |
 | Add a project | Append to `projects.json` with a unique `id`, then set `featured` and `order` |
-| Add or edit a tour stop | `tour.json`. The `target` must match an element id on `/` |
+| Edit the home page's skill shortlist | `src/content/skills-summary.json`; keep four groups |
 | Change colours or fonts | The `@theme` block in `src/index.css`, and the font links in `index.html` |
 | Move a building | `BUILDINGS` (and its path's waypoints in `PATHS`) in `scripts/world/layout.mjs`, then `npm run world:map`. Collision, triggers, labels and routing follow automatically |
 | Add or move a prop | `PROPS` in `layout.mjs`, then `npm run world:map`. The generator warns if a prop lands on a path, a building or the water. Give it collision in `SOLID_BY_FRAME` (`WorldScene.js`) |

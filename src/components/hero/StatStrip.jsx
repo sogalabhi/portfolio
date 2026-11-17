@@ -2,6 +2,9 @@ import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from '../../lib/gsap'
 import useReducedMotion from '../../hooks/useReducedMotion'
+import sitePlan from '../../content/site-plan.json'
+
+const { titleBlock } = sitePlan
 
 function parseStat(value) {
   const match = value.match(/^([\d,]+\.?\d*)/)
@@ -35,7 +38,7 @@ export default function StatStrip({ stats }) {
       containerRef.current.querySelectorAll('[data-stat-value]').forEach((el) => {
         const original = el.textContent
         const parsed = parseStat(original)
-        if (!parsed) return
+        if (!parsed || /^(st|nd|rd|th)\b/.test(parsed.suffix)) return
 
         const proxy = { n: 0 }
         gsap.to(proxy, {
@@ -55,19 +58,34 @@ export default function StatStrip({ stats }) {
     { scope: containerRef, dependencies: [reduced] },
   )
 
+  const cell = 'border-ink/20 px-5 py-4 sm:px-6'
+  const label = 'font-mono text-[10px] uppercase tracking-[0.1em] text-faint'
+
+  // laid out as a drawing's title block: a label over each value, ruled cells
   return (
     <dl
       ref={containerRef}
-      className="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-8 sm:flex sm:flex-wrap sm:gap-x-12"
+      className="relative grid grid-cols-2 border-t border-ink/35 bg-paper sm:grid-cols-4 lg:grid-cols-[1.25fr_repeat(4,1fr)_0.7fr]"
     >
-      {stats.map((stat) => (
-        <div key={stat.label}>
-          <dd data-stat-value className="font-mono text-2xl font-medium text-ink md:text-3xl">
+      <div className={`hidden lg:block lg:pl-14 ${cell}`}>
+        <dt className={label}>{titleBlock.drawingLabel}</dt>
+        <dd className="mt-1 font-display text-lg italic text-ink">{titleBlock.drawing}</dd>
+      </div>
+      {stats.map((stat, i) => (
+        <div
+          key={stat.label}
+          className={`${cell} lg:border-l ${i % 2 ? 'border-l' : ''} ${i > 1 ? 'border-t sm:border-t-0' : ''} ${i === 2 ? 'sm:border-l' : ''}`}
+        >
+          <dt className={label}>{stat.label}</dt>
+          <dd data-stat-value className="mt-1 font-mono text-xl font-medium text-ink md:text-2xl">
             {stat.value}
           </dd>
-          <dt className="mt-1 text-sm text-faint">{stat.label}</dt>
         </div>
       ))}
+      <div className={`hidden border-l lg:block ${cell}`}>
+        <dt className={label}>{titleBlock.sheetLabel}</dt>
+        <dd className="mt-1 font-mono text-xl text-ink md:text-2xl">{titleBlock.sheet}</dd>
+      </div>
     </dl>
   )
 }

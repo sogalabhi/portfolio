@@ -15,7 +15,9 @@ const OUT_DIR = 'public/world/atlas'
 async function main() {
   mkdirSync(OUT_DIR, { recursive: true })
 
-  const files = readdirSync(SPRITES_DIR).filter((f) => f.endsWith('.png'))
+  // the avatar strips are loaded as their own spritesheet (BootScene) and by
+  // the homepage, so they stay out of the atlas
+  const files = readdirSync(SPRITES_DIR).filter((f) => f.endsWith('.png') && !f.startsWith('avatar'))
   const images = files.map((file) => ({
     path: file,
     contents: readFileSync(path.join(SPRITES_DIR, file)),

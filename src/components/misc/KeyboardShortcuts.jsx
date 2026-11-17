@@ -18,9 +18,7 @@ export default function KeyboardShortcuts() {
         return
       }
 
-      if (e.key === 't' || e.key === 'T') {
-        document.querySelector('[data-tour-start]')?.click()
-      } else if (e.key === 'r' || e.key === 'R') {
+      if (e.key === 'r' || e.key === 'R') {
         track('resume_download', { source: 'keyboard_shortcut' })
         const link = document.createElement('a')
         link.href = profile.links.resume
@@ -50,10 +48,6 @@ export default function KeyboardShortcuts() {
       >
         <h2 className="font-display text-lg font-semibold text-ink">Keyboard shortcuts</h2>
         <dl className="mt-4 space-y-3 text-sm text-slate">
-          <div className="flex items-center justify-between">
-            <dt>Take the tour</dt>
-            <dd className="rounded border border-line bg-paper px-2 py-0.5 font-mono text-xs">t</dd>
-          </div>
           <div className="flex items-center justify-between">
             <dt>Download résumé</dt>
             <dd className="rounded border border-line bg-paper px-2 py-0.5 font-mono text-xs">r</dd>

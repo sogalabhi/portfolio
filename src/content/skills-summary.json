@@ -1,0 +1,18 @@
+[
+  {
+    "group": "Languages",
+    "skills": ["Python", "Java", "JavaScript / TypeScript", "Dart", "SQL"]
+  },
+  {
+    "group": "Apps & APIs",
+    "skills": ["React", "Flutter", "Django", "FastAPI", "Spring Boot"]
+  },
+  {
+    "group": "Data & Systems",
+    "skills": ["Spark", "Airflow", "Delta Lake", "PostgreSQL", "Redis", "Docker"]
+  },
+  {
+    "group": "Engineering",
+    "skills": ["Steel design", "Beam & slope analysis", "NumPy", "SciPy", "Three.js"]
+  }
+]

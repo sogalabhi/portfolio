@@ -1,12 +1,13 @@
 import Phaser from 'phaser'
 
-// 'char' is a single static 32x32 sprite (a "32x32 Battlers" pack frame - front-
-// facing only, no walk cycle), loaded by BootScene from world/char.png. It's a
-// quick real-art swap-in, not the deliberate LimeZu/Kenney walk-cycle pack call -
-// see scripts/assets/README.md for that. With no frames to animate, we just flip
-// the sprite horizontally for left/right and hold the single pose otherwise.
-// Falls back to the placeholder 'player' texture/anim rig when 'char' isn't loaded.
+// 'char' is the avatar (assets/pixel/avatar.mjs), loaded by BootScene from
+// world/sprites/avatar.png: 16 frames of 16x24, four per direction in the
+// order down, left, right, up (stand, step, stand, step). Each direction gets
+// a walk cycle over its four frames and an idle on its first. If 'char' fails
+// to load, the same rig runs on the placeholder 'player' texture BootScene
+// draws at runtime.
 
+const DIRECTIONS = ['down', 'left', 'right', 'up']
 const SPEED = 130
 const ARRIVE_DIST = 4
 const STUCK_MS = 300
@@ -18,8 +19,9 @@ export default class Player {
 
     if (this.usingCharArt) {
       this.sprite = scene.physics.add.sprite(x, y, 'char', 0)
-      this.sprite.body.setSize(20, 14)
-      this.sprite.body.setOffset(6, 16)
+      // the feet: the bottom rows of the 16x24 frame
+      this.sprite.body.setSize(10, 6)
+      this.sprite.body.setOffset(3, 18)
     } else {
       this.sprite = scene.physics.add.sprite(x, y, 'player', 'down-0')
       this.sprite.body.setSize(8, 6)
@@ -27,7 +29,7 @@ export default class Player {
     }
     // sorted by the feet (bottom of the physics body), the same "where it meets
     // the ground" rule the buildings and scatter use - the sprite's centre sits
-    // ~14px above the feet, so standing at a door would otherwise tuck the
+    // ~12px above the feet, so standing at a door would otherwise tuck the
     // player behind the wall
     this.sprite.setDepth(this.sprite.body.bottom)
 
@@ -39,19 +41,22 @@ export default class Player {
     this.stuckSince = null
     this.lastPos = { x, y }
 
-    if (!this.usingCharArt) {
-      this.createAnimations()
-      this.sprite.play('idle-down')
-    }
+    this.createAnimations()
+    this.sprite.play('idle-down')
   }
 
   createAnimations() {
     const anims = this.scene.anims
-    ;['down', 'left', 'right', 'up'].forEach((dir) => {
+    // the art is one numbered strip; the placeholder names its frames
+    const frame = (dir, f) =>
+      this.usingCharArt
+        ? { key: 'char', frame: DIRECTIONS.indexOf(dir) * 4 + f }
+        : { key: 'player', frame: `${dir}-${f}` }
+    DIRECTIONS.forEach((dir) => {
       if (!anims.exists(`walk-${dir}`)) {
         anims.create({
           key: `walk-${dir}`,
-          frames: [0, 1, 2, 3].map((f) => ({ key: 'player', frame: `${dir}-${f}` })),
+          frames: [0, 1, 2, 3].map((f) => frame(dir, f)),
           frameRate: 8,
           repeat: -1,
         })
@@ -59,7 +64,7 @@ export default class Player {
       if (!anims.exists(`idle-${dir}`)) {
         anims.create({
           key: `idle-${dir}`,
-          frames: [{ key: 'player', frame: `${dir}-0` }],
+          frames: [frame(dir, 0)],
           frameRate: 1,
         })
       }
@@ -94,7 +99,7 @@ export default class Player {
   update(delta, cursors, wasd, pauseInput) {
     if (pauseInput) {
       this.sprite.body.setVelocity(0, 0)
-      if (!this.usingCharArt) this.sprite.anims.play(`idle-${this.facing}`, true)
+      this.sprite.anims.play(`idle-${this.facing}`, true)
       this.sprite.setDepth(this.sprite.body.bottom)
       return
     }
@@ -154,12 +159,10 @@ export default class Player {
     if (vec.length() > 0) {
       this.facing =
         Math.abs(vec.x) > Math.abs(vec.y) ? (vec.x > 0 ? 'right' : 'left') : vec.y > 0 ? 'down' : 'up'
-      if (this.usingCharArt) this.sprite.setFlipX(this.facing === 'left')
-      else this.sprite.anims.play(`walk-${this.facing}`, true)
+      this.sprite.anims.play(`walk-${this.facing}`, true)
       this.moving = true
     } else {
-      if (this.usingCharArt) this.sprite.setFlipX(this.facing === 'left')
-      else this.sprite.anims.play(`idle-${this.facing}`, true)
+      this.sprite.anims.play(`idle-${this.facing}`, true)
       this.moving = false
     }
 

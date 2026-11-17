@@ -90,6 +90,53 @@
   }
 }
 
+/* the site plan in the hero (components/hero/SitePlan.jsx) */
+.site-plan [data-hair] * {
+  /* hairlines stay one device pixel wide however far the drawing is scaled */
+  vector-effect: non-scaling-stroke;
+}
+
+/* hairlines don't scale down with the drawing, so on a phone the heavier
+   lines (coast, building outlines) come down to one px to keep the weights apart */
+@media (max-width: 639px) {
+  .site-plan [data-heavy],
+  .site-plan [data-heavy] * {
+    stroke-width: 1px;
+  }
+}
+
+.site-plan-lines {
+  animation: plan-in 1.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes plan-in {
+  from {
+    clip-path: circle(0% at 50% 52%);
+  }
+  to {
+    clip-path: circle(260% at 50% 52%);
+  }
+}
+
+/* one frame of public/world/sprites/avatar.png (16 frames of 16x24), anchored at the feet */
+.avatar-sprite {
+  width: 16px;
+  height: 24px;
+  background: url("/world/sprites/avatar.png") 0 0 / 1600% 100% no-repeat;
+  image-rendering: pixelated;
+}
+
+.site-plan-avatar {
+  transform: translate(-50%, -94%);
+}
+
+@media (min-width: 640px) {
+  .site-plan-avatar {
+    width: 32px;
+    height: 48px;
+  }
+}
+
 @media print {
   body {
     background: #fff !important;

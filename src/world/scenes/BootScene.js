@@ -34,7 +34,9 @@ export default class BootScene extends Phaser.Scene {
     // Phaser fires 'loaderror' rather than throwing, and scenes fall back to the
     // placeholder textures above (`this.textures.exists('objects')` / `'char'`).
     this.load.atlas('objects', 'world/atlas/atlas.png', 'world/atlas/atlas.json')
-    this.load.spritesheet('char', 'world/char.png', { frameWidth: 32, frameHeight: 32 })
+    // the avatar (assets/pixel/avatar.mjs): 16 frames of 16x24 - down, left,
+    // right, up, four each
+    this.load.spritesheet('char', 'world/sprites/avatar.png', { frameWidth: 16, frameHeight: 24 })
   }
 
   create() {

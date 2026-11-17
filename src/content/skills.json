@@ -1,18 +1,426 @@
 [
   {
+    "group": "Languages",
+    "skills": [
+      {
+        "name": "Python",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "Java",
+        "roles": [
+          "sde",
+          "data"
+        ]
+      },
+      {
+        "name": "JavaScript",
+        "roles": [
+          "sde",
+          "civil"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "Dart",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "SQL",
+        "roles": [
+          "sde",
+          "data"
+        ]
+      },
+      {
+        "name": "Solidity",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "Rust",
+        "roles": [
+          "sde"
+        ]
+      }
+    ]
+  },
+  {
+    "group": "Web & APIs",
+    "skills": [
+      {
+        "name": "React",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "Django",
+        "roles": [
+          "sde",
+          "civil"
+        ]
+      },
+      {
+        "name": "FastAPI",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "Spring Boot",
+        "roles": [
+          "sde",
+          "data"
+        ]
+      },
+      {
+        "name": "Node.js",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "Express",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "Socket.IO",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "WebSockets",
+        "roles": [
+          "sde",
+          "civil"
+        ]
+      },
+      {
+        "name": "Three.js",
+        "roles": [
+          "sde",
+          "civil"
+        ]
+      }
+    ]
+  },
+  {
+    "group": "Mobile",
+    "skills": [
+      {
+        "name": "Flutter",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "React Native",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "Expo",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "BLoC",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "Drift",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "Hive",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "Firebase Cloud Messaging",
+        "roles": [
+          "sde"
+        ]
+      }
+    ]
+  },
+  {
     "group": "Data Engineering",
-    "skills": ["Spark", "Airflow", "Delta Lake", "dbt", "Kafka", "MinIO"]
+    "skills": [
+      {
+        "name": "Apache Spark",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "Airflow",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "Delta Lake",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "dbt",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "Redpanda",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "MinIO",
+        "roles": [
+          "data"
+        ]
+      }
+    ]
   },
   {
-    "group": "Cloud & Infra",
-    "skills": ["Azure", "Terraform", "Docker", "K8s", "GitHub Actions", "Linux"]
+    "group": "Machine Learning & AI",
+    "skills": [
+      {
+        "name": "TensorFlow",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "Keras",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "Scikit-Learn",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "Pandas",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "Sentence Transformers",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "RAG",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "Gemini",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      }
+    ]
   },
   {
-    "group": "Full Stack",
-    "skills": ["FastAPI", "Django", "Flutter", "React", "Next.js", "Node"]
+    "group": "Civil & Numerical",
+    "skills": [
+      {
+        "name": "Steel design",
+        "roles": [
+          "civil"
+        ]
+      },
+      {
+        "name": "Beam analysis",
+        "roles": [
+          "civil"
+        ]
+      },
+      {
+        "name": "Slope stability",
+        "roles": [
+          "civil"
+        ]
+      },
+      {
+        "name": "Continuous Strength Method",
+        "roles": [
+          "civil"
+        ]
+      },
+      {
+        "name": "NumPy",
+        "roles": [
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "SciPy",
+        "roles": [
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "PySlope",
+        "roles": [
+          "sde",
+          "civil"
+        ]
+      },
+      {
+        "name": "Plotly",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "Matplotlib",
+        "roles": [
+          "data",
+          "civil"
+        ]
+      }
+    ]
   },
   {
-    "group": "Tools",
-    "skills": ["Git", "Postman", "Figma", "TimescaleDB"]
+    "group": "Databases & Storage",
+    "skills": [
+      {
+        "name": "PostgreSQL",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "TimescaleDB",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "SQLite",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "Firestore",
+        "roles": [
+          "sde"
+        ]
+      },
+      {
+        "name": "Supabase",
+        "roles": [
+          "sde"
+        ]
+      }
+    ]
+  },
+  {
+    "group": "Cloud & Delivery",
+    "skills": [
+      {
+        "name": "Docker",
+        "roles": [
+          "sde",
+          "data"
+        ]
+      },
+      {
+        "name": "Azure",
+        "roles": [
+          "data"
+        ]
+      },
+      {
+        "name": "Celery",
+        "roles": [
+          "sde",
+          "civil"
+        ]
+      },
+      {
+        "name": "Redis",
+        "roles": [
+          "sde",
+          "civil"
+        ]
+      },
+      {
+        "name": "Git",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "GitHub Actions",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      },
+      {
+        "name": "Linux",
+        "roles": [
+          "sde",
+          "data",
+          "civil"
+        ]
+      }
+    ]
   }
 ]

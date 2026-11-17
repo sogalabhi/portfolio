@@ -1,36 +1,67 @@
 {
-  "summary": "2 hackathon wins and an international selection, from 3 entries",
+  "summary": "Two third-place finishes and an ETHGlobal selection.",
   "hackathons": [
     {
       "event": "AssetHub Hackathon, Goa 2025",
       "date": "2025",
       "result": "3rd of 190+",
-      "project": "Polkaflow -visual blockchain workflow builder for Polkadot",
+      "project": "Polkaflow — visual blockchain workflow builder for Polkadot",
       "oneLiner": "Drag-and-drop flowchart to deployed smart contract, with AI code-gen, a hand-built logic engine, and automatic Solidity-to-Rust optimization for gas-heavy functions.",
       "myRole": "",
-      "stack": ["React", "Solidity", "Rust", "PolkaVM", "AssetHub"],
-      "links": { "github": "https://github.com/sogalabhi/Polkadot", "devpost": "", "demo": "https://www.youtube.com/watch?v=1wMiRCPWYBE" }
+      "stack": [
+        "React",
+        "Solidity",
+        "Rust",
+        "PolkaVM",
+        "AssetHub"
+      ],
+      "links": {
+        "github": "https://github.com/sogalabhi/Polkadot",
+        "devpost": "",
+        "demo": "https://www.youtube.com/watch?v=1wMiRCPWYBE"
+      }
     },
     {
       "event": "Polkadot Builder House, Bengaluru",
       "date": "2025-12",
       "result": "3rd place",
-      "project": "Polar Bridge -cross-chain lending, INR collateral to PAS tokens",
-      "oneLiner": "A fiat-to-Polkadot on-ramp -pay by UPI, borrow PAS tokens against INR collateral, no crypto knowledge needed.",
-      "myRole": "Web3 developer, 2-person team -built the smart contracts and the relayer service handling cross-chain event synchronization between the Stellar vault and the Paseo Asset Hub pool",
-      "stack": ["React", "Node.js", "Stellar Soroban", "Paseo Asset Hub", "Solidity", "Razorpay"],
-      "links": { "github": "https://github.com/sogalabhi/Polar", "devpost": "", "demo": "" }
+      "project": "Polar Bridge — cross-chain lending, INR collateral to PAS tokens",
+      "oneLiner": "A fiat-to-Polkadot on-ramp — pay by UPI, borrow PAS tokens against INR collateral, no crypto knowledge needed.",
+      "myRole": "Web3 developer, 2-person team — built the smart contracts and the relayer service handling cross-chain event synchronization between the Stellar vault and the Paseo Asset Hub pool",
+      "stack": [
+        "React",
+        "Node.js",
+        "Stellar Soroban",
+        "Paseo Asset Hub",
+        "Solidity",
+        "Razorpay"
+      ],
+      "links": {
+        "github": "https://github.com/sogalabhi/Polar",
+        "devpost": "",
+        "demo": ""
+      }
     },
     {
       "event": "ETHGlobal New Delhi",
       "date": "2025-09",
-      "result": "Selected for the offline round in Delhi -international event",
-      "project": "PokeWars -multiplayer Pokémon shooting game with Web3 rewards on Polygon",
+      "result": "Selected for ETHGlobal",
+      "project": "PokeWars — multiplayer Pokémon shooting game with Web3 rewards on Polygon",
       "oneLiner": "Wallet-authenticated multiplayer combat in Phaser, with NFT-owned Pokémon and daily on-chain rewards via the X402 protocol.",
       "myRole": "",
-      "stack": ["Phaser", "React", "Solidity", "Polygon", "MetaMask", "WebSockets"],
-      "links": { "github": "", "devpost": "", "demo": "" }
+      "stack": [
+        "Phaser",
+        "React",
+        "Solidity",
+        "Polygon",
+        "MetaMask",
+        "WebSockets"
+      ],
+      "links": {
+        "github": "",
+        "devpost": "",
+        "demo": ""
+      }
     }
-  ],
-  "note_to_self": "Three entries, no filler tier -dropped the plan to list non-placing hackathons as compact rows. If more hackathons come up later with a real result worth showing, add them in the same full-entry shape as these three, not as a lesser tier."
+  ]
 }

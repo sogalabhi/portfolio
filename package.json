@@ -18,7 +18,9 @@
     "assets:pack": "node scripts/assets/pack-atlas.mjs",
     "world:terrain": "node scripts/world/build-terrain.mjs",
     "world:map": "node scripts/world/build-map.mjs",
-    "world:build": "npm run assets:pixel && npm run assets:roofs && npm run assets:pack && npm run world:terrain && npm run world:map"
+    "world:preview": "node scripts/world/build-preview.mjs",
+    "world:plan": "node scripts/world/build-plan.mjs",
+    "world:build": "npm run assets:pixel && npm run assets:roofs && npm run assets:pack && npm run world:terrain && npm run world:map && npm run world:preview && npm run world:plan"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

@@ -1,5 +1,12 @@
 # Improvement plan
 
+Current homepage update (2026-10-27): the civil-engineering intro, two hero
+actions with social icons, four featured projects, compact Experience, four-row
+Skills summary, and corrected achievements are implemented. The guided tour is
+removed. Artwork, avatar, banner, and margin-decoration work is deferred to
+Claude. The older checklists below are historical; use `docs/HANDOVER.md` and
+`docs/project-selection.md` for the current page structure and content.
+
 This plan comes from running `/` and `/world` at desktop (1280×800) and phone (390×844) sizes on 2026-09-26. It has three parts:
 
 1. **What I need from you**: files, content and decisions. All are settled apart from the few content details listed in 1.2.

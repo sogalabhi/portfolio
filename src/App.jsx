@@ -6,17 +6,17 @@ import useGsapReveal from './hooks/useGsapReveal'
 import Nav from './components/layout/Nav'
 import Footer from './components/layout/Footer'
 import Section from './components/layout/Section'
-import SectionIcon from './components/layout/SectionIcon'
+import SectionHeader from './components/layout/SectionHeader'
 import WorldMiniBanner from './components/layout/WorldMiniBanner'
-import PageScatter from './components/layout/PageScatter'
+import MarginAlignment from './components/layout/MarginAlignment'
 import Hero from './components/hero/Hero'
-import MarginCharacter from './components/hero/MarginCharacter'
 import ProjectExplorer from './components/work/ProjectExplorer'
 import SkillsSummary from './components/skills/SkillsSummary'
 import GithubHeatmap from './components/skills/GithubHeatmap'
 import TimelineCard from './components/exp/TimelineCard'
 import CompactRoleList from './components/exp/CompactRoleList'
 import EducationBlock from './components/exp/EducationBlock'
+import About from './components/misc/About'
 import Achievements from './components/misc/Achievements'
 import Contact from './components/misc/Contact'
 import NotFound from './components/misc/NotFound'
@@ -44,48 +44,38 @@ function Home() {
       </a>
 
       <Nav />
-      <PageScatter />
-      <MarginCharacter />
+      <MarginAlignment />
       <main id="main">
         <Hero />
 
         <Section id="work">
-          <div className="flex items-center gap-4">
-            <SectionIcon src="/world/sprites/workshop.png" />
-            <h2 className="text-ink">{sections.work.heading}</h2>
-          </div>
-          <div className="mt-8">
+          <SectionHeader id="work" />
+          <div className="mt-10">
             <ProjectExplorer projects={orderedProjects} />
           </div>
         </Section>
 
-        <Section id="experience" className="border-t border-line">
-          <div className="flex items-center gap-4">
-            <SectionIcon src="/world/sprites/archive.png" />
-            <h2 className="text-ink">{sections.experience.heading}</h2>
-          </div>
-          <div ref={timelineRevealRef} className="mt-10">
+        <Section id="experience">
+          <SectionHeader id="experience" />
+          <div ref={timelineRevealRef} className="mt-4">
             {experience.tier1.map((exp) => (
               <TimelineCard key={exp.org} experience={exp} />
             ))}
             <CompactRoleList roles={experience.tier2} />
           </div>
 
-          <div className="mt-16">
-            <h3 className="font-display text-lg font-semibold text-ink">
+          <div className="mt-14">
+            <h3 className="font-mono text-[11px] font-normal uppercase tracking-[0.1em] text-slate">
               {sections.experience.educationHeading}
             </h3>
-            <div className="mt-6">
+            <div className="mt-4">
               <EducationBlock education={education} />
             </div>
           </div>
         </Section>
 
-        <Section id="skills" className="border-t border-line">
-          <div className="flex items-center gap-4">
-            <SectionIcon src="/world/sprites/shed.png" />
-            <h2 className="text-ink">{sections.skills.heading}</h2>
-          </div>
+        <Section id="skills">
+          <SectionHeader id="skills" />
           <SkillsSummary />
 
           <div className="mt-12">
@@ -93,20 +83,21 @@ function Home() {
           </div>
         </Section>
 
-        <Section id="about" className="border-t border-line">
-          <div id="achievements" className="scroll-mt-20">
-            <div className="flex items-center gap-4">
-              <SectionIcon src="/world/sprites/shrine.png" />
-              <h2 className="text-ink">{sections.achievements.heading}</h2>
-            </div>
-            <div className="mt-10">
-              <Achievements />
-            </div>
-          </div>
+        <Section id="about">
+          <SectionHeader id="about" />
+          <About />
+        </Section>
 
-          <div id="contact" className="scroll-mt-20 mt-24">
-            <Contact />
+        <Section id="achievements">
+          <SectionHeader id="achievements" />
+          <div className="mt-8">
+            <Achievements />
           </div>
+        </Section>
+
+        <Section id="contact">
+          <SectionHeader id="contact" />
+          <Contact />
         </Section>
       </main>
       <Footer />

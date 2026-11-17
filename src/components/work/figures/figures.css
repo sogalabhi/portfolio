@@ -1,0 +1,310 @@
+/* The project figures (components/work/figures/). Every loop is written so
+   0% and 100% are the complete drawing: the reset happens in the first few
+   percent, then the drawing builds back up. A paused figure therefore shows a
+   finished drawing, and so does reduced motion (index.css collapses every
+   animation to one 0.01ms iteration; fill-mode both holds the last frame). */
+
+.fig .fig-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: currentColor;
+}
+
+.fig .fig-label-sm {
+  font-size: 10px;
+}
+
+/* p, e, P: variables, set the way a drawing sets them */
+.fig .fig-label-sym {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-style: italic;
+}
+
+.fig .fig-title {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+/* only while the plate is on screen (Drawing's IntersectionObserver). Not
+   under reduced motion, where the one short iteration has to run to reach
+   its finished last frame. */
+@media (prefers-reduced-motion: no-preference) {
+  .fig:not([data-playing]) * {
+    animation-play-state: paused;
+  }
+}
+
+/* ---- Fig. 1, phone --------------------------------------------------------- */
+.fig-phone-playhead {
+  animation: fig-phone-playhead 8s linear infinite both;
+}
+@keyframes fig-phone-playhead {
+  0% { transform: translateX(92px); }
+  3% { transform: translateX(0); }
+  100% { transform: translateX(92px); }
+}
+
+.fig-phone-played {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: fig-phone-played 8s linear infinite both;
+}
+@keyframes fig-phone-played {
+  0% { transform: scaleX(1); }
+  3% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+/* a line each quarter, in step with the playhead */
+.fig-phone-lyric {
+  animation: fig-phone-lyric 8s step-end infinite both;
+}
+@keyframes fig-phone-lyric {
+  0% { transform: translateY(36px); }
+  3% { transform: translateY(0); }
+  27% { transform: translateY(12px); }
+  51% { transform: translateY(24px); }
+  76% { transform: translateY(36px); }
+  100% { transform: translateY(36px); }
+}
+
+.fig-phone-bar {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: fig-phone-bar 1.2s ease-in-out infinite both;
+}
+@keyframes fig-phone-bar {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.35); }
+}
+
+.fig-phone-bell {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: fig-phone-bell 8s ease-in-out infinite both;
+}
+@keyframes fig-phone-bell {
+  0%, 84% { transform: rotate(0); }
+  86% { transform: rotate(18deg); }
+  88% { transform: rotate(-15deg); }
+  90% { transform: rotate(10deg); }
+  92% { transform: rotate(-5deg); }
+  94%, 100% { transform: rotate(0); }
+}
+
+.fig-phone-badge {
+  animation: fig-phone-badge 8s step-end infinite both;
+}
+@keyframes fig-phone-badge {
+  0% { opacity: 1; }
+  3% { opacity: 0; }
+  86% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* ---- Fig. 2, base plate ------------------------------------------------------ */
+.fig-bp-queued { animation: fig-bp-queued 8s step-end infinite both; }
+.fig-bp-running { animation: fig-bp-running 8s step-end infinite both; }
+.fig-bp-done { animation: fig-bp-done 8s step-end infinite both; }
+@keyframes fig-bp-queued {
+  0% { opacity: 0; }
+  3% { opacity: 1; }
+  24% { opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes fig-bp-running {
+  0% { opacity: 0; }
+  24% { opacity: 1; }
+  58% { opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes fig-bp-done {
+  0% { opacity: 1; }
+  3% { opacity: 0; }
+  58% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* the anchor bolts go in one at a time while the job runs: dropped into the
+   elevation, set into the plan */
+.fig-bp-hole {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.fig-bp-bolt.fig-bp-bolt-1 { animation: fig-bp-drop-1 8s ease-in infinite both; }
+.fig-bp-bolt.fig-bp-bolt-2 { animation: fig-bp-drop-2 8s ease-in infinite both; }
+.fig-bp-hole.fig-bp-bolt-1 { animation: fig-bp-set-1 8s ease-out infinite both; }
+.fig-bp-hole.fig-bp-bolt-2 { animation: fig-bp-set-2 8s ease-out infinite both; }
+.fig-bp-hole.fig-bp-bolt-3 { animation: fig-bp-set-3 8s ease-out infinite both; }
+.fig-bp-hole.fig-bp-bolt-4 { animation: fig-bp-set-4 8s ease-out infinite both; }
+@keyframes fig-bp-drop-1 {
+  0% { transform: none; opacity: 1; }
+  3%, 27% { transform: translateY(-30px); opacity: 0; }
+  32%, 100% { transform: none; opacity: 1; }
+}
+@keyframes fig-bp-drop-2 {
+  0% { transform: none; opacity: 1; }
+  3%, 34% { transform: translateY(-30px); opacity: 0; }
+  39%, 100% { transform: none; opacity: 1; }
+}
+@keyframes fig-bp-set-1 {
+  0% { transform: none; opacity: 1; }
+  3%, 27% { transform: scale(1.8); opacity: 0; }
+  32%, 100% { transform: none; opacity: 1; }
+}
+@keyframes fig-bp-set-2 {
+  0% { transform: none; opacity: 1; }
+  3%, 34% { transform: scale(1.8); opacity: 0; }
+  39%, 100% { transform: none; opacity: 1; }
+}
+@keyframes fig-bp-set-3 {
+  0% { transform: none; opacity: 1; }
+  3%, 41% { transform: scale(1.8); opacity: 0; }
+  46%, 100% { transform: none; opacity: 1; }
+}
+@keyframes fig-bp-set-4 {
+  0% { transform: none; opacity: 1; }
+  3%, 48% { transform: scale(1.8); opacity: 0; }
+  53%, 100% { transform: none; opacity: 1; }
+}
+
+.fig-bp-dims {
+  animation: fig-bp-dims 8s ease-out infinite both;
+}
+@keyframes fig-bp-dims {
+  0% { opacity: 1; }
+  3%, 60% { opacity: 0; }
+  66%, 100% { opacity: 1; }
+}
+
+.fig-bp-load {
+  animation: fig-bp-load 8s ease-in-out infinite both;
+}
+@keyframes fig-bp-load {
+  0%, 68% { transform: none; }
+  72% { transform: translateY(5px); }
+  78%, 100% { transform: none; }
+}
+
+/* ---- Fig. 3, pipeline ---------------------------------------------------------- */
+/* batch: two spaced groups a loop, slowly */
+.fig-pl-batch {
+  animation: fig-pl-batch 8s linear infinite both;
+}
+@keyframes fig-pl-batch {
+  0% { transform: translateX(0); opacity: 0; }
+  2% { opacity: 1; }
+  42% { transform: translateX(172px); opacity: 1; }
+  44%, 100% { transform: translateX(172px); opacity: 0; }
+}
+
+/* stream: a steady run along the bottom, up, and into silver */
+.fig-pl-stream {
+  animation: fig-pl-stream 2s linear infinite both;
+}
+@keyframes fig-pl-stream {
+  0% { transform: translate(0, 0); opacity: 0; }
+  3% { opacity: 1; }
+  55.7% { transform: translate(146px, 0); }
+  91.6% { transform: translate(146px, -94px); }
+  97% { opacity: 1; }
+  100% { transform: translate(168px, -94px); opacity: 0; }
+}
+
+.fig-pl-fill {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+.fig-pl-fill-bronze { animation: fig-pl-bronze 8s ease-in-out infinite both; }
+.fig-pl-fill-silver { animation: fig-pl-silver 8s ease-in-out infinite both; }
+.fig-pl-fill-gold { animation: fig-pl-gold 8s ease-in-out infinite both; }
+@keyframes fig-pl-bronze {
+  0% { transform: scaleX(1); }
+  3%, 40% { transform: scaleX(0); }
+  50%, 100% { transform: scaleX(1); }
+}
+@keyframes fig-pl-silver {
+  0% { transform: scaleX(1); }
+  3%, 52% { transform: scaleX(0); }
+  62%, 100% { transform: scaleX(1); }
+}
+@keyframes fig-pl-gold {
+  0% { transform: scaleX(1); }
+  3%, 64% { transform: scaleX(0); }
+  74%, 100% { transform: scaleX(1); }
+}
+
+/* ---- Fig. 4, flow ----------------------------------------------------------- */
+.fig-fl-contract {
+  animation: fig-fl-contract 8s ease-in-out infinite both;
+}
+@keyframes fig-fl-contract {
+  0% { transform: none; opacity: 1; }
+  2% { transform: none; opacity: 0; }
+  3% { transform: translate(40px, 34px); opacity: 0; }
+  8%, 11% { transform: translate(40px, 34px); opacity: 1; }
+  28%, 100% { transform: none; opacity: 1; }
+}
+
+.fig-fl-cursor {
+  animation: fig-fl-cursor 8s ease-in-out infinite both;
+}
+@keyframes fig-fl-cursor {
+  0%, 3% { transform: translate(40px, 34px); opacity: 0; }
+  8%, 11% { transform: translate(40px, 34px); opacity: 1; }
+  28% { transform: none; opacity: 1; }
+  33%, 100% { transform: translate(8px, 10px); opacity: 0; }
+}
+
+.fig-fl-link-1 { animation: fig-fl-link-1 8s ease-out infinite both; }
+.fig-fl-link-2 { animation: fig-fl-link-2 8s ease-out infinite both; }
+.fig-fl-link-3 { animation: fig-fl-link-3 8s ease-out infinite both; }
+.fig-fl-link-4 { animation: fig-fl-link-4 8s ease-out infinite both; }
+@keyframes fig-fl-link-1 {
+  0% { opacity: 1; }
+  3%, 31% { opacity: 0; }
+  35%, 100% { opacity: 1; }
+}
+@keyframes fig-fl-link-2 {
+  0% { opacity: 1; }
+  3%, 36% { opacity: 0; }
+  40%, 100% { opacity: 1; }
+}
+@keyframes fig-fl-link-3 {
+  0% { opacity: 1; }
+  3%, 41% { opacity: 0; }
+  45%, 100% { opacity: 1; }
+}
+@keyframes fig-fl-link-4 {
+  0% { opacity: 1; }
+  3%, 46% { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+
+.fig-fl-arrow {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: fig-fl-arrow 8s ease-in-out infinite both;
+}
+@keyframes fig-fl-arrow {
+  0% { opacity: 1; transform: none; }
+  3%, 51% { opacity: 0.3; transform: none; }
+  54% { opacity: 1; transform: scaleX(1.18); }
+  57% { transform: none; }
+  60% { transform: scaleX(1.18); }
+  63%, 100% { opacity: 1; transform: none; }
+}
+
+/* the contract, a line at a time */
+.fig-fl-code {
+  animation: fig-fl-code 8s infinite both;
+}
+@keyframes fig-fl-code {
+  0% { clip-path: inset(0 0 0 0); }
+  3% { clip-path: inset(0 0 100% 0); animation-timing-function: step-end; }
+  60% { clip-path: inset(0 0 100% 0); animation-timing-function: steps(17, end); }
+  95%, 100% { clip-path: inset(0 0 0 0); }
+}

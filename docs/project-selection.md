@@ -16,9 +16,24 @@ Adoption, team, and hackathon figures come from the existing experience and
 achievements content. OpenLake's benchmark is recorded in its repository README;
 it is a held-out test result, not a production business metric.
 
-Polkaflow's existing `frontend/public/screenshot.png` is copied to
-`public/projects/polkaflow.png` and displayed as a thumbnail that opens the full
-image. Other featured cards have no screenshot placeholder.
+## Plates: figure and media
+
+Each featured card is a figure plate. By default it shows a line drawing,
+animated, made for that project (`figure`); a project with a real image also
+gets a **Drawing | Built** switch that shows it (`screenshot`). The images in
+`public/projects/` are real, arranged but never retouched:
+
+- `osdag-web.webp`: the Connections page of Osdag Web, from the owner's local
+  build in guest mode.
+- `arjun-guruji.webp`: three images from the app's public Play Store listing
+  side by side: the raw Books screenshot, then the Astottara and Audio listing
+  graphics.
+- `polkaflow.webp`: the project's own `frontend/public/screenshot.png`
+  (`polkaflow.png` is the original).
+- OpenLake has no UI, so it has a drawing and no Built view.
+
+Any of these can be swapped for a better image of the real product; nothing
+made up goes on a plate.
 
 ## Adding or editing a project
 
@@ -29,11 +44,22 @@ Edit `src/content/projects.json`. Each entry has:
 - `featured`: keep exactly four entries marked true.
 - `featuredOrder`: the order of those four cards.
 - `result`: one short, supported outcome for each featured project.
-- `screenshot`: optional `src`, descriptive `alt`, intrinsic `width`, and `height`.
-- `roles`: retained classification metadata (`sde`, `data`, and `civil`).
-- `order`: the order of the additional projects and the interactive world's list.
+- `figure`: for featured projects, `{ "type", "caption", "labels" }`. `type`
+  picks the drawing (`phone`, `base-plate`, `pipeline`, `flow`; see
+  `src/components/work/figures/index.js`), `caption` sits under the plate, and
+  `labels` holds every word the drawing shows. Draw only what the project
+  really has; dimensions are symbols, never invented numbers.
+- `screenshot`: optional `src`, descriptive `alt`, intrinsic `width` and
+  `height`, `fit` (`cover` for a landscape screenshot, shown from the top;
+  `contain` for a strip of phone screens), and `caption` (shown under the plate
+  in the Built view).
+- `roles`: `sde`, `data` and `civil`. Shown as tags on the plates and used by
+  the index's filter (labels in `sections.json` → `work.roles`).
+- `order`: the order of the index and the interactive world's list; also the
+  register number shown in the index.
 - `links`: `github`, `live`, `demo`, and `playStore`; leave unavailable links empty.
-- `stack`: technologies shown in the interactive world's project panel.
+- `stack`: technologies; the first six show on a plate, the first four in an
+  index row, all of them in the interactive world's project panel.
 
 The home page shows four curated skill rows from `src/content/skills-summary.json`
 after Experience, followed by the GitHub heatmap. The complete

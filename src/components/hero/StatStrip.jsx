@@ -84,7 +84,7 @@ export default function StatStrip({ stats }) {
       ))}
       <div className={`hidden border-l lg:block ${cell}`}>
         <dt className={label}>{titleBlock.sheetLabel}</dt>
-        <dd className="mt-1 font-mono text-xl text-ink md:text-2xl">{titleBlock.sheet}</dd>
+        <dd className="mt-1 whitespace-nowrap font-mono text-xl text-ink md:text-2xl lg:text-xl min-[1400px]:text-2xl">{titleBlock.sheet}</dd>
       </div>
     </dl>
   )

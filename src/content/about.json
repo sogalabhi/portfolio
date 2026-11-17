@@ -1,0 +1,20 @@
+{
+  "portrait": {
+    "src": "/world/sprites/avatar_portrait.png",
+    "alt": "Pixel-art portrait of Abhijith: short black hair, a moustache, a dark polo and jeans.",
+    "figure": "Fig. 5",
+    "caption": "The author, 32 × 48 px, drawn from a photograph. Also walks the island."
+  },
+  "bio": [
+    "I'm a civil engineering student at NITK Surathkal, and I've been shipping software since 2021. It started with Arjun Guruji, a Flutter app I still maintain, which has passed 2,000 downloads. Today I lead the four-person web team building Osdag, an open-source steel design tool, at FOSSEE, IIT Bombay.",
+    "Civil engineering teaches you to check the load path before you trust the drawing, and I work on software the same way. Before Osdag's web version went to production, I load-tested it at 200+ concurrent requests with 20+ contributors, then wrote up the server configuration the results supported.",
+    "Lately I've been pulled toward data systems: OpenLake, a Spark and Delta Lake platform that runs locally or on Azure from one codebase, and a process-mining backend in Spring Boot."
+  ],
+  "notesHeading": "General notes",
+  "notes": [
+    "B.Tech in Civil Engineering with a minor in Electronics & Communication, NITK Surathkal, 2023 to present.",
+    "Based in Mysuru, Karnataka.",
+    "Two third-place hackathon finishes and an ETHGlobal selection.",
+    "Looking for SDE and data engineering roles for 2027."
+  ]
+}

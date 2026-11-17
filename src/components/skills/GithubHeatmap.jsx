@@ -3,6 +3,12 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from '../../lib/gsap'
 import useReducedMotion from '../../hooks/useReducedMotion'
 import useGithubContributions from '../../hooks/useGithubContributions'
+import sections from '../../content/sections.json'
+import fill from '../../lib/fill'
+
+const copy = sections.skills.heatmap
+// a streak is only worth mentioning once it's a few days long
+const MIN_STREAK = 3
 
 const LEVEL_COLORS = ['bg-line', 'bg-moss/25', 'bg-moss/50', 'bg-moss/75', 'bg-moss']
 
@@ -41,7 +47,7 @@ export default function GithubHeatmap() {
         }}
         className="flex gap-1 overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch]"
         role="img"
-        aria-label={`GitHub contribution heatmap: ${state.total.toLocaleString()} contributions in the last year, ${state.streak}-day current streak`}
+        aria-label={fill(copy.aria, { total: state.total.toLocaleString() })}
       >
         {state.weeks.map((week, i) => (
           <div key={i} className="flex flex-col gap-1">
@@ -49,7 +55,7 @@ export default function GithubHeatmap() {
               <div
                 key={day.date}
                 data-heatmap-cell
-                title={`${day.count} contributions on ${day.date}`}
+                title={fill(copy.cellTitle, { count: day.count, date: day.date })}
                 className={`h-2.5 w-2.5 shrink-0 rounded-sm ${LEVEL_COLORS[day.level] ?? LEVEL_COLORS[0]}`}
               />
             ))}
@@ -57,7 +63,8 @@ export default function GithubHeatmap() {
         ))}
       </div>
       <p className="mt-3 font-mono text-sm text-faint">
-        {state.total.toLocaleString()} contributions in the last year · {state.streak}-day streak
+        {fill(copy.total, { total: state.total.toLocaleString() })}
+        {state.streak >= MIN_STREAK && ` · ${fill(copy.streak, { streak: state.streak })}`}
       </p>
     </div>
   )

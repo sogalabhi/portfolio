@@ -18,5 +18,9 @@
     }
   ],
   "resumeLabel": "Résumé",
-  "exploreLabel": "Explore"
+  "exploreLabel": "Explore",
+  "miniBanner": {
+    "label": "Explore my world →",
+    "ariaLabel": "Visit the interactive world"
+  }
 }

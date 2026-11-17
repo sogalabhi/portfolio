@@ -1,11 +1,12 @@
 # Improvement plan
 
-Current homepage update (2026-10-27): the civil-engineering intro, two hero
-actions with social icons, four featured projects, compact Experience, four-row
-Skills summary, and corrected achievements are implemented. The guided tour is
-removed. Artwork, avatar, banner, and margin-decoration work is deferred to
-Claude. The older checklists below are historical; use `docs/HANDOVER.md` and
-`docs/project-selection.md` for the current page structure and content.
+Current state (2026-11-17): the homepage has been rebuilt as a drawing set
+(`docs/LANDING-PLAN.md`): a site-plan hero that builds the island, numbered
+section sheets, animated figure plates for the featured projects, an About
+sheet, and the avatar walking a road drawn down the margin. The avatar is
+also the `/world` player, with a walk cycle. The older checklists below are
+historical; use `docs/HANDOVER.md` and `docs/project-selection.md` for the
+current page structure and content.
 
 This plan comes from running `/` and `/world` at desktop (1280×800) and phone (390×844) sizes on 2026-09-26. It has three parts:
 
@@ -136,7 +137,7 @@ The skin values were sampled from the photo and brightened slightly, because the
 ### P1: art that looks like a real game ✅ done 2026-09-26 (except the character, scheduled last)
 
 - [x] **Art pipeline**: `assets/pixel/*.mjs` grids go to `assets/svg/`, then `public/world/sprites/` (`npm run assets:pixel`). `npm run world:build` rebuilds all art and the map, deterministically.
-- [ ] **Player character**: about 16×24 px, 4 directions × 4 walk frames plus an idle frame, drawn from [1.4](#14-avatar-reference). Wire it into `Player.js` with real animations. *Scheduled after the other improvements.*
+- [x] **Player character**: about 16×24 px, 4 directions × 4 walk frames plus an idle frame, drawn from [1.4](#14-avatar-reference). Wire it into `Player.js` with real animations. *Scheduled after the other improvements.*
 - [x] **Ground tiles**: a corner-based set (15 edge tiles per overlay) for sand, grass, dirt and stone flagstones, drawn procedurally with rims, a foam line and ledge shadows. It has 4 grass variants and a stone plaza at spawn (`scripts/world/build-terrain.mjs`).
 - [x] **Island shape**: a wobbly-ellipse coast with bays, a beach ring, and 3-frame animated water. The shore is the new boundary.
 - [x] **Map rebuild**: an 80×56 Tiled-format map (`public/world/map/island.json`) generated from `scripts/world/layout.mjs`, with Catmull-Rom dirt paths from the plaza to each door. It includes wang sets for Tiled's terrain brush.
@@ -185,8 +186,8 @@ The skin values were sampled from the photo and brightened slightly, because the
 
 ### Homepage (`/`)
 
-- [ ] **Mascot**: replace the dark monster in the hero and the margin-walking character with the new avatar. This happens with the character work.
-- [ ] **Island banner**: turn `IslandDivider` into an animated SVG scene with waves, clouds, the avatar walking and chimney smoke, as a live preview of the game.
+- [x] **Mascot**: replace the dark monster in the hero and the margin-walking character with the new avatar. Done: the avatar walks the hero's site plan and the margin road; the creature and `char.png` are gone.
+- [x] **Island banner**: superseded. The banner is gone; the hero's site plan, which builds the island tile by tile around the walking avatar, does this job. The original idea was to turn `IslandDivider` into an animated SVG scene with waves, clouds, the avatar walking and chimney smoke, as a live preview of the game.
 - [ ] **Section icons**: small hover animations on each icon, like workshop smoke or the tower dish turning.
 - [ ] **404 page**: an animated SVG of the avatar stranded on a tiny island.
 
@@ -241,4 +242,4 @@ scripts/assets/pack-atlas.mjs (existing) → public/world/atlas/
 
 - **Unused props**: 17 prop sprites are in the atlas but never placed. They're listed under P1.
 - **Collision**: only the map border blocks the player (`collisionLayer`). Buildings have no collision.
-- **Current character**: `char.png` is a single 32×32 front-facing frame (a dark horned creature with a staff) from a battle-sprite pack. It has no walk frames.
+- **Current character** (at the time): `char.png` was a single 32×32 front-facing frame (a dark horned creature with a staff) from a battle-sprite pack, with no walk frames. Since replaced by the avatar.

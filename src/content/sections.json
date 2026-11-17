@@ -1,9 +1,102 @@
 {
-  "work": { "heading": "Work" },
-  "skills": { "heading": "Skills" },
-  "experience": { "heading": "Experience", "educationHeading": "Education" },
-  "achievements": { "heading": "Achievements" },
-  "contact": { "heading": "Let's build something." },
+  "sheetLabel": "Sheet",
+  "work": {
+    "heading": "Work",
+    "sheet": "02",
+    "tag": "A",
+    "zone": "workshop",
+    "zoneName": "Workshop",
+    "note": "Four plates, then the index",
+    "card": {
+      "figure": "Fig.",
+      "drawing": "Drawing",
+      "built": "Built",
+      "viewLabel": "Show the drawing or the built thing",
+      "openFull": "Open the full image of {title}",
+      "github": "GitHub",
+      "githubLabel": "{title} on GitHub",
+      "live": "Live",
+      "playStore": "Play Store",
+      "demo": "Demo",
+      "private": "Private project",
+      "stackLabel": "Stack"
+    },
+    "roles": {
+      "sde": "Software",
+      "data": "Data",
+      "civil": "Civil"
+    },
+    "index": {
+      "show": "Show {count} more",
+      "hide": "Hide the index",
+      "heading": "Index of the other {count}",
+      "all": "All",
+      "filterLabel": "Filter the index by role",
+      "featuredLabel": "Featured projects",
+      "indexLabel": "More projects"
+    }
+  },
+  "experience": {
+    "heading": "Experience",
+    "educationHeading": "Education",
+    "sheet": "03",
+    "tag": "B",
+    "zone": "archive",
+    "zoneName": "Archive",
+    "note": "2021 – present",
+    "moreRoles": "Show {count} more roles",
+    "hideRoles": "Hide"
+  },
+  "skills": {
+    "heading": "Skills",
+    "sheet": "04",
+    "tag": "C",
+    "zone": "shed",
+    "zoneName": "Garden",
+    "note": "What I reach for",
+    "heatmap": {
+      "total": "{total} contributions in the last year",
+      "streak": "{streak}-day streak",
+      "aria": "GitHub contribution heatmap: {total} contributions in the last year",
+      "cellTitle": "{count} contributions on {date}"
+    }
+  },
+  "about": {
+    "heading": "About",
+    "sheet": "05",
+    "tag": "",
+    "zone": "signpost",
+    "zoneName": "General notes",
+    "note": ""
+  },
+  "achievements": {
+    "heading": "Achievements",
+    "sheet": "06",
+    "tag": "D",
+    "zone": "shrine",
+    "zoneName": "Shrine",
+    "note": "Hackathons",
+    "links": {
+      "github": "Code",
+      "demo": "Demo video",
+      "githubLabel": "{project} on GitHub",
+      "demoLabel": "Demo video of {project}"
+    }
+  },
+  "contact": {
+    "heading": "Let's build something.",
+    "sheet": "06",
+    "tag": "E",
+    "zone": "tower",
+    "zoneName": "Tower",
+    "note": "",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyLabel": "Copy email address",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "resume": "Résumé (PDF)"
+  },
   "notFound": {
     "eyebrow": "404",
     "title": "This page doesn't exist.",

@@ -118,13 +118,14 @@ Gemini palette live in `EXTRA_HEX` (`palette.mjs`).
 | `fence-segment.png` / `fence-post.png` | 16×20 | |
 | `lamp-post.png` | 16×40 | |
 
-## Character (Tier E - do not generate)
+## Character
 
-Download a CC0 4-direction walk-cycle pack (LimeZu or Kenney - match its
-outline treatment to whatever the generated buildings end up with). Save the
-spritesheet to `public/world/char.png`. Frame layout varies pack to pack, so
-wiring it into `Player.js`'s animation frames is a manual step once you've
-picked one - see the comment block at the top of `Player.js`.
+The player is drawn in code, not generated: `assets/pixel/avatar.mjs` is
+Abhijith as a 16x24 walking sprite (16 frames: down, left, right, up, four
+each) plus a 32x48 portrait for the homepage. `npm run assets:pixel` writes
+`public/world/sprites/avatar.png` and `avatar_portrait.png`; both are kept out
+of the atlas. `BootScene.js` loads the walking strip as the `char`
+spritesheet and `Player.js` builds a walk cycle per direction from it.
 
 ## Verification checklist
 

@@ -26,7 +26,34 @@
     ],
     "featured": true,
     "featuredOrder": 2,
-    "result": "4-person team · production deployment at IIT Bombay"
+    "result": "4-person team · production deployment at IIT Bombay",
+    "screenshot": {
+      "src": "/projects/osdag-web.webp",
+      "alt": "The Connections page of Osdag Web, with plated, shear, moment, base plate and truss connection tabs.",
+      "width": 1440,
+      "height": 900,
+      "fit": "cover",
+      "caption": "Built: the Connections page of the web app."
+    },
+    "figure": {
+      "type": "base-plate",
+      "caption": "Column base plate, elevation and plan.",
+      "labels": {
+        "elevation": "Elevation",
+        "plan": "Plan",
+        "column": "Column",
+        "weld": "Weld",
+        "plate": "Base plate",
+        "bolts": "Anchor bolts",
+        "pedestal": "Pedestal",
+        "load": "P",
+        "pitch": "p",
+        "edge": "e",
+        "queued": "queued",
+        "running": "running",
+        "done": "done"
+      }
+    }
   },
   {
     "id": "arjun-guruji",
@@ -52,7 +79,24 @@
     ],
     "featured": true,
     "featuredOrder": 1,
-    "result": "2,000+ downloads · 4.9★ on Google Play"
+    "result": "2,000+ downloads · 4.9★ on Google Play",
+    "screenshot": {
+      "src": "/projects/arjun-guruji.webp",
+      "alt": "Three screens from the Arjun Guruji Play Store listing: the Book section, the Astottara section and the Audio section.",
+      "width": 1100,
+      "height": 688,
+      "fit": "contain",
+      "caption": "Built: Books, Astottara and Audio, from the Play Store listing."
+    },
+    "figure": {
+      "type": "phone",
+      "caption": "Front elevation: what runs on the phone.",
+      "labels": {
+        "notifications": "Event notifications",
+        "books": "Books stored on the device",
+        "lyrics": "Lyrics in step with the audio"
+      }
+    }
   },
   {
     "id": "retail-lakehouse",
@@ -82,7 +126,35 @@
     ],
     "featured": true,
     "featuredOrder": 3,
-    "result": "77% churn accuracy · 5,042-customer dataset"
+    "result": "77% churn accuracy · 5,042-customer dataset",
+    "figure": {
+      "type": "pipeline",
+      "caption": "Batch and streaming paths, from the README.",
+      "labels": {
+        "csv": "online_retail_II.csv",
+        "stream": "Live Order Stream Generator",
+        "copy": [
+          "Server-side",
+          "copy"
+        ],
+        "redpanda": [
+          "Redpanda /",
+          "Event Hubs"
+        ],
+        "streaming": [
+          "Structured",
+          "Streaming"
+        ],
+        "bronze": "bronze",
+        "silver": "silver",
+        "gold": "gold",
+        "pyspark": "PySpark clean",
+        "dbt": "dbt",
+        "dashboards": "Superset",
+        "churn": "Churn model",
+        "crm": "CRM"
+      }
+    }
   },
   {
     "id": "process-mining",
@@ -184,10 +256,24 @@
     "featuredOrder": 4,
     "result": "3rd of 190+ · AssetHub Hackathon",
     "screenshot": {
-      "src": "/projects/polkaflow.png",
+      "src": "/projects/polkaflow.webp",
       "alt": "Polkaflow workflow canvas with connected trigger, logic, wallet, and smart contract nodes.",
-      "width": 1904,
-      "height": 1036
+      "width": 1440,
+      "height": 784,
+      "fit": "cover",
+      "caption": "Built: the workflow canvas."
+    },
+    "figure": {
+      "type": "flow",
+      "caption": "A flowchart on the left, a contract on the right.",
+      "labels": {
+        "trigger": "Trigger",
+        "logic": "Logic",
+        "wallet": "Wallet",
+        "contract": "Contract",
+        "generate": "generate",
+        "target": "Solidity → Rust · PolkaVM"
+      }
     }
   },
   {

@@ -1,62 +1,85 @@
 import { useEffect, useRef } from 'react'
-import { gsap, ScrollTrigger } from '../../lib/gsap'
+import { ScrollTrigger } from '../../lib/gsap'
 import useReducedMotion from '../../hooks/useReducedMotion'
 
-// Walks the left margin as overall page-scroll progress goes 0->1, starting
-// beside the hero. Position, not decoration - position: fixed (not tied to
-// document flow like the Section decor sprites) and scrubbed directly off
-// scroll, so it's the reader's scrolling that moves it, not a timer.
+// The avatar walking the road drawn down the left margin (MarginAlignment).
+// position: fixed and driven off scroll, so it's the reader's scrolling that
+// moves him: down the road while the page goes down, back up when it goes up.
+// His feet stay between the two ends of the road (`start`/`end`, document
+// px), so he waits at the first station while the hero is on screen and at
+// the last one by the footer.
 //
-// Deliberately simpler than a per-section "pause and face the heading" -
-// that needs coordinating a second set of ScrollTriggers against the same
-// scrub and snapping between them, real engineering for a decorative touch.
-// This is the continuous version; the pause-at-heading polish is a separate
-// follow-up if it's worth the complexity once this is live.
+// The same update publishes where his feet are as `--margin-built` on the
+// root element; the road draws itself "as built" (solid) down to there.
 const WALK_TOP_VH = 0.18
 const WALK_RANGE_VH = 0.62
+const HEIGHT = 48 // 32x48: the 16x24 frames at 2x
+const STEP_PX = 14 // feet travel per walk frame
+const SETTLE_MS = 150
+const DIRECTIONS = ['down', 'left', 'right', 'up'] // row order in avatar.png
 
-export default function MarginCharacter() {
+const framePosition = (dir, frame) => `${((DIRECTIONS.indexOf(dir) * 4 + frame) / 15) * 100}% 0`
+
+export default function MarginCharacter({ start, end }) {
   const charRef = useRef(null)
+  const range = useRef({ start, end })
   const reduced = useReducedMotion()
+
+  useEffect(() => {
+    range.current = { start, end }
+    ScrollTrigger.refresh()
+  }, [start, end])
 
   useEffect(() => {
     if (reduced) return undefined
     const el = charRef.current
+    const root = document.documentElement
     if (!el) return undefined
 
-    let lastY = window.scrollY
-    let facingLeft = false
+    let lastFeet = null
+    let settle = 0
+
+    function place(progress) {
+      const vh = window.innerHeight
+      const { start: lo, end: hi } = range.current
+      const wanted = window.scrollY + vh * (WALK_TOP_VH + progress * WALK_RANGE_VH) + HEIGHT
+      const feet = Math.round(Math.max(lo, Math.min(hi, wanted)))
+      el.style.top = `${feet - HEIGHT - window.scrollY}px`
+      root.style.setProperty('--margin-built', `${feet}px`)
+
+      if (lastFeet !== null && feet !== lastFeet) {
+        const dir = feet > lastFeet ? 'down' : 'up'
+        el.style.backgroundPosition = framePosition(dir, Math.floor(feet / STEP_PX) % 4)
+        clearTimeout(settle)
+        settle = setTimeout(() => (el.style.backgroundPosition = framePosition('down', 0)), SETTLE_MS)
+      }
+      lastFeet = feet
+    }
 
     const trigger = ScrollTrigger.create({
-      trigger: document.documentElement,
+      trigger: root,
       start: 'top top',
       end: 'bottom bottom',
-      onUpdate: (self) => {
-        const vh = window.innerHeight
-        gsap.set(el, { top: vh * WALK_TOP_VH + self.progress * vh * WALK_RANGE_VH })
-
-        const goingUp = window.scrollY < lastY
-        lastY = window.scrollY
-        if (goingUp !== facingLeft) {
-          facingLeft = goingUp
-          el.style.transform = facingLeft ? 'scaleX(-1)' : 'scaleX(1)'
-        }
-      },
+      onUpdate: (self) => place(self.progress),
+      onRefresh: (self) => place(self.progress),
     })
+    place(trigger.progress)
 
-    return () => trigger.kill()
+    return () => {
+      trigger.kill()
+      clearTimeout(settle)
+      root.style.removeProperty('--margin-built')
+    }
   }, [reduced])
 
   if (reduced) return null
 
   return (
-    <img
+    <div
       ref={charRef}
-      src="/world/char.png"
-      alt=""
+      className="avatar-sprite pointer-events-none fixed left-8 z-10 hidden xl:block print:hidden"
+      style={{ width: 32, height: HEIGHT, top: '-100px' }}
       aria-hidden="true"
-      className="pointer-events-none fixed left-8 z-10 hidden xl:block"
-      style={{ height: 32, width: 'auto', imageRendering: 'pixelated', top: '18vh' }}
     />
   )
 }

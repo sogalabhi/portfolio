@@ -90,10 +90,42 @@
   }
 }
 
-/* the site plan in the hero (components/hero/SitePlan.jsx) */
-.site-plan [data-hair] * {
-  /* hairlines stay one device pixel wide however far the drawing is scaled */
+/* line drawings: the hero's site plan (components/hero/SitePlan.jsx) and the
+   project figures (components/work/figures/). Hairlines stay the same width
+   however far the drawing is scaled. */
+[data-hair] * {
   vector-effect: non-scaling-stroke;
+}
+
+/* a figure plate's survey grid: a small cross every 60 px, faint */
+.plate-grid {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M26 30h8M30 26v8' stroke='%231C1B19' stroke-opacity='0.22' fill='none'/%3E%3C/svg%3E");
+  background-position: center;
+}
+
+/* the About portrait: public/world/sprites/avatar_portrait.png (2 frames of
+   32x48, eyes open then shut) at 5x, blinking every few seconds. Under reduced
+   motion the animation collapses and the eyes stay open. */
+.portrait-blink {
+  width: 160px;
+  height: 240px;
+  background-size: 200% 100%;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  animation: portrait-blink 4.6s step-end infinite;
+}
+
+@keyframes portrait-blink {
+  0% {
+    background-position: 0 0;
+  }
+  94% {
+    background-position: 100% 0;
+  }
+  97% {
+    background-position: 0 0;
+  }
 }
 
 /* hairlines don't scale down with the drawing, so on a phone the heavier

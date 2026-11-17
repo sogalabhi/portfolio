@@ -4,7 +4,7 @@ This covers the whole repo: the scrolling portfolio at `/` and the explorable pi
 
 - **Live:** https://sogalabhi.vercel.app (Vercel)
 - **Owner:** Abhijith Sogal V (`sogalabhi`)
-- **Status:** `/` and `/world` both ship. The home page now leads with civil engineering, shows four featured projects plus a disclosure, and has compact Experience and Skills sections. Artwork, avatar, and island changes are deferred to Claude; the existing character, banners, and margin decorations remain in place.
+- **Status:** `/` and `/world` both ship. The home page is a drawing set (see `docs/LANDING-PLAN.md`): the hero is a site plan of the island that builds itself, every section is a numbered sheet, the four featured projects are animated line-drawing plates, and the avatar walks a road drawn down the left margin. `/world` uses the same avatar, with a real walk cycle.
 
 ---
 
@@ -46,20 +46,25 @@ src/
   index.css             Tailwind @theme tokens, fonts, base styles
   content/*.json        ALL displayed copy (the single source of truth)
   components/           `/` page components (layout, hero, work, skills, exp, misc)
+  components/work/figures/  the animated project drawings (one per figure type)
   hooks/                useGsapReveal, useReducedMotion, useGithubContributions
   lib/gsap.js           GSAP plugin registration + reduced-motion defaults
+  lib/fill.js           fills "{name}" slots in JSON copy
   world/                everything for /world (Phaser + React overlay)
+  world/data/plan.json  the island as a site plan, for the hero (generated, §5.8)
 scripts/assets/         sprite pipeline (see §5.8)
 scripts/world/          terrain tileset + island map generators (see §7.4)
 assets/cut/             intermediate sliced sprites + manifests (pipeline output)
-assets/pixel/           art authored in code: text-grid sprites (rocks so far)
+assets/pixel/           art authored in code: text-grid sprites (rocks, the avatar)
 assets/svg/             those grids as SVGs (build output, also usable on `/`)
 public/
   world/sprites/*.png   individual sprites (also reused by `/` for decoration)
   world/atlas/          packed atlas.png + atlas.json that Phaser loads
   world/map/island.json the island, Tiled format (generated; editable in Tiled)
   world/tiles/          terrain.png ground tileset + water.png animation strip
-  world/char.png        player sprite
+  world/sprites/avatar.png, avatar_portrait.png   the avatar (kept out of the atlas)
+  world/island.webp     the island rendered flat, for the hero's site plan
+  projects/             the Work plates' "Built" images (WebP)
   fonts/                Departure Mono + license
   og-image.png, favicons, robots.txt, sitemap.xml, site.webmanifest
 ```
@@ -70,17 +75,19 @@ Every visible string comes from `src/content/*.json`. Components don't hardcode 
 
 | File | Feeds |
 |---|---|
-| `profile.json` | Name, tagline, availability pill, email, links (GitHub/LinkedIn/résumé), and the 4-stat strip |
-| `projects.json` | Projects. `featured: true` puts one in the big cards and `order` sorts them. Links: `github`, `live`, `demo`, `playStore` |
+| `profile.json` | Name, tagline, availability pill, email, links (GitHub/LinkedIn/résumé), and the 4-stat title block |
+| `site-plan.json` | The hero's site plan: the hint, the build button, the key, the title block, and the six lettered labels (zone, tag, name, section, link) |
+| `projects.json` | Projects. `featured: true` puts one in the plates and `featuredOrder` sorts them; `roles` drives the index filter. Featured ones carry a `figure` (`type`, `caption`, `labels`: every word the drawing shows) and may carry a `screenshot` (`src`, `alt`, `width`, `height`, `fit`, `caption`) for the "Built" view. Links: `github`, `live`, `demo`, `playStore`. See `docs/project-selection.md` |
+| `about.json` | The About sheet: portrait figure, the bio paragraphs, the numbered general notes |
 | `experience.json` | `tier1` (timeline cards) and `tier2` (compact role list) |
 | `education.json` | Education block, plus the Archive zone in the game |
 | `skills-summary.json` | Four curated skill rows on `/` |
 | `skills.json` | Complete skills list for the Garden zone; `skillsForRole` accepts string and role-tagged entries |
 | `achievements.json` | `summary` and `hackathons[]` for `/` Achievements and the Shrine zone |
-| `sections.json` | Section headings and the 404 page copy |
-| `nav.json` | Nav items and button labels |
+| `sections.json` | Each section's sheet header (`heading`, `sheet`, `tag`, `zone` sprite, `zoneName`, `note`), the Work card and index copy, the role labels, the heatmap and contact strings, and the 404 page copy |
+| `nav.json` | Nav items, button labels, the corner "Explore my world" pill |
 
-**Watch out for what gets rendered.** `experience.json` `tier1[].note` shows publicly under the card (`TimelineCard.jsx`), so never put a note-to-self there. Fields that are *not* rendered anywhere today: project `date` and `myRole`, and hackathon `date`, `myRole` and `links`. An empty string hides optional fields like `impact` and `links.*`.
+**Watch out for what gets rendered.** `experience.json` `tier1[].note` shows publicly under the card (`TimelineCard.jsx`) and `tier2[].note` under the role in the expanded list (`CompactRoleList.jsx`), so never put a note-to-self in either. Hackathon `links.github` and `links.demo` render on `/`. Fields that are *not* rendered anywhere today: project `date` and `myRole`, and hackathon `date`, `myRole` and `links.devpost`. An empty string hides optional fields like `impact` and `links.*`.
 
 Unfinished copy used to be marked with the literal `NEEDS_INPUT`, and none is left. `Achievements.jsx` and `CompactRoleList.jsx` still guard against it, so it's safe to use again as a marker, but most components would render it as-is.
 
@@ -90,22 +97,23 @@ Unfinished copy used to be marked with the literal `NEEDS_INPUT`, and none is le
 
 ### 5.1 Composition
 
+The page is a drawing set: each section is a sheet, and the pixel island is the thing the drawings describe. Line drawing explains; pixel art is the built thing. `docs/LANDING-PLAN.md` has the full brief.
+
 `App.jsx → Home` renders these in order:
 
 1. Skip link, then `Nav` (sticky, turns solid on scroll, mobile overlay menu, Résumé and Explore buttons)
-2. `PageScatter`: pixel trees, rocks and flowers placed deterministically down both margins
-3. `MarginCharacter`: a `position: fixed` sprite that walks down the left margin as the page scrolls (scrubbed by ScrollTrigger; disabled under reduced motion)
-4. `Hero`: availability pill, name, civil-engineering intro, Résumé and Explore buttons, GitHub/LinkedIn icons, and `StatStrip`
-5. `IslandDivider`: a large pixel-art banner that links to `/world` (`#world-banner`)
-6. `#work`: four featured cards, then a "Show 21 more" disclosure; see `docs/project-selection.md`
-7. `#experience`: `TimelineCard` (at most two bullets per organisation), `CompactRoleList` (tier 2), `EducationBlock`
-8. `#skills`: `SkillsSummary` with four `SkillGroup` rows, then `GithubHeatmap`
-9. `#about`: `#achievements` then `#contact`
-10. `Footer` and `WorldMiniBanner`
+2. `MarginAlignment` (xl only): a road alignment drawn down the left margin (clay centreline, chainage every 500 px, a lettered station at each section) with `MarginCharacter`, the avatar, walking it as the page scrolls; the stretch he has walked is drawn solid. Plan-style planting symbols down the right margin.
+3. `Hero` (sheet 01, `#hero`, with `#world-banner` on the sheet itself): the intro on the left, `SitePlan` on the right, and `StatStrip` as the title block. `SitePlan` draws the island as a site plan (`src/world/data/plan.json`) and builds it, tile by tile, from `public/world/island.webp` around the avatar as he walks the paths and under the visitor's pointer or tap. Its six lettered labels (A–F) link to the sections and `/world`; below `sm` they shrink to their letters and a key lists them under the drawing.
+4. Every section after it opens with `SectionHeader`: `SHEET 02 · A — WORKSHOP`, the building sprite, the heading, an optional note, a rule. The letters match the site plan's.
+5. `#work` (sheet 02): four featured figure plates, then the index (§5.9)
+6. `#experience` (03): `TimelineCard` (at most two bullets per organisation), `CompactRoleList` (tier 2, with notes), `EducationBlock`
+7. `#skills` (04): `SkillsSummary` with four `SkillGroup` rows, then `GithubHeatmap` (the streak shows only from 3 days)
+8. `#about` (05, "General notes"): `About`, the pixel portrait as a figure plate (blinking every few seconds), the bio and numbered notes
+9. `#achievements` (06, D): hackathons with their code and demo links
+10. `#contact` (06, E)
+11. `Footer` and `WorldMiniBanner`
 
 `ScrollProgressBar`, `KeyboardShortcuts` and `<Analytics/>` sit outside the routes, so they appear on every page.
-
-Each section heading uses a `/world` building sprite as its icon (`SectionIcon`): workshop for Work, shed for Skills, archive for Experience and shrine for Achievements. This ties the two surfaces together visually.
 
 ### 5.2 Design tokens
 
@@ -120,6 +128,7 @@ Two game colours are also available as rare accents: `panel #2B2438` (the footer
 - `useGsapReveal({ stagger, y, selector='[data-reveal]' })` returns a ref. Children marked `data-reveal` fade and slide up once, at `top 85%`. It checks whether an element is already past the trigger line on a hard refresh, so nothing gets stuck invisible.
 - `lib/gsap.js` sets every GSAP duration to 0 under `prefers-reduced-motion`. `index.css` also removes CSS transitions in that case.
 - `index.html` forces `history.scrollRestoration = 'manual'` so reveals behave the same on every load. `App.jsx` calls `ScrollTrigger.refresh()` after fonts and `load` finish.
+- The project figures and the site plan are CSS/canvas, not GSAP. Each figure loop is written so its first and last frames are the finished drawing; under reduced motion the global rule in `index.css` collapses it to that last frame. The site plan shows its opening patch with the avatar standing; the margin walker is not rendered at all.
 
 ### 5.4 Guided tour removal
 
@@ -150,7 +159,7 @@ This is shared with `/world`. For the full walkthrough see `scripts/assets/READM
 
 **Where the art comes from:**
 - **Generated art** (buildings, props, trees): sheets are made outside this repo (Gemini), then processed with `process`, `slice`, renaming by hand, and `downscale`/`batch-downscale` (target sizes are in `sizes.mjs`).
-- **Art authored as code**: text grids in `assets/pixel/*.mjs` become SVGs in `assets/svg/` and then PNGs (`npm run assets:pixel`). A hand-written SVG in `assets/svg/` works too (`npm run assets:svg`).
+- **Art authored as code**: text grids in `assets/pixel/*.mjs` become SVGs in `assets/svg/` and then PNGs (`npm run assets:pixel`). A hand-written SVG in `assets/svg/` works too (`npm run assets:svg`). The avatar is one of these: `assets/pixel/avatar.mjs`, drawn from the owner's photo, writes `avatar.png` (16 frames of 16×24: down, left, right, up, four each) and `avatar_portrait.png` (2 frames of 32×48: eyes open, blink). Both are kept out of the atlas (`pack-atlas.mjs`); its extra colours are `EXTRA_HEX` in `palette.mjs`.
 
 **Rebuilding:** `npm run world:build` rebuilds everything downstream of the sprite PNGs, in order:
 1. the code-authored sprites
@@ -158,10 +167,20 @@ This is shared with `/world`. For the full walkthrough see `scripts/assets/READM
 3. the atlas (`assets:pack`)
 4. the ground tileset and water (`world:terrain`)
 5. the island map (`world:map`)
+6. the flat render of the island for the hero, `public/world/island.webp` (`world:preview`, `scripts/world/build-preview.mjs`; draws what `WorldScene` draws, in the same order)
+7. the site plan data, `src/world/data/plan.json` (`world:plan`, `scripts/world/build-plan.mjs`; coast, contours, paths, footprints and planting in world px, so the linework sits exactly over the render)
 
-It's deterministic: two runs give identical files.
+`scripts/world/shape.mjs` holds the geometry the map, the preview and the plan share, so they can't drift apart. It's deterministic: two runs give identical files (`sha256sum public/world/map/island.json` is in `docs/LANDING-PLAN.md` §2).
+
+**The Work images** in `public/projects/` are WebP conversions of real screenshots, arranged but never retouched: Osdag Web's Connections page from a local build, three screens from the Arjun Guruji Play Store listing side by side, and the Polkaflow canvas.
 
 **Gotcha:** `batch-downscale` regenerates `public/world/sprites/` from the Gemini cut-outs. That overwrites the per-building roof colours and the redrawn rocks, so run `npm run world:build` after it.
+
+### 5.9 Work: figure plates and the index
+
+- **Plates** (`ProjectCard.jsx`): each featured project shows a figure plate (16:10) with `FIG. n` over it, its caption and role tags under it, then title, result, tagline, the first six stack entries and links. The plate shows the project's drawing (`figure.type` → `components/work/figures/index.js`); a project that also has a `screenshot` gets a **Drawing | Built** switch on the plate's top edge, cross-fading to the real image, which opens full size on click.
+- **Figures** are inline SVG on a shared `Drawing` sheet (480×300, survey grid, hatch, hairlines that don't scale), animated in CSS (`figures.css`) on an 8 s loop that runs only while the plate is on screen and in the Drawing view. Dimensions are symbols (`p`, `e`, `P`), never numbers. Phone (Arjun Guruji), base plate (Osdag Web), pipeline (OpenLake, names from its README) and flow (Polkaflow).
+- **The index** (`ProjectExplorer.jsx`): every non-featured project behind a toggle, as a register of compact rows (two columns from `md`), filterable by role with counts. Filtering refreshes ScrollTrigger.
 
 ---
 
@@ -171,10 +190,12 @@ These are sent with `track()` from `@vercel/analytics`:
 
 | Event | Props | Fired from |
 |---|---|---|
-| `world_explore_click` | `source`: `hero`, `nav`, `nav_mobile`, `island_divider`, `mini_banner` | Every link to `/world` |
+| `world_explore_click` | `source`: `hero`, `nav`, `nav_mobile`, `site_plan`, `mini_banner` | Every link to `/world` (`site_plan` is the Terminal label and its key entry) |
 | `resume_download` | `source`: `nav`, `nav_mobile`, `hero`, `contact`, `keyboard_shortcut`, `world_terminal` | Every résumé link |
-| `project_link_click` | `project`, `type`: `github`/`live`/`screenshot` | `ProjectCard` |
-| `more_projects_toggle` | `expanded`: boolean | Additional projects disclosure |
+| `project_link_click` | `project`, `type`: `github`/`live`/`screenshot` | `ProjectCard` (`screenshot` is a click on a plate's Built image) |
+| `more_projects_toggle` | `expanded`: boolean | Opening or closing the project index |
+| `project_filter` | `role`: `all`/`sde`/`data`/`civil` | The index's role filter |
+| `site_plan_toggle` | `built`: boolean | The hero's "Build it all" / "Back to the drawing" button |
 | `contact_email_click` | `method`: `copy`/`mailto` | `Contact` |
 | `world_zone_open` | `zone`: zone id; `source`: `keyboard`, `prompt`, `click`, `tap`, `menu` | `WorldOverlay` (the single handler for every zone open in `/world`) |
 
@@ -218,9 +239,9 @@ In dev builds, `window.__worldBus` and `window.__worldScene` are exposed for pok
 - BootScene loads:
   - the island map (`world/map/island.json`, key `island`)
   - the ground tileset (`world/tiles/terrain.png`) and the water strip (`world/tiles/water.png`, 3 frames of 32 px)
-  - the sprite atlas (`world/atlas/atlas.{png,json}`, key `objects`) and `world/char.png` (key `char`)
+  - the sprite atlas (`world/atlas/atlas.{png,json}`, key `objects`) and the avatar, `world/sprites/avatar.png`, as the `char` spritesheet (16×24 frames)
 - The loading bar follows the loader's real progress.
-- BootScene also draws **placeholder textures at runtime**: a coloured-box player with a 4×4 walk cycle, and a coloured rectangle for each building. If the atlas or `char.png` 404s, the game falls back to those. `resolvePropTexture()` in `WorldScene` and `Player`'s `usingCharArt` check pick whichever texture is available. The map and tiles have no fallback.
+- BootScene also draws **placeholder textures at runtime**: a coloured-box player with a 4×4 walk cycle, and a coloured rectangle for each building. If the atlas or the avatar 404s, the game falls back to those. `resolvePropTexture()` in `WorldScene` and `Player`'s `usingCharArt` check pick whichever texture is available. The map and tiles have no fallback.
 
 - The island is a **Tiled-format map**, `public/world/map/island.json`: 80×56 tiles at 16 px, so 1280×896 world px.
   - `scripts/world/build-map.mjs` generates it from the design in `scripts/world/layout.mjs`: the island shape, plaza, building positions, path waypoints, props and scatter settings.
@@ -262,7 +283,7 @@ In dev builds, `window.__worldBus` and `window.__worldScene` are exposed for pok
 - `Player.js`: moves at 130 px/s. You can steer with WASD or the arrow keys (diagonal movement is normalised), or click/tap to walk somewhere.
   - Click/tap moves follow a route of waypoints (`moveAlong`) from the pathfinder, described below.
   - The player gives up if it's stuck for 300 ms, and in that case `onArrive` does **not** fire.
-  - `char.png` is a single front-facing 32×32 frame with no walk cycle, so the sprite just flips horizontally for left and right.
+  - The avatar has a walk cycle per direction (`walk-<dir>`, its four frames at 8 fps) and an idle on each direction's first frame. Its body is the feet: 10×6 at offset (3, 18). The placeholder texture uses the same animation keys.
 - **Draw order** (the `DEPTH` constants in `WorldScene.js`), bottom to top:
   1. water
   2. the ground overlays
@@ -353,7 +374,8 @@ The first-visit hint stores `world-hint-seen` in localStorage.
 | Add a new zone | `zones.js`, plus `layout.mjs` (`BUILDINGS`, `PATHS`), `PROP_BY_ZONE` in `WorldScene.js`, `ZONE_TITLES`/`CONTENT_BY_ZONE` in `ZonePanel.jsx` and `DESTINATIONS` in `ZoneMenu.jsx` |
 | Draw a sprite in code | Add a grid module in `assets/pixel/` (see `rocks.mjs`), then `npm run world:build` |
 | Replace or add sprites | Follow the §5.8 pipeline, then `npm run world:build` |
-| Add a real walk cycle | Add a spritesheet at `public/world/char.png` and add anims in `Player.js` (the placeholder code shows the pattern) |
+| Change the avatar | `assets/pixel/avatar.mjs`, then `npm run world:build`. `Player.js`, the hero and the margin walker all read the same strip |
+| Add a project figure | A component in `src/components/work/figures/` built on `Drawing`, keyframes in `figures.css` (first and last frame = the finished drawing), an entry in `figures/index.js`, and a `figure` in `projects.json` |
 | Add a terminal command | Update `COMMANDS`, `HELP_LINES`, the `switch` and, optionally, `CHIP_COMMANDS` in `Terminal.jsx` |
 
 ---
@@ -362,7 +384,9 @@ The first-visit hint stores `world-hint-seen` in localStorage.
 
 - **The résumé** lives at `public/resume.pdf`. Every résumé link (nav, hero, contact, `R`, terminal `cat resume`) points there, so replace that file to update it. It's a LaTeX export, and the printed LinkedIn text on it is missing `/in/` (the clickable link is correct).
 - **Content details still open**: two impact numbers, hackathon roles, a few experience numbers and guessed dates. The full list is in `docs/IMPROVEMENTS.md` §1.2.
-- **The player sprite** is a single static frame with no walk animation.
+- **The bio** in `about.json` is a draft in the owner's facts but not his voice; he means to rewrite it.
+- **The Work images** can be swapped for better ones (same paths, or new `screenshot` entries in `projects.json`).
+- **Figure labels on a phone** are about 8 px tall: legible on a high-density screen, small on a low one.
 - **The Archive zone** shows only org and period for each role. `/` shows much more detail there.
 - **`README.md`** is still the default Vite template. Replace it or point it at this doc.
 - **No tests or CI.** Before you push, run `npm run build` and `npm run lint`, then check `/` and `/world` at phone width by hand.

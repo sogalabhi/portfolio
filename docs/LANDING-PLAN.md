@@ -80,34 +80,34 @@ together with B's margin walker.
 
 At 390 px wide the plan is about 340 px across, and three things break.
 
-- [ ] **Labels are clipped** at the left and right edges ("ORKSHOP", "ARDEN",
+- [x] **Labels are clipped** at the left and right edges ("ORKSHOP", "ARDEN",
   "ARCHI"). Below `sm`, show only the lettered circle at each label position,
   and add a legend under the plan: a two-column list of links, "A Workshop —
   Work" and so on, from the same `labels` array.
-- [ ] **The build button covers the Archive label.** Below `sm`, move it out
+- [x] **The build button covers the Archive label.** Below `sm`, move it out
   of the drawing, under the legend.
-- [ ] **North point and scale text are unreadable** at that size. Hide the
+- [x] **North point and scale text are unreadable** at that size. Hide the
   text (keep the marks) below `sm`.
-- [ ] **Linework reads heavy** on the phone because hairlines don't scale.
+- [x] **Linework reads heavy** on the phone because hairlines don't scale.
   Drop the coast and building outlines to 1 px below `sm`.
-- [ ] Check 768, 1280×720 and 1920×1080 too. The sheet caps at 1400 px.
-- [ ] `site-plan.json` has an unused `titleBlock.byLabel`. Use it or delete it.
-- [ ] Preload the island: `<link rel="preload" as="image"
+- [x] Check 768, 1280×720 and 1920×1080 too. The sheet caps at 1400 px.
+- [x] `site-plan.json` has an unused `titleBlock.byLabel`. Use it or delete it.
+- [x] Preload the island: `<link rel="preload" as="image"
   href="/world/island.webp">` in `index.html`.
-- [ ] `plan.json` is 48 kB raw in the main bundle. Sample the sea contours
+- [x] `plan.json` is 48 kB raw in the main bundle. Sample the sea contours
   every 3° instead of 2° if the coast still looks smooth, and report the
   gzipped size of the main bundle before and after this whole plan.
 
 ### B. The avatar everywhere
 
-- [ ] **Margin walker** — `src/components/hero/MarginCharacter.jsx`. Use the
+- [x] **Margin walker** — `src/components/hero/MarginCharacter.jsx`. Use the
   `.avatar-sprite` class at 32×48. Walk the "down" frames while the page
   scrolls down and the "up" frames while it scrolls up; settle on the
   standing "down" frame about 150 ms after scrolling stops. Remove the
   `scaleX` flip. Frame `i` of the strip is `background-position-x:
   ${(i / 15) * 100}%`. It stays `xl`-only and returns `null` under reduced
   motion.
-- [ ] **The game** —
+- [x] **The game** —
   - `BootScene.js`: load `world/sprites/avatar.png` as the `char`
     spritesheet, `frameWidth: 16, frameHeight: 24`.
   - `Player.js`: real animations for the art path (`walk-<dir>` over that
@@ -119,16 +119,16 @@ At 390 px wide the plan is about 340 px across, and three things break.
   - Verify in a browser: WASD walks with the right facing, click-to-walk
     still routes around buildings, clicking a building opens its panel, the
     player draws in front of a door and behind a roof.
-- [ ] Once nothing references it, delete `public/world/char.png` and
+- [x] Once nothing references it, delete `public/world/char.png` and
   `src/components/layout/IslandDivider.jsx`. Leave `src/assets/` alone.
 
 ### C. Sheets: one header for every section
 
-- [ ] New `src/components/layout/SectionHeader.jsx`: a mono eyebrow
+- [x] New `src/components/layout/SectionHeader.jsx`: a mono eyebrow
   (`SHEET 02 · A — WORKSHOP`), then the existing building sprite and `<h2>`,
   an optional right-aligned mono note, and a hairline. The letter is the
   same tag the hero plan uses, so the plan really is the page's index.
-- [ ] Add `sheet`, `tag` and `zone` to each entry in `sections.json`.
+- [x] Add `sheet`, `tag` and `zone` to each entry in `sections.json`.
 
   | Sheet | Section | Tag | Sprite |
   |---|---|---|---|
@@ -139,7 +139,7 @@ At 390 px wide the plan is about 340 px across, and three things break.
   | 05 | About ("General notes") | — | signpost |
   | 06 | Achievements, then Contact | D, E | shrine, tower |
 
-- [ ] Tighten `Section`: `py-16 md:py-24` instead of `py-24 md:py-32`. There
+- [x] Tighten `Section`: `py-16 md:py-24` instead of `py-24 md:py-32`. There
   are roughly 300 px blank gaps between sections today.
 
 ### D. Work
@@ -147,7 +147,7 @@ At 390 px wide the plan is about 340 px across, and three things break.
 Featured cards become **figure plates**: a real image or diagram on top, a
 caption row, then the text.
 
-- [ ] **Images**, converted to WebP into `public/projects/`. The sources are
+- [x] **Images**, converted to WebP into `public/projects/`. The sources are
   already collected (paths are in the scratchpad directory given in the
   agent brief):
   - *Osdag Web*: `osdag-conn.png`, the Connections page of the real
@@ -159,7 +159,7 @@ caption row, then the text.
     the Astottara and Audio screens. Look at them and lay three side by
     side into one strip. Arrange only; do not redraw or retouch.
   - *Polkaflow*: `public/projects/polkaflow.png` exists.
-- [ ] **OpenLake has no UI**, so it gets a drawn pipeline instead. New
+- [x] **OpenLake has no UI**, so it gets a drawn pipeline instead. New
   `src/components/work/PipelineFigure.jsx` in the plan's line style, driven
   by a `figure` field in `projects.json`. Take the stages from the Mermaid
   diagram in `~/coding/openlake_project/Readme.md` (section 2), roughly:
@@ -167,7 +167,7 @@ caption row, then the text.
   Streaming) → store (Delta silver, dbt gold) → serve (Superset, churn
   model, reverse ETL to CRM, FastAPI). Read the README and use its names.
   It must stay legible at a 440 px card and on a phone.
-- [ ] **`ProjectCard.jsx`, featured variant**:
+- [x] **`ProjectCard.jsx`, featured variant**:
   1. Plate: 16:10, hairline border, `object-cover object-top` for landscape
      screenshots, `object-contain` for the phone strip. Clicking opens the
      full image, tracked as today (`project_link_click`, `type:
@@ -177,7 +177,7 @@ caption row, then the text.
   3. Title, result line, tagline.
   4. Stack chips: the first five or six entries of `stack`, small and mono.
   5. Links, as now.
-- [ ] **The other 21** — `ProjectExplorer.jsx`. Today "Show 21 more" opens a
+- [x] **The other 21** — `ProjectExplorer.jsx`. Today "Show 21 more" opens a
   3,470 px single column. Make it an index: filter chips (All / Software /
   Data / Civil, with counts) from the `roles` field every project already
   has, and two columns of compact rows from `md` up. Move the hardcoded
@@ -190,13 +190,13 @@ Nav's "About" currently lands on Achievements. Make it a real section,
 between Skills and Achievements. Achievements and Contact become their own
 `Section`s after it.
 
-- [ ] `src/content/about.json` and `src/components/misc/About.jsx`.
-- [ ] **Left**: the portrait as a figure plate. `avatar_portrait.png` at 5×
+- [x] `src/content/about.json` and `src/components/misc/About.jsx`.
+- [x] **Left**: the portrait as a figure plate. `avatar_portrait.png` at 5×
   (160×240), `image-rendering: pixelated`, blinking every few seconds with a
   two-step CSS animation (still under reduced motion). Caption in mono.
-- [ ] **Right**: the bio, then numbered "general notes", the way a drawing
+- [x] **Right**: the bio, then numbered "general notes", the way a drawing
   lists them.
-- [ ] **Bio draft.** Tune the wording if it reads stiffly, but add no facts.
+- [x] **Bio draft.** Tune the wording if it reads stiffly, but add no facts.
   The owner will rewrite it in his own voice, so say so in the final report.
 
   > I'm a civil engineering student at NITK Surathkal who has been shipping
@@ -224,23 +224,23 @@ between Skills and Achievements. Achievements and Contact become their own
 
 ### F. Small fixes while in there
 
-- [ ] **Achievements**: render the `links.github` and `links.demo` each
+- [x] **Achievements**: render the `links.github` and `links.demo` each
   hackathon already has in `achievements.json`.
-- [ ] **Heatmap caption**: it currently reads "0-day streak". Drop the
+- [x] **Heatmap caption**: it currently reads "0-day streak". Drop the
   streak when it is under 3 days.
-- [ ] **Tier-2 roles**: `CompactRoleList.jsx` never renders the `note` two
+- [x] **Tier-2 roles**: `CompactRoleList.jsx` never renders the `note` two
   of the roles carry. Show it under the role.
 
 ### G. Docs
 
-- [ ] `docs/HANDOVER.md`: repo layout, the content table (`site-plan.json`,
+- [x] `docs/HANDOVER.md`: repo layout, the content table (`site-plan.json`,
   `about.json`), the `/` composition in 5.1, the pipeline in 5.8 (avatar,
   `world:preview`, `world:plan`), analytics in 6 (`site_plan_toggle`; the
   `site_plan` source on `world_explore_click`; anything added for the
   filter), the player in 7.5, and the open items in 9.
-- [ ] `docs/IMPROVEMENTS.md`: tick the player character and the homepage
+- [x] `docs/IMPROVEMENTS.md`: tick the player character and the homepage
   mascot and banner items, and fix the top note.
-- [ ] `docs/project-selection.md`: the new media and figure fields.
+- [x] `docs/project-selection.md`: the new media and figure fields.
 
 ### H. A drawn, animated figure for each featured project
 
@@ -250,17 +250,17 @@ This is the hero's idea again, at card size: the plan first, then the thing.
 
 #### H.1 The plate
 
-- [ ] Each featured project gets a `figure` in `projects.json`:
+- [x] Each featured project gets a `figure` in `projects.json`:
   `{ "type": "...", "caption": "...", "labels": { ... } }`. Every word the
   drawing shows comes from `labels`.
-- [ ] `src/components/work/figures/`: one component per type and an
+- [x] `src/components/work/figures/`: one component per type and an
   `index.js` mapping `type` to component.
-- [ ] If the project also has a `screenshot`, the plate gets a small mono
+- [x] If the project also has a `screenshot`, the plate gets a small mono
   two-way switch in a corner, **Drawing | Built** (labels in JSON),
   cross-fading between the figure and the screenshot. In the Built view,
   clicking the image opens it full size, tracked as before. OpenLake has no
   screenshot, so it has no switch.
-- [ ] The caption row under the plate stays as planned: `FIG. 1` and the
+- [x] The caption row under the plate stays as planned: `FIG. 1` and the
   figure's caption on the left, role tags on the right.
 
 #### H.2 Shared drawing rules
@@ -297,7 +297,7 @@ This is the hero's idea again, at card size: the plan first, then the thing.
 Compositions below are a starting point. Keep the facts and the labels;
 improve the layout if a screenshot shows it needs it.
 
-- [ ] **Fig. 1, Arjun Guruji — `phone`. "Front elevation: what runs on the
+- [x] **Fig. 1, Arjun Guruji — `phone`. "Front elevation: what runs on the
   phone."**
   - A phone drawn in elevation at left-centre: rounded outline, inset
     screen, speaker slot.
@@ -311,7 +311,7 @@ improve the layout if a screenshot shows it needs it.
     it; the waveform bars pulse, staggered; the bell rings once near the
     end.
 
-- [ ] **Fig. 2, Osdag Web — `base-plate`. "Column base plate, elevation and
+- [x] **Fig. 2, Osdag Web — `base-plate`. "Column base plate, elevation and
   plan."** The résumé names Base Plate Connection as one of the modules he
   led, so draw that one, not a generic joint.
   - Elevation, left two-thirds: an I-section column standing on a base
@@ -329,7 +329,7 @@ improve the layout if a screenshot shows it needs it.
     the step turns moss and the dimension symbols appear. The `P` arrow
     presses down a few units and returns.
 
-- [ ] **Fig. 3, OpenLake — `pipeline`. "Batch and streaming paths, from the
+- [x] **Fig. 3, OpenLake — `pipeline`. "Batch and streaming paths, from the
   README."** This is the `PipelineFigure` already in section D; build it
   here, to these rules.
   - Left to right: two sources (a file, a live order stream) → ingest →
@@ -343,7 +343,7 @@ improve the layout if a screenshot shows it needs it.
     the stream line as a fast, continuous run; the three layers fill in
     turn.
 
-- [ ] **Fig. 4, Polkaflow — `flow`. "A flowchart on the left, a contract on
+- [x] **Fig. 4, Polkaflow — `flow`. "A flowchart on the left, a contract on
   the right."**
   - Left 60%: a canvas with four nodes labelled Trigger, Logic, Wallet and
     Contract (the node types in the existing screenshot), each a rounded box
@@ -363,7 +363,7 @@ Today the margins hold pixel rocks, bushes and trees
 for the built thing, so the only pixel art left in the margin is the avatar,
 walking a **drawn road alignment**.
 
-- [ ] **Left margin: the alignment.** Replace the scatter with one tall SVG
+- [x] **Left margin: the alignment.** Replace the scatter with one tall SVG
   (document height, sized by the existing `ResizeObserver`):
   - A clay dashed centreline (`9 4 2 4`) running the full height at
     x = 48 px, which is the middle of the avatar.
@@ -374,16 +374,16 @@ walking a **drawn road alignment**.
   - **As built**: the part of the line the avatar has already walked is
     solid ink, not dashed clay. Drive its length from the same
     `ScrollTrigger` update that moves the avatar (a CSS variable is enough).
-- [ ] **Right margin: planting.** Keep the seeded placement code, but draw
+- [x] **Right margin: planting.** Keep the seeded placement code, but draw
   the plan's symbols instead of sprites: a circle with a small cross for a
   tree, a dashed circle for a bush. Sparse, ink at low opacity. No rocks.
-- [ ] **The avatar** (this is section B's margin walker): as specified
+- [x] **The avatar** (this is section B's margin walker): as specified
   there. Make sure it sits exactly on the centreline.
-- [ ] Still `xl`-only, `aria-hidden`, `pointer-events: none`, hidden in
+- [x] Still `xl`-only, `aria-hidden`, `pointer-events: none`, hidden in
   print. Update the long comment in `PageScatter.jsx`; most of it is about
   sprite lanes that will no longer exist. Rename the file if the old name
   no longer fits, and update `App.jsx` and the docs.
-- [ ] **Find every remaining creature.** `grep -rn "char.png"` must come
+- [x] **Find every remaining creature.** `grep -rn "char.png"` must come
   back empty outside `docs/`. Then look at `public/og-image.png`,
   `public/favicon.svg` and the icon PNGs. If the social image shows the
   creature or the old layout, regenerate it: a 1200×630 capture of the hero

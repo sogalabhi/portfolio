@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom'
 import { track } from '@vercel/analytics'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 import useReducedMotion from '../../hooks/useReducedMotion'
+import navContent from '../../content/nav.json'
 
-// Shrinks the big island banner (#world-banner, IslandDivider.jsx) into a
+// Shrinks the hero sheet (#world-banner, the site plan of the island) into a
 // corner pill once it scrolls out of view, and reverses when you scroll
 // back up to it - a GSAP-driven cross-fade between two elements rather than
 // morphing one element's position type (document flow -> fixed), which
@@ -34,11 +35,11 @@ export default function WorldMiniBanner() {
       ref={ref}
       to="/world"
       onClick={() => track('world_explore_click', { source: 'mini_banner' })}
-      aria-label="Visit the interactive world"
+      aria-label={navContent.miniBanner.ariaLabel}
       className="fixed bottom-6 right-6 z-30 hidden items-center gap-2 rounded-lg border-2 border-[#2B2438] bg-[#5FA65A] px-4 py-3 font-mono text-xs uppercase tracking-wide text-[#F4EDE2] shadow-md transition-colors duration-150 hover:bg-[#4A7C4E] md:flex print:hidden"
       style={{ transform: 'scale(0)', opacity: 0 }}
     >
-      Explore my world →
+      {navContent.miniBanner.label}
     </Link>
   )
 }

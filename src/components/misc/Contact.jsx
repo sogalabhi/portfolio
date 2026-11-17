@@ -3,8 +3,9 @@ import { Copy, Check, FileText } from 'lucide-react'
 import { track } from '@vercel/analytics'
 import profile from '../../content/profile.json'
 import sections from '../../content/sections.json'
-import SectionIcon from '../layout/SectionIcon'
 import { GithubIcon, LinkedinIcon } from './BrandIcons'
+
+const copy = sections.contact
 
 export default function Contact() {
   const [copied, setCopied] = useState(false)
@@ -18,11 +19,6 @@ export default function Contact() {
 
   return (
     <div>
-      <div className="flex items-center gap-4">
-        <SectionIcon src="/world/sprites/tower.png" />
-        <h2 className="text-ink">{sections.contact.heading}</h2>
-      </div>
-
       <div className="mt-8 flex flex-wrap items-center gap-3">
         <a
           href={`mailto:${profile.email}`}
@@ -34,11 +30,11 @@ export default function Contact() {
         <button
           type="button"
           onClick={handleCopy}
-          aria-label="Copy email address"
+          aria-label={copy.copyLabel}
           className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-line px-3 py-2 text-sm text-slate transition-colors duration-150 hover:border-clay hover:text-clay"
         >
           {copied ? <Check size={16} /> : <Copy size={16} />}
-          {copied ? 'Copied' : 'Copy'}
+          {copied ? copy.copied : copy.copy}
         </button>
       </div>
 
@@ -50,7 +46,7 @@ export default function Contact() {
           className="inline-flex items-center gap-2 text-slate transition-colors duration-150 hover:text-clay"
         >
           <GithubIcon size={16} />
-          GitHub
+          {copy.github}
         </a>
         <a
           href={profile.links.linkedin}
@@ -59,7 +55,7 @@ export default function Contact() {
           className="inline-flex items-center gap-2 text-slate transition-colors duration-150 hover:text-clay"
         >
           <LinkedinIcon size={16} />
-          LinkedIn
+          {copy.linkedin}
         </a>
         <a
           href={profile.links.resume}
@@ -69,7 +65,7 @@ export default function Contact() {
           className="inline-flex items-center gap-2 text-slate transition-colors duration-150 hover:text-clay"
         >
           <FileText size={16} aria-hidden="true" />
-          Résumé (PDF)
+          {copy.resume}
         </a>
       </div>
 

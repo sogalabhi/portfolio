@@ -28,6 +28,7 @@ import education from './content/education.json'
 import sections from './content/sections.json'
 
 const World = lazy(() => import('./world/WorldPage'))
+const Another = lazy(() => import('./another/AnotherPage'))
 
 function Home() {
   const orderedProjects = [...projects].sort((a, b) => a.order - b.order)
@@ -120,6 +121,15 @@ export default function App() {
       <KeyboardShortcuts />
       <Routes>
         <Route path="/" element={<Home />} />
+        {/* the blueprint draft, beside the real home page */}
+        <Route
+          path="/another"
+          element={
+            <Suspense fallback={null}>
+              <Another />
+            </Suspense>
+          }
+        />
         <Route
           path="/world"
           element={

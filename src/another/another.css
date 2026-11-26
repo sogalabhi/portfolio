@@ -1,0 +1,95 @@
+/* /another: the blueprint draft of the home page. Everything is scoped to .bp,
+   which re-points the shared design tokens, so the components borrowed from /
+   take these colours and fonts and / itself is untouched. Blue is the default
+   (dark) side; white is the light side. */
+.bp {
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-hand: "Architects Daughter", cursive;
+  min-height: 100vh;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+.bp[data-mode="blue"] {
+  color-scheme: dark;
+  --color-paper: #0A1A3A;
+  --color-card: #103C8F;
+  --color-ink: #F2F6FF;
+  --color-slate: #D3DEF7;
+  --color-faint: #AFC2EC;
+  --color-line: #33528F;
+  --color-sand: #1B3A75;
+  --color-clay: #FFD54A;
+  --color-moss: #8FE6B4;
+  --color-panel: #061128;
+  --accent-text: #FFD54A;
+  --on-accent: #0A1A3A;
+  --sheet: #103C8F;
+  --grid: rgb(255 255 255 / 0.09);
+}
+
+.bp[data-mode="white"] {
+  color-scheme: light;
+  --color-paper: #F6F6F1;
+  --color-card: #FFFFFF;
+  --color-ink: #121212;
+  --color-slate: #3F3F3F;
+  --color-faint: #66665F;
+  --color-line: #CFCFC6;
+  --color-sand: #E9E9E1;
+  --color-clay: #D8231D;
+  --color-moss: #1B7A3D;
+  --color-panel: #121212;
+  --accent-text: #C21F1A;
+  --on-accent: #FFFFFF;
+  --sheet: #F6F6F1;
+  --grid: rgb(0 0 0 / 0.07);
+}
+
+.bp h1,
+.bp h2,
+.bp h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.bp h1 { font-size: clamp(3.5rem, 9vw, 7rem); line-height: 0.9; }
+.bp h2 { font-size: clamp(2.75rem, 6vw, 4.5rem); line-height: 0.95; }
+.bp h3 { font-size: 1.75rem; line-height: 1.1; }
+
+/* the hero sheet: squared paper. Drawings fill their shapes with `paper`, so
+   inside a sheet or a plate `paper` is that surface's own colour. */
+/* clipped, so the hero's contours stop at the sheet's edge */
+.bp section.bp-sheet { overflow: hidden; }
+
+.bp-sheet {
+  --color-paper: var(--sheet);
+  background-color: var(--sheet);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.bp-plate { --color-paper: var(--color-card); background: var(--color-card); }
+
+.bp-hand {
+  font-family: var(--font-hand);
+  color: var(--accent-text);
+  line-height: 1.25;
+}
+
+.bp-button {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* the shared section pieces, set in this page's face */
+.bp-body h3 { font-size: 1.5rem; }

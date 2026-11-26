@@ -8,16 +8,24 @@ import ProjectGrid from './ProjectGrid'
 
 const copy = sections.work.index
 const ROLES = sections.work.roles
+const TRACKS = sections.work.tracks
 
-// The four featured plates, then everything else as an index: a register of
+// ?role=ai opens the page on that track, so each kind of recruiter can be
+// sent their own link
+function initialTrack() {
+  const wanted = new URLSearchParams(window.location.search).get('role')
+  return TRACKS.some((t) => t.id === wanted) ? wanted : TRACKS[0].id
+}
+
+// The chosen track's featured plates, then everything else as an index: a register of
 // compact rows, filterable by the role tags every project carries.
 export default function ProjectExplorer({ projects }) {
   const [open, setOpen] = useState(false)
   const [role, setRole] = useState('all')
-  const featured = projects
-    .filter((project) => project.featured)
-    .sort((a, b) => a.featuredOrder - b.featuredOrder)
-  const more = projects.filter((project) => !project.featured)
+  const [trackId, setTrackId] = useState(initialTrack)
+  const picked = TRACKS.find((t) => t.id === trackId).projects
+  const featured = picked.map((id) => projects.find((project) => project.id === id))
+  const more = projects.filter((project) => !picked.includes(project.id))
   const shown = role === 'all' ? more : more.filter((project) => project.roles.includes(role))
   const filters = [
     ['all', copy.all, more.length],
@@ -28,11 +36,19 @@ export default function ProjectExplorer({ projects }) {
   useEffect(() => {
     const frame = requestAnimationFrame(() => ScrollTrigger.refresh())
     return () => cancelAnimationFrame(frame)
-  }, [open, role])
+  }, [open, role, trackId])
 
   function toggleMore() {
     setOpen((value) => !value)
     track('more_projects_toggle', { expanded: !open })
+  }
+
+  function pickTrack(id) {
+    setTrackId(id)
+    const url = new URL(window.location.href)
+    url.searchParams.set('role', id)
+    window.history.replaceState(window.history.state, '', url)
+    track('track_switch', { track: id })
   }
 
   function pick(key) {
@@ -42,7 +58,23 @@ export default function ProjectExplorer({ projects }) {
 
   return (
     <div>
-      <ProjectGrid projects={featured} label={copy.featuredLabel} />
+      <div role="group" aria-label={sections.work.tracksLabel} className="mb-10 inline-flex border border-ink/30 print:hidden">
+        {TRACKS.map((t, i) => (
+          <button
+            key={t.id}
+            type="button"
+            aria-pressed={trackId === t.id}
+            onClick={() => pickTrack(t.id)}
+            className={`min-h-11 cursor-pointer px-5 font-mono text-xs uppercase tracking-[0.08em] transition-colors duration-150 ${i ? 'border-l border-ink/30' : ''} ${
+              trackId === t.id ? 'bg-ink text-paper' : 'text-slate hover:text-clay'
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+      {/* keyed, so a new track gets fresh plates and reveals */}
+      <ProjectGrid key={trackId} projects={featured} label={copy.featuredLabel} />
 
       {more.length > 0 && (
         <div className="mt-16 print:hidden">

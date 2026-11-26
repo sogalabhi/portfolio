@@ -4,6 +4,7 @@ import { Menu, X, Download, ArrowUpRight } from 'lucide-react'
 import { track } from '@vercel/analytics'
 import navContent from '../../content/nav.json'
 import profile from '../../content/profile.json'
+import ThemeToggle from './ThemeToggle'
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
@@ -70,6 +71,7 @@ export default function Nav() {
         </ul>
 
         <div className="hidden items-center gap-3 md:flex">
+          <ThemeToggle />
           <Link
             to="/world"
             onClick={() => track('world_explore_click', { source: 'nav' })}
@@ -90,9 +92,13 @@ export default function Nav() {
           </a>
         </div>
 
+        <div className="ml-auto md:hidden">
+          <ThemeToggle />
+        </div>
+
         <button
           type="button"
-          className="cursor-pointer p-2 md:hidden"
+          className="cursor-pointer p-2 text-ink md:hidden"
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((open) => !open)}

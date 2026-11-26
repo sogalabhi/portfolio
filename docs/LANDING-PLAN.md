@@ -46,27 +46,27 @@ that travels with the scroll): `mylatestwork.dev`, `anzalabidi.dev`,
 
 ## 3. Already done
 
-- [x] **Avatar art** — `assets/pixel/avatar.mjs`, drawn from the owner's photo.
+- [x] **Avatar art**: `assets/pixel/avatar.mjs`, drawn from the owner's photo.
   - `public/world/sprites/avatar.png`: 16 frames of 16×24. Order is down,
     left, right, up; four frames each (stand, step, stand, step).
   - `public/world/sprites/avatar_portrait.png`: 2 frames of 32×48 (eyes
     open, blink).
   - Both are kept out of the atlas (`scripts/assets/pack-atlas.mjs`).
   - New colours are in `EXTRA_HEX` in `scripts/assets/palette.mjs`.
-- [x] **Island render** — `scripts/world/build-preview.mjs` writes
+- [x] **Island render**: `scripts/world/build-preview.mjs` writes
   `public/world/island.webp` (1280×896, lossless, about 107 kB). It draws what
   `WorldScene` draws, in the same order.
-- [x] **Shared geometry** — `scripts/world/shape.mjs`. `build-map.mjs` now
+- [x] **Shared geometry**: `scripts/world/shape.mjs`. `build-map.mjs` now
   imports from it; the map output is byte-identical.
-- [x] **Plan data** — `scripts/world/build-plan.mjs` writes
+- [x] **Plan data**: `scripts/world/build-plan.mjs` writes
   `src/world/data/plan.json`.
-- [x] **npm scripts** — `world:preview`, `world:plan`, both chained into
+- [x] **npm scripts**: `world:preview`, `world:plan`, both chained into
   `world:build`.
-- [x] **Hero** — `src/components/hero/Hero.jsx`, `SitePlan.jsx`,
+- [x] **Hero**: `src/components/hero/Hero.jsx`, `SitePlan.jsx`,
   `StatStrip.jsx` (now the title block), copy in
   `src/content/site-plan.json`, styles at the end of `src/index.css`.
   Checked at 1440×900 with no console errors.
-- [x] **Old banner off the page** — `IslandDivider` is no longer rendered.
+- [x] **Old banner off the page**: `IslandDivider` is no longer rendered.
   `#world-banner` is now the hero sheet, so `WorldMiniBanner` still works.
 
 ## 4. To do, in this order
@@ -82,7 +82,7 @@ At 390 px wide the plan is about 340 px across, and three things break.
 
 - [x] **Labels are clipped** at the left and right edges ("ORKSHOP", "ARDEN",
   "ARCHI"). Below `sm`, show only the lettered circle at each label position,
-  and add a legend under the plan: a two-column list of links, "A Workshop —
+  and add a legend under the plan: a two-column list of links, "A Workshop:
   Work" and so on, from the same `labels` array.
 - [x] **The build button covers the Archive label.** Below `sm`, move it out
   of the drawing, under the legend.
@@ -100,14 +100,14 @@ At 390 px wide the plan is about 340 px across, and three things break.
 
 ### B. The avatar everywhere
 
-- [x] **Margin walker** — `src/components/hero/MarginCharacter.jsx`. Use the
+- [x] **Margin walker**: `src/components/hero/MarginCharacter.jsx`. Use the
   `.avatar-sprite` class at 32×48. Walk the "down" frames while the page
   scrolls down and the "up" frames while it scrolls up; settle on the
   standing "down" frame about 150 ms after scrolling stops. Remove the
   `scaleX` flip. Frame `i` of the strip is `background-position-x:
   ${(i / 15) * 100}%`. It stays `xl`-only and returns `null` under reduced
   motion.
-- [x] **The game** —
+- [x] **The game**:
   - `BootScene.js`: load `world/sprites/avatar.png` as the `char`
     spritesheet, `frameWidth: 16, frameHeight: 24`.
   - `Player.js`: real animations for the art path (`walk-<dir>` over that
@@ -125,18 +125,18 @@ At 390 px wide the plan is about 340 px across, and three things break.
 ### C. Sheets: one header for every section
 
 - [x] New `src/components/layout/SectionHeader.jsx`: a mono eyebrow
-  (`SHEET 02 · A — WORKSHOP`), then the existing building sprite and `<h2>`,
+  (`SHEET 02 · A: WORKSHOP`), then the existing building sprite and `<h2>`,
   an optional right-aligned mono note, and a hairline. The letter is the
   same tag the hero plan uses, so the plan really is the page's index.
 - [x] Add `sheet`, `tag` and `zone` to each entry in `sections.json`.
 
   | Sheet | Section | Tag | Sprite |
   |---|---|---|---|
-  | 01 | Hero | — | — |
+  | 01 | Hero | - | - |
   | 02 | Work | A | workshop |
   | 03 | Experience | B | archive |
   | 04 | Skills | C | shed |
-  | 05 | About ("General notes") | — | signpost |
+  | 05 | About ("General notes") | - | signpost |
   | 06 | Achievements, then Contact | D, E | shrine, tower |
 
 - [x] Tighten `Section`: `py-16 md:py-24` instead of `py-24 md:py-32`. There
@@ -177,7 +177,7 @@ caption row, then the text.
   3. Title, result line, tagline.
   4. Stack chips: the first five or six entries of `stack`, small and mono.
   5. Links, as now.
-- [x] **The other 21** — `ProjectExplorer.jsx`. Today "Show 21 more" opens a
+- [x] **The other 21**: `ProjectExplorer.jsx`. Today "Show 21 more" opens a
   3,470 px single column. Make it an index: filter chips (All / Software /
   Data / Civil, with counts) from the `roles` field every project already
   has, and two columns of compact rows from `md` up. Move the hardcoded
@@ -220,7 +220,7 @@ between Skills and Achievements. Achievements and Contact become their own
      Communication, NITK Surathkal, 2023 to present.
   2. Based in Mysuru, Karnataka.
   3. Two third-place hackathon finishes and an ETHGlobal selection.
-  4. Looking for SDE and data engineering roles for 2027.
+  4. Looking for SDE roles for 2027.
 
 ### F. Small fixes while in there
 
@@ -297,7 +297,7 @@ This is the hero's idea again, at card size: the plan first, then the thing.
 Compositions below are a starting point. Keep the facts and the labels;
 improve the layout if a screenshot shows it needs it.
 
-- [x] **Fig. 1, Arjun Guruji — `phone`. "Front elevation: what runs on the
+- [x] **Fig. 1, Arjun Guruji: `phone`. "Front elevation: what runs on the
   phone."**
   - A phone drawn in elevation at left-centre: rounded outline, inset
     screen, speaker slot.
@@ -311,7 +311,7 @@ improve the layout if a screenshot shows it needs it.
     it; the waveform bars pulse, staggered; the bell rings once near the
     end.
 
-- [x] **Fig. 2, Osdag Web — `base-plate`. "Column base plate, elevation and
+- [x] **Fig. 2, Osdag Web: `base-plate`. "Column base plate, elevation and
   plan."** The résumé names Base Plate Connection as one of the modules he
   led, so draw that one, not a generic joint.
   - Elevation, left two-thirds: an I-section column standing on a base
@@ -329,7 +329,7 @@ improve the layout if a screenshot shows it needs it.
     the step turns moss and the dimension symbols appear. The `P` arrow
     presses down a few units and returns.
 
-- [x] **Fig. 3, OpenLake — `pipeline`. "Batch and streaming paths, from the
+- [x] **Fig. 3, OpenLake: `pipeline`. "Batch and streaming paths, from the
   README."** This is the `PipelineFigure` already in section D; build it
   here, to these rules.
   - Left to right: two sources (a file, a live order stream) → ingest →
@@ -343,7 +343,7 @@ improve the layout if a screenshot shows it needs it.
     the stream line as a fast, continuous run; the three layers fill in
     turn.
 
-- [x] **Fig. 4, Polkaflow — `flow`. "A flowchart on the left, a contract on
+- [x] **Fig. 4, Polkaflow: `flow`. "A flowchart on the left, a contract on
   the right."**
   - Left 60%: a canvas with four nodes labelled Trigger, Logic, Wallet and
     Contract (the node types in the existing screenshot), each a rounded box

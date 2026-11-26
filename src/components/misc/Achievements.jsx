@@ -16,7 +16,7 @@ export default function Achievements() {
 
       <ul ref={revealRef} className="divide-y divide-line border-t border-line">
         {achievements.hackathons.map((item) => {
-          const project = item.project.split(' — ')[0]
+          const project = item.project.split(': ')[0]
           return (
             <li key={item.event} data-reveal className="grid gap-x-8 gap-y-2 py-6 sm:grid-cols-[12rem_minmax(0,1fr)]">
               <span className="font-mono text-lg leading-snug text-clay">{item.result}</span>

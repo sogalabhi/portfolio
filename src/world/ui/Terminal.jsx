@@ -220,7 +220,7 @@ export default function Terminal({ onClose }) {
         aria-label="Terminal"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
-        className="flex h-[70dvh] w-full max-w-xl flex-col rounded-lg border border-[#4A7C4E]/40 bg-black/90 p-4 font-mono text-sm text-[#5FA65A] shadow-2xl"
+        className="flex h-[70dvh] w-full max-w-xl flex-col rounded-lg border border-[#4A7C4E]/40 bg-black/90 p-4 font-[ui-monospace,monospace] text-sm text-[#5FA65A] shadow-2xl"
         style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
       >
         <div className="mb-2 flex items-center justify-between border-b border-[#4A7C4E]/30 pb-2">

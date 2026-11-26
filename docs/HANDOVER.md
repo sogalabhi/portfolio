@@ -4,7 +4,7 @@ This covers the whole repo: the scrolling portfolio at `/` and the explorable pi
 
 - **Live:** https://sogalabhi.vercel.app (Vercel)
 - **Owner:** Abhijith Sogal V (`sogalabhi`)
-- **Status:** `/` and `/world` both ship. The home page is a drawing set (see `docs/LANDING-PLAN.md`): the hero is a site plan of the island that builds itself, every section is a numbered sheet, the four featured projects are animated line-drawing plates, and the avatar walks a road drawn down the left margin. `/world` uses the same avatar, with a real walk cycle.
+- **Status:** `/` and `/world` both ship. The home page is a drawing set (see `docs/LANDING-PLAN.md`): the hero is a site plan of the island that builds itself, every section is a numbered sheet, the featured projects (a set per role, SDE or AI Engineer) are animated line-drawing plates, and the avatar walks a road drawn down the left margin. `/world` uses the same avatar, with a real walk cycle.
 
 ---
 
@@ -77,7 +77,7 @@ Every visible string comes from `src/content/*.json`. Components don't hardcode 
 |---|---|
 | `profile.json` | Name, tagline, availability pill, email, links (GitHub/LinkedIn/résumé), and the 4-stat title block |
 | `site-plan.json` | The hero's site plan: the hint, the build button, the key, the title block, and the six lettered labels (zone, tag, name, section, link) |
-| `projects.json` | Projects. `featured: true` puts one in the plates and `featuredOrder` sorts them; `roles` drives the index filter. Featured ones carry a `figure` (`type`, `caption`, `labels`: every word the drawing shows) and may carry a `screenshot` (`src`, `alt`, `width`, `height`, `fit`, `caption`) for the "Built" view. Links: `github`, `live`, `demo`, `playStore`. See `docs/project-selection.md` |
+| `projects.json` | Projects. which ones are plates, and in what order, is set per track in `sections.json` → `work.tracks`; `roles` drives the index filter. Featured ones carry a `figure` (`type`, `caption`, `labels`: every word the drawing shows) and may carry a `screenshot` (`src`, `alt`, `width`, `height`, `fit`, `caption`) for the "Built" view. Links: `github`, `live`, `demo`, `playStore`. See `docs/project-selection.md` |
 | `about.json` | The About sheet: portrait figure, the bio paragraphs, the numbered general notes |
 | `experience.json` | `tier1` (timeline cards) and `tier2` (compact role list) |
 | `education.json` | Education block, plus the Archive zone in the game |
@@ -104,8 +104,8 @@ The page is a drawing set: each section is a sheet, and the pixel island is the 
 1. Skip link, then `Nav` (sticky, turns solid on scroll, mobile overlay menu, Résumé and Explore buttons)
 2. `MarginAlignment` (xl only): a road alignment drawn down the left margin (clay centreline, chainage every 500 px, a lettered station at each section) with `MarginCharacter`, the avatar, walking it as the page scrolls; the stretch he has walked is drawn solid. Plan-style planting symbols down the right margin.
 3. `Hero` (sheet 01, `#hero`, with `#world-banner` on the sheet itself): the intro on the left, `SitePlan` on the right, and `StatStrip` as the title block. `SitePlan` draws the island as a site plan (`src/world/data/plan.json`) and builds it, tile by tile, from `public/world/island.webp` around the avatar as he walks the paths and under the visitor's pointer or tap. Its six lettered labels (A–F) link to the sections and `/world`; below `sm` they shrink to their letters and a key lists them under the drawing.
-4. Every section after it opens with `SectionHeader`: `SHEET 02 · A — WORKSHOP`, the building sprite, the heading, an optional note, a rule. The letters match the site plan's.
-5. `#work` (sheet 02): four featured figure plates, then the index (§5.9)
+4. Every section after it opens with `SectionHeader`: `SHEET 02 · A: WORKSHOP`, the building sprite, the heading, an optional note, a rule. The letters match the site plan's.
+5. `#work` (sheet 02): the role switch and its featured figure plates, then the index (§5.9)
 6. `#experience` (03): `TimelineCard` (at most two bullets per organisation), `CompactRoleList` (tier 2, with notes), `EducationBlock`
 7. `#skills` (04): `SkillsSummary` with four `SkillGroup` rows, then `GithubHeatmap` (the streak shows only from 3 days)
 8. `#about` (05, "General notes"): `About`, the pixel portrait as a figure plate (blinking every few seconds), the bio and numbered notes
@@ -117,11 +117,16 @@ The page is a drawing set: each section is a sheet, and the pixel island is the 
 
 ### 5.2 Design tokens
 
-These live in the `src/index.css` `@theme` block and are used as Tailwind classes (`bg-paper`, `text-clay`, and so on):
+These live in the `src/index.css` `@theme` block and are used as Tailwind classes (`bg-paper`, `text-clay`, and so on). Dark is the default theme: `index.html` sets `data-theme` before paint, `ThemeToggle` flips and stores it, and the `:root[data-theme="dark"]` block overrides the variables. Print is always light.
 
-`ink #1C1B19` · `slate #5A574F` · `faint #8B8780` · `paper #FAF7F0` · `card #FFF` · `line #E4DFD4` · **`clay #C4552E` (the one accent)** · `moss #4A7C4E` · `sand #E8DCC4`
+| Token | Light | Dark |
+|---|---|---|
+| `ink` | `#10262B` | `#E7F1F2` |
+| `paper` | `#FFFFFF` | `#0C171A` |
+| `clay` (the accent, island water) | `#5EA9B3` | `#6FC0CB` |
+| accent text | `#2B737E` | `#83CDD7` |
 
-Two game colours are also available as rare accents: `panel #2B2438` (the footer) and `teal #87C5C2`. Cards use borders instead of shadows, and a shadow appears only on hover. Keep clay under about 5% of any screen.
+Fonts are Bricolage Grotesque (display) and Figtree (everything else).
 
 ### 5.3 Motion
 
@@ -179,7 +184,7 @@ This is shared with `/world`. For the full walkthrough see `scripts/assets/READM
 ### 5.9 Work: figure plates and the index
 
 - **Plates** (`ProjectCard.jsx`): each featured project shows a figure plate (16:10) with `FIG. n` over it, its caption and role tags under it, then title, result, tagline, the first six stack entries and links. The plate shows the project's drawing (`figure.type` → `components/work/figures/index.js`); a project that also has a `screenshot` gets a **Drawing | Built** switch on the plate's top edge, cross-fading to the real image, which opens full size on click.
-- **Figures** are inline SVG on a shared `Drawing` sheet (480×300, survey grid, hatch, hairlines that don't scale), animated in CSS (`figures.css`) on an 8 s loop that runs only while the plate is on screen and in the Drawing view. Dimensions are symbols (`p`, `e`, `P`), never numbers. Phone (Arjun Guruji), base plate (Osdag Web), pipeline (OpenLake, names from its README) and flow (Polkaflow).
+- **Figures** are inline SVG on a shared `Drawing` sheet (480×300, survey grid, hatch, hairlines that don't scale), animated in CSS (`figures.css`) on an 8 s loop that runs only while the plate is on screen and in the Drawing view. Dimensions are symbols (`p`, `e`, `P`), never numbers. Phone (Arjun Guruji), base plate (Osdag Web), pipeline (OpenLake, names from its README) review (BriefForge) process (Process Mining), monitor (SysSight) and retrieval (RAG assistant). The pipeline (OpenLake) and flow (Polkaflow) drawings are kept for projects that are not featured now.
 - **The index** (`ProjectExplorer.jsx`): every non-featured project behind a toggle, as a register of compact rows (two columns from `md`), filterable by role with counts. Filtering refreshes ScrollTrigger.
 
 ---
@@ -194,7 +199,9 @@ These are sent with `track()` from `@vercel/analytics`:
 | `resume_download` | `source`: `nav`, `nav_mobile`, `hero`, `contact`, `keyboard_shortcut`, `world_terminal` | Every résumé link |
 | `project_link_click` | `project`, `type`: `github`/`live`/`screenshot` | `ProjectCard` (`screenshot` is a click on a plate's Built image) |
 | `more_projects_toggle` | `expanded`: boolean | Opening or closing the project index |
-| `project_filter` | `role`: `all`/`sde`/`data`/`civil` | The index's role filter |
+| `track_switch` | `track`: `sde`/`ai` | The Work section's role switch (also set by `?role=`) |
+| `theme_switch` | `theme`: `light`/`dark` | `ThemeToggle` in the nav |
+| `project_filter` | `role`: `all`/`sde`/`civil` | The index's role filter |
 | `site_plan_toggle` | `built`: boolean | The hero's "Build it all" / "Back to the drawing" button |
 | `contact_email_click` | `method`: `copy`/`mailto` | `Contact` |
 | `world_zone_open` | `zone`: zone id; `source`: `keyboard`, `prompt`, `click`, `tap`, `menu` | `WorldOverlay` (the single handler for every zone open in `/world`) |
@@ -364,7 +371,7 @@ The first-visit hint stores `world-hint-seen` in localStorage.
 | Task | Where |
 |---|---|
 | Change any copy | `src/content/*.json` only |
-| Add a project | Append to `projects.json` with a unique `id`, then set `featured` and `order` |
+| Add a project | Append to `projects.json` with a unique `id`, then set `order`, and add it to a track to feature it |
 | Edit the home page's skill shortlist | `src/content/skills-summary.json`; keep four groups |
 | Change colours or fonts | The `@theme` block in `src/index.css`, and the font links in `index.html` |
 | Move a building | `BUILDINGS` (and its path's waypoints in `PATHS`) in `scripts/world/layout.mjs`, then `npm run world:map`. Collision, triggers, labels and routing follow automatically |

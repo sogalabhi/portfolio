@@ -60,7 +60,7 @@ None of the dates above are shown on the site today. They only matter for sortin
 - **PokeWars**: a public repo or demo link, if one exists.
 
 **Inconsistencies to settle:**
-- The achievements summary says "2 hackathon wins and an international selection, from 3 entries". The résumé says "finalist in all 4 hackathons participated". Pick one story.
+- Hackathon count (settled 2026-11-26): `/` lists selected results and claims no total. The Esko AIForge second prize is listed. The résumé still says "finalist in all 4 hackathons participated" and does not mention Esko.
 - The résumé still says "Shortlisted for the **upcoming** final round of EthGlobal New Delhi", but that event was in 2025.
 - The résumé's printed LinkedIn text is missing `/in/`. The clickable link is correct.
 

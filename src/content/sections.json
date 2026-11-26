@@ -6,7 +6,7 @@
     "tag": "A",
     "zone": "workshop",
     "zoneName": "Workshop",
-    "note": "Four plates, then the index",
+    "note": "Pick a track, then the index",
     "card": {
       "figure": "Fig.",
       "drawing": "Drawing",
@@ -21,9 +21,13 @@
       "private": "Private project",
       "stackLabel": "Stack"
     },
+    "tracksLabel": "Show featured projects for a role",
+    "tracks": [
+      { "id": "sde", "label": "SDE", "projects": ["osdag-web", "syssight", "arjun-guruji", "process-mining"] },
+      { "id": "ai", "label": "AI Engineer", "projects": ["briefforge", "rag-is-code"] }
+    ],
     "roles": {
       "sde": "Software",
-      "data": "Data",
       "civil": "Civil"
     },
     "index": {

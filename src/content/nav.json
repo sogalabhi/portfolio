@@ -19,6 +19,10 @@
   ],
   "resumeLabel": "Résumé",
   "exploreLabel": "Explore",
+  "theme": {
+    "light": "Switch to light theme",
+    "dark": "Switch to dark theme"
+  },
   "miniBanner": {
     "label": "Explore my world →",
     "ariaLabel": "Visit the interactive world"

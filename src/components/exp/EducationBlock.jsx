@@ -8,7 +8,7 @@ export default function EducationBlock({ education }) {
             <span className="font-mono text-xs text-faint">{entry.period}</span>
           </div>
           <p className="mt-1 text-slate">
-            {entry.degrees.map((d) => `${d.label} — ${d.detail}`).join('  ·  ')}
+            {entry.degrees.map((d) => `${d.label}: ${d.detail}`).join('  ·  ')}
           </p>
         </div>
       ))}

@@ -1,20 +1,19 @@
 # Project collection
 
-Work shows four featured projects with a title, one result line, a short
+Work shows a featured set per role, each project with a title, one result line, a short
 description, and links. The remaining 21 projects are compact text rows behind
 the "Show 21 more" toggle. The count follows the collection automatically.
 The featured layout has two columns on desktop and one on mobile.
 
-Featured order:
+Featured sets live in `sections.json` → `work.tracks`. `?role=ai` opens the
+AI Engineer set.
 
-1. Arjun Guruji: 2,000+ downloads and a 4.9-star Google Play rating.
-2. Osdag Web: a four-person team and production deployment at IIT Bombay.
-3. OpenLake: 77% churn accuracy on a 5,042-customer dataset.
-4. Polkaflow: third of 190+ at the AssetHub Hackathon.
+- SDE: Osdag Web, SysSight, Arjun Guruji, Process Mining.
+- AI Engineer: BriefForge, RAG assistant. An AI harness in Rust is planned and
+  not listed yet.
 
-Adoption, team, and hackathon figures come from the existing experience and
-achievements content. OpenLake's benchmark is recorded in its repository README;
-it is a held-out test result, not a production business metric.
+Adoption, team and hackathon figures come from the experience and achievements
+content. The Process Mining figures come from the résumé.
 
 ## Plates: figure and media
 
@@ -41,8 +40,6 @@ Edit `src/content/projects.json`. Each entry has:
 
 - `id`: a unique, stable identifier, also used by link analytics.
 - `title` and `tagline`: the display name and a short description.
-- `featured`: keep exactly four entries marked true.
-- `featuredOrder`: the order of those four cards.
 - `result`: one short, supported outcome for each featured project.
 - `figure`: for featured projects, `{ "type", "caption", "labels" }`. `type`
   picks the drawing (`phone`, `base-plate`, `pipeline`, `flow`; see
@@ -53,7 +50,7 @@ Edit `src/content/projects.json`. Each entry has:
   `height`, `fit` (`cover` for a landscape screenshot, shown from the top;
   `contain` for a strip of phone screens), and `caption` (shown under the plate
   in the Built view).
-- `roles`: `sde`, `data` and `civil`. Shown as tags on the plates and used by
+- `roles`: `sde` and `civil`. Shown as tags on the plates and used by
   the index's filter (labels in `sections.json` → `work.roles`).
 - `order`: the order of the index and the interactive world's list; also the
   register number shown in the index.
@@ -71,10 +68,9 @@ Keep both skill lists backed by the reviewed projects or existing work experienc
 
 Reviewed only the 27 repositories named in the user's final list. Available
 READMEs were checked against representative source files. Priority is based on
-real usage, personal contribution, technical depth, and relevance to software
-and data roles, rather than the most recent repository update.
+real usage, personal contribution, technical depth, and relevance to SDE
+roles, rather than the most recent repository update.
 
-Arjun Guruji, Osdag Web, OpenLake, and Polkaflow are the featured selection.
 Domain-specific tools, research, focused proofs of concept, and smaller builds
 remain accessible through the additional-projects disclosure.
 

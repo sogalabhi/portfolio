@@ -24,8 +24,6 @@
       "sde",
       "civil"
     ],
-    "featured": true,
-    "featuredOrder": 2,
     "result": "4-person team · production deployment at IIT Bombay",
     "screenshot": {
       "src": "/projects/osdag-web.webp",
@@ -77,8 +75,6 @@
     "roles": [
       "sde"
     ],
-    "featured": true,
-    "featuredOrder": 1,
     "result": "2,000+ downloads · 4.9★ on Google Play",
     "screenshot": {
       "src": "/projects/arjun-guruji.webp",
@@ -100,7 +96,7 @@
   },
   {
     "id": "retail-lakehouse",
-    "title": "OpenLake — Retail Lakehouse",
+    "title": "OpenLake: Retail Lakehouse",
     "tagline": "Batch and streaming retail lakehouse using Spark, Airflow, Delta Lake, and dbt. Serves analytics, churn predictions, and scores back to a mock CRM.",
     "stack": [
       "Apache Spark",
@@ -121,11 +117,8 @@
     },
     "order": 3,
     "roles": [
-      "sde",
-      "data"
+      "sde"
     ],
-    "featured": true,
-    "featuredOrder": 3,
     "result": "77% churn accuracy · 5,042-customer dataset",
     "figure": {
       "type": "pipeline",
@@ -175,10 +168,23 @@
     },
     "order": 4,
     "roles": [
-      "sde",
-      "data"
+      "sde"
     ],
-    "featured": false
+    "result": "16K+ events across 2,500+ cases",
+    "figure": {
+      "type": "process",
+      "caption": "An event log in, a process map out.",
+      "labels": {
+        "log": "Event log",
+        "graph": "Directly-Follows Graph",
+        "order": "Order",
+        "payment": "Payment",
+        "packing": "Packing",
+        "shipping": "Shipping",
+        "bottleneck": "Bottleneck",
+        "rework": "Rework"
+      }
+    }
   },
   {
     "id": "mechanics-sight",
@@ -201,13 +207,12 @@
     "roles": [
       "sde",
       "civil"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "briefforge",
-    "title": "BriefForge — Packaging Artwork Review",
-    "tagline": "AI-assisted packaging review against approved product data and rulebooks. Verifies nutrition, units, and barcodes with source evidence and human review.",
+    "title": "BriefForge: Packaging Artwork Review",
+    "tagline": "AI-assisted packaging review against approved product data and rulebooks. Verifies nutrition, units, and barcodes with source evidence and human review. Built solo.",
     "stack": [
       "Python",
       "FastAPI",
@@ -223,10 +228,30 @@
     },
     "order": 6,
     "roles": [
-      "sde",
-      "data"
+      "sde"
     ],
-    "featured": false
+    "result": "2nd prize · Esko AIForge Hackathon",
+    "screenshot": {
+      "src": "/projects/briefforge.webp",
+      "alt": "BriefForge showing an unfolded granola carton marked with numbered review findings.",
+      "width": 1440,
+      "height": 810,
+      "fit": "cover",
+      "caption": "Built: the marked-up artwork."
+    },
+    "figure": {
+      "type": "review",
+      "caption": "Artwork in, a verdict with its evidence out.",
+      "labels": {
+        "artwork": "Artwork",
+        "sheet": "Content sheet",
+        "rulebook": "Rulebook",
+        "check": "Checked by code",
+        "fail": "Fail",
+        "review": "Needs review",
+        "pass": "Pass"
+      }
+    }
   },
   {
     "id": "polkaflow",
@@ -252,8 +277,6 @@
     "roles": [
       "sde"
     ],
-    "featured": true,
-    "featuredOrder": 4,
     "result": "3rd of 190+ · AssetHub Hackathon",
     "screenshot": {
       "src": "/projects/polkaflow.webp",
@@ -298,8 +321,7 @@
     "order": 8,
     "roles": [
       "sde"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "money-follows",
@@ -321,8 +343,7 @@
     "order": 9,
     "roles": [
       "sde"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "syssight",
@@ -346,7 +367,18 @@
     "roles": [
       "sde"
     ],
-    "featured": false
+    "result": "One alert per sustained spike",
+    "figure": {
+      "type": "monitor",
+      "caption": "Many hosts, one server, one alert.",
+      "labels": {
+        "agent": "Agent",
+        "server": "FastAPI",
+        "store": "TimescaleDB",
+        "alert": "Discord alert",
+        "dedup": "deduplicated"
+      }
+    }
   },
   {
     "id": "stainless-csm",
@@ -369,8 +401,7 @@
     "roles": [
       "sde",
       "civil"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "verdict-chain",
@@ -392,10 +423,8 @@
     },
     "order": 12,
     "roles": [
-      "sde",
-      "data"
-    ],
-    "featured": false
+      "sde"
+    ]
   },
   {
     "id": "isofold",
@@ -415,10 +444,8 @@
     },
     "order": 13,
     "roles": [
-      "data",
       "civil"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "rag-is-code",
@@ -441,10 +468,22 @@
     "order": 14,
     "roles": [
       "sde",
-      "data",
       "civil"
     ],
-    "featured": false
+    "result": "Keyword, semantic and hybrid search compared",
+    "figure": {
+      "type": "retrieval",
+      "caption": "A question in, a cited answer out.",
+      "labels": {
+        "question": "Question",
+        "keyword": "Keyword",
+        "semantic": "Semantic",
+        "hybrid": "Hybrid",
+        "answer": "Answer",
+        "cited": "citation checked",
+        "source": "IS 800 provisions"
+      }
+    }
   },
   {
     "id": "arjun-guruji-web",
@@ -466,8 +505,7 @@
     "order": 15,
     "roles": [
       "sde"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "slope-stability",
@@ -491,8 +529,7 @@
     "roles": [
       "sde",
       "civil"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "paladin-sdk",
@@ -513,8 +550,7 @@
     "order": 17,
     "roles": [
       "sde"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "pokiwars",
@@ -538,8 +574,7 @@
     "order": 18,
     "roles": [
       "sde"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "agentic-orchestration",
@@ -562,10 +597,8 @@
     },
     "order": 19,
     "roles": [
-      "sde",
-      "data"
-    ],
-    "featured": false
+      "sde"
+    ]
   },
   {
     "id": "eta-predictor",
@@ -585,10 +618,7 @@
       "playStore": ""
     },
     "order": 20,
-    "roles": [
-      "data"
-    ],
-    "featured": false
+    "roles": []
   },
   {
     "id": "finsight",
@@ -609,10 +639,7 @@
       "playStore": ""
     },
     "order": 21,
-    "roles": [
-      "data"
-    ],
-    "featured": false
+    "roles": []
   },
   {
     "id": "voyagehunt",
@@ -634,8 +661,7 @@
     "order": 22,
     "roles": [
       "sde"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "interactive-portfolio",
@@ -657,8 +683,7 @@
     "order": 23,
     "roles": [
       "sde"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "vehicle-pcu",
@@ -679,10 +704,8 @@
     },
     "order": 24,
     "roles": [
-      "data",
       "civil"
-    ],
-    "featured": false
+    ]
   },
   {
     "id": "genkisportz-links",
@@ -704,7 +727,6 @@
     "order": 25,
     "roles": [
       "sde"
-    ],
-    "featured": false
+    ]
   }
 ]

@@ -8,7 +8,7 @@ import sections from '../../content/sections.json'
 // a rule. `id` is the section's key in sections.json.
 export default function SectionHeader({ id, as: Heading = 'h2' }) {
   const s = sections[id]
-  const ref = [s.tag, s.zoneName].filter(Boolean).join(' — ')
+  const ref = [s.tag, s.zoneName].filter(Boolean).join(': ')
 
   return (
     <header data-section-header className="border-b border-ink/25 pb-4">

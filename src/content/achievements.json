@@ -1,11 +1,31 @@
 {
-  "summary": "Two third-place finishes and an ETHGlobal selection.",
+  "summary": "A second prize, two third-place finishes and an ETHGlobal selection.",
   "hackathons": [
+    {
+      "event": "Esko AIForge Hackathon",
+      "date": "2026",
+      "result": "2nd prize",
+      "project": "BriefForge: AI-assisted print-readiness check for packaging artwork",
+      "oneLiner": "Checks finished artwork against approved product information and a rulebook, then sorts each result into fail, needs review or pass, with the evidence shown.",
+      "myRole": "Solo; built the whole project",
+      "stack": [
+        "Python",
+        "FastAPI",
+        "React",
+        "TypeScript",
+        "Gemini"
+      ],
+      "links": {
+        "github": "https://github.com/sogalabhi/esko",
+        "devpost": "",
+        "demo": ""
+      }
+    },
     {
       "event": "AssetHub Hackathon, Goa 2025",
       "date": "2025",
       "result": "3rd of 190+",
-      "project": "Polkaflow — visual blockchain workflow builder for Polkadot",
+      "project": "Polkaflow: visual blockchain workflow builder for Polkadot",
       "oneLiner": "Drag-and-drop flowchart to deployed smart contract, with AI code-gen, a hand-built logic engine, and automatic Solidity-to-Rust optimization for gas-heavy functions.",
       "myRole": "",
       "stack": [
@@ -25,9 +45,9 @@
       "event": "Polkadot Builder House, Bengaluru",
       "date": "2025-12",
       "result": "3rd place",
-      "project": "Polar Bridge — cross-chain lending, INR collateral to PAS tokens",
-      "oneLiner": "A fiat-to-Polkadot on-ramp — pay by UPI, borrow PAS tokens against INR collateral, no crypto knowledge needed.",
-      "myRole": "Web3 developer, 2-person team — built the smart contracts and the relayer service handling cross-chain event synchronization between the Stellar vault and the Paseo Asset Hub pool",
+      "project": "Polar Bridge: cross-chain lending, INR collateral to PAS tokens",
+      "oneLiner": "A fiat-to-Polkadot on-ramp: pay by UPI, borrow PAS tokens against INR collateral, no crypto knowledge needed.",
+      "myRole": "Web3 developer, 2-person team; built the smart contracts and the relayer service handling cross-chain event synchronization between the Stellar vault and the Paseo Asset Hub pool",
       "stack": [
         "React",
         "Node.js",
@@ -46,7 +66,7 @@
       "event": "ETHGlobal New Delhi",
       "date": "2025-09",
       "result": "Selected for ETHGlobal",
-      "project": "PokeWars — multiplayer Pokémon shooting game with Web3 rewards on Polygon",
+      "project": "PokeWars: multiplayer Pokémon shooting game with Web3 rewards on Polygon",
       "oneLiner": "Wallet-authenticated multiplayer combat in Phaser, with NFT-owned Pokémon and daily on-chain rewards via the X402 protocol.",
       "myRole": "",
       "stack": [

@@ -1,6 +1,6 @@
 import { Drawing } from './Drawing'
 
-// Fig. 4, Polkaflow: the flowchart on the left - the four node types in the
+// Fig. 5, Polkaflow: the flowchart on the left - the four node types in the
 // real canvas (Trigger, Logic, Wallet, Contract) - generates the contract on
 // the right. The code is drawn as bars, not text: there's no real code here to
 // show. Moving parts (figures.css): a cursor drags the last node into place,

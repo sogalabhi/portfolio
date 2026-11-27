@@ -9,6 +9,9 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [active, setActive] = useState('')
+  // the hero already shows the name in large type: the nav only carries it
+  // once that heading has scrolled out of view
+  const [heroNameVisible, setHeroNameVisible] = useState(true)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80)
@@ -36,6 +39,20 @@ export default function Nav() {
   }, [])
 
   useEffect(() => {
+    const heading = document.querySelector('#hero h1')
+    if (!heading) {
+      setHeroNameVisible(false)
+      return undefined
+    }
+    const observer = new IntersectionObserver(([entry]) => setHeroNameVisible(entry.isIntersecting), {
+      // count the strip under the fixed nav as out of view
+      rootMargin: '-72px 0px 0px 0px',
+    })
+    observer.observe(heading)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
@@ -49,7 +66,14 @@ export default function Nav() {
       }`}
     >
       <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4 md:px-10">
-        <a href="#" className="font-display text-lg font-semibold text-ink">
+        <a
+          href="#"
+          aria-hidden={heroNameVisible && !menuOpen ? true : undefined}
+          tabIndex={heroNameVisible && !menuOpen ? -1 : undefined}
+          className={`font-display text-lg font-semibold text-ink transition-opacity duration-200 ${
+            heroNameVisible && !menuOpen ? 'pointer-events-none opacity-0' : 'opacity-100'
+          }`}
+        >
           {profile.name}
         </a>
 

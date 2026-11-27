@@ -4,13 +4,15 @@ import { track } from '@vercel/analytics'
 import useReducedMotion from '../../hooks/useReducedMotion'
 import content from '../../content/site-plan.json'
 
-// The hero's drawing: a construction site in isometric, drawn in line, with
-// one pixel figure walking it, the site engineer (public/world/sprites/
-// engineer.png, made by assets/pixel/engineer.mjs). Each labelled structure
-// is a section of the page. Until he has walked over and inspected it, a
-// structure is only its dashed footprint, the way a drawing shows something
-// proposed; once inspected it is drawn as built. Pointing at a label sends him
-// there.
+// The hero's drawing: a system architecture drawn as a site layout, in
+// isometric line. Each part of the system is a structure that stands for it
+// (compute is a build shed, databases are silos, containers are shipping
+// containers stacked in a yard and moved by a crane, the API gateway is the
+// site gate), each is a section of the page, and the roads between them carry
+// requests. One pixel figure walks it: the engineer (public/world/sprites/
+// engineer.png, from assets/pixel/engineer.mjs). A part is only its dashed
+// footprint, designed, until he walks over and deploys it; traffic flows
+// between two parts once both are deployed. Pointing at a label sends him there.
 //
 // Everything is placed in site units on the ground (x right-back, y left-back,
 // z up) and projected with P(); the SVG's viewBox is in screen units.
@@ -31,10 +33,16 @@ const pt = (p) => {
 const poly = (...ps) => `M${ps.map(pt).join('L')}Z`
 const seg = (a, b) => `M${pt(a)}L${pt(b)}`
 const lines = (pairs) => pairs.map(([a, b]) => seg(a, b)).join('')
-// a circle lying on the ground, as an isometric ellipse
-const groundEllipse = (x, y, r) => {
-  const [cx, cy] = P(x, y)
+const polyline = (ps) => `M${ps.map(pt).join('L')}`
+// a circle lying flat at height z, as an isometric ellipse
+const flatEllipse = (x, y, r, z = 0) => {
+  const [cx, cy] = P(x, y, z)
   return { cx, cy, rx: r * K * Math.SQRT2 * COS, ry: r * K * Math.SQRT1_2 }
+}
+// text lying on a wall that runs along x (the left-hand faces)
+const onLeftFace = (x, y, z) => {
+  const [sx, sy] = P(x, y, z)
+  return `matrix(${COS.toFixed(3)} 0.5 0 1 ${f(sx)} ${f(sy)})`
 }
 
 const SITE = { x2: 100, y2: 70 }
@@ -42,41 +50,54 @@ const GATE = [46, 54] // the opening in the front fence, along x
 const HUB = [50, 40]
 const ROAD = 4.4
 
-// where he walks: each route leaves the hub and ends where he stands to inspect
+// where he walks: each route leaves the hub and ends where he stands to deploy
 const ROUTES = {
   shed: [HUB, [42, 40], [42, 19]],
-  crane: [HUB, [50, 17]],
+  office: [HUB, [50, 21.5]],
   bridge: [HUB, [70, 40], [70, 20], [85, 20]],
-  office: [HUB, [70, 40], [70, 47.5]],
+  silos: [HUB, [70, 40], [70, 49]],
   yard: [HUB, [40, 40], [40, 54], [36, 54]],
   gate: [HUB, [50, 68]],
 }
-// the roads he walks on (the bridge route ends on the bridge, past the road)
+// the roads (the bridge route ends on the bridge, past the end of its road)
 const ROADS = { ...ROUTES, bridge: [HUB, [70, 40], [70, 20], [80, 20]] }
 
-const TOUR = ['shed', 'crane', 'bridge', 'office', 'gate', 'yard']
-// what is already up when the page opens; the rest goes up as he walks
-const BUILT_AT_START = ['gate', 'office', 'yard']
-const WALK_SPEED = 12 // site units per second
+// requests moving between parts, along the roads; a flow runs once both of
+// its ends are deployed
+const FLOWS = [
+  { from: 'gate', to: 'office', path: [[50, 68], HUB, [50, 21.5]], dots: 1 },
+  { from: 'gate', to: 'shed', path: [[50, 68], HUB, [42, 40], [42, 19]], dots: 3 },
+  { from: 'shed', to: 'silos', path: [[42, 19], [42, 40], [70, 40], [70, 49]], dots: 2 },
+  { from: 'silos', to: 'gate', path: [[70, 49], [70, 40], HUB, [50, 68]], dots: 2 },
+  { from: 'yard', to: 'shed', path: [[36, 54], [40, 54], [40, 40], [42, 40], [42, 19]], dots: 1 },
+  { from: 'shed', to: 'office', path: [[42, 19], [42, 40], HUB, [50, 21.5]], dots: 1 },
+  { from: 'shed', to: 'bridge', path: [[42, 19], [42, 40], [70, 40], [70, 20], [SITE.x2, 20]], dots: 2 },
+]
+const FLOW_SPEED = 13 // site units per second
+
+const TOUR = ['shed', 'office', 'bridge', 'silos', 'gate', 'yard']
+// what is already running when the page opens; the rest he deploys as he walks
+const BUILT_AT_START = ['gate', 'yard', 'office']
+const WALK_SPEED = 12
 const DWELL_MS = 1500
 const WALK_FPS = 7
 const DIRECTIONS = ['down', 'left', 'right', 'up'] // row order in engineer.png
 
-// the point each label's leader line runs to
+// the point each label's leader line runs to once the part is deployed
 const ANCHOR = {
   shed: [8, 26, 10],
-  crane: [46, 14, 31],
-  office: [70, 55.5, 6],
+  silos: [64, 57.4, 8],
   bridge: [85, 22, 1.6],
-  yard: [21, 64, 0],
+  yard: [9, 61.4, 2.6],
+  office: [46, 19, 6],
   gate: [46.6, 69.8, 3],
 }
 // where each label sits, in screen units; `anchor` is the side touching `at`
 const LABEL_AT = {
-  shed: { at: [250, 210], anchor: 'right' },
-  crane: { at: [840, 120], anchor: 'left' },
-  office: { at: [790, 860], anchor: 'left' },
+  shed: { at: [400, 150], anchor: 'right' },
+  office: { at: [880, 160], anchor: 'left' },
   bridge: { at: [1080, 700], anchor: 'left' },
+  silos: { at: [790, 860], anchor: 'left' },
   yard: { at: [230, 760], anchor: 'right' },
   gate: { at: [500, 860], anchor: 'right' },
 }
@@ -113,7 +134,26 @@ function roadStrips(route, width) {
   })
 }
 
-// --- the site, in the order it is painted: ground first, then back to front ---------
+// the point `d` along a route, and the direction of travel there
+function alongPath(route, d) {
+  let left = d
+  for (let i = 1; i < route.length; i++) {
+    const [ax, ay] = route[i - 1]
+    const [bx, by] = route[i]
+    const len = Math.hypot(bx - ax, by - ay)
+    if (left <= len || i === route.length - 1) {
+      const t = len ? Math.min(1, left / len) : 1
+      return { x: ax + (bx - ax) * t, y: ay + (by - ay) * t, dx: bx - ax, dy: by - ay }
+    }
+    left -= len
+  }
+  return { x: route[0][0], y: route[0][1], dx: 0, dy: 0 }
+}
+
+const routeLength = (route) =>
+  route.slice(1).reduce((s, b, i) => s + Math.hypot(b[0] - route[i][0], b[1] - route[i][1]), 0)
+
+// --- the ground: fence, roads, drain ------------------------------------------------
 
 function Ground() {
   // the boundary fence, with the gate gap in the front edge
@@ -139,8 +179,8 @@ function Ground() {
   }
   const strips = Object.values(ROADS).flatMap((r) => roadStrips(r, ROAD))
   const outline = Object.values(ROADS).flatMap((r) => roadStrips(r, ROAD + 0.5))
-  const hub = groundEllipse(...HUB, 4.6)
-  const hubOutline = groundEllipse(...HUB, 4.85)
+  const hub = flatEllipse(...HUB, 4.6)
+  const hubOutline = flatEllipse(...HUB, 4.85)
 
   return (
     <g>
@@ -163,37 +203,32 @@ function Ground() {
         ))}
         <ellipse {...hub} />
       </g>
-      <g data-hair className="text-clay" fill="none" stroke="currentColor" opacity="0.6" strokeDasharray="9 4 2 4">
+      <g data-hair fill="none" stroke="currentColor" opacity="0.35" strokeDasharray="9 4 2 4">
         {Object.values(ROADS).map((r, i) => (
-          <path key={i} d={r.slice(1).map((b, j) => seg(r[j], b)).join('')} />
+          <path key={i} d={polyline(r)} />
         ))}
       </g>
-      {/* phase two: the road beyond the bridge, not built yet */}
+      {/* beyond the bridge: the outside world, past the edge of the site */}
       <path
         data-hair
-        d={seg([90, 20], [SITE.x2, 20])}
+        d={seg([90, 20], [SITE.x2 + 6, 20])}
         fill="none"
         stroke="currentColor"
         opacity="0.45"
         strokeDasharray="4 4"
       />
 
-      {/* the drain: two banks, the water between them marked */}
+      {/* the drain: two banks, the water between them */}
       <g data-hair fill="none" stroke="currentColor">
         <path d={seg([82, 0], [82, SITE.y2]) + seg([88, 0], [88, SITE.y2])} opacity="0.7" />
         <path d={seg([82.8, 0], [82.8, SITE.y2]) + seg([87.2, 0], [87.2, SITE.y2])} opacity="0.3" />
         <path d={poly([82.8, 0], [87.2, 0], [87.2, SITE.y2], [82.8, SITE.y2])} fill="url(#iso-water)" stroke="none" />
-        <path
-          d={Array.from({ length: 13 }, (_, i) => seg([84, 3 + i * 5.2], [86, 4.4 + i * 5.2])).join('')}
-          className="text-clay"
-          opacity="0.6"
-        />
       </g>
     </g>
   )
 }
 
-// a crossfade between the proposed footprint and the built structure, which
+// a crossfade between the designed footprint and the deployed structure, which
 // rises a little into place
 function Stage({ built, proposed, children }) {
   return (
@@ -224,7 +259,9 @@ function Stage({ built, proposed, children }) {
   )
 }
 
-// A: a steel portal-frame shed, the frame up and the cladding not yet on
+// --- the parts of the system ------------------------------------------------------
+
+// Work, compute: a steel portal-frame shed, where things get built
 const SHED = { x1: 8, x2: 38, y1: 6, y2: 26, ym: 16, eave: 10, apex: 13 }
 const SHED_GRID = [8, 15.5, 23, 30.5, 38]
 function Shed({ built }) {
@@ -240,21 +277,20 @@ function Shed({ built }) {
     [[x1, y1, eave], [x2, y1, eave]],
     [[x1, y2, eave], [x2, y2, eave]],
     [[x1, ym, apex], [x2, ym, apex]],
-    // purlins halfway up each slope
     [[x1, (y1 + ym) / 2, (eave + apex) / 2], [x2, (y1 + ym) / 2, (eave + apex) / 2]],
     [[x1, (ym + y2) / 2, (eave + apex) / 2], [x2, (ym + y2) / 2, (eave + apex) / 2]],
   ]
-  // cross-bracing in the two end bays of the near wall
   const bracing = [
     [[x1, y2], [SHED_GRID[1], y2, eave]],
     [[SHED_GRID[1], y2], [x1, y2, eave]],
     [[SHED_GRID[3], y2], [x2, y2, eave]],
     [[x2, y2], [SHED_GRID[3], y2, eave]],
   ]
+  // server racks inside, one per bay
+  const racks = SHED_GRID.slice(0, -1).map((x) => ({ x: x + 2.2, y: 12, w: 3, d: 2, h: 3.4 }))
 
   return (
     <g>
-      {/* the grid is part of the design, so it shows either way */}
       <g data-hair fill="none" stroke="currentColor" opacity="0.45" strokeDasharray="12 3 2 3">
         <path d={gridlines} />
       </g>
@@ -273,6 +309,12 @@ function Shed({ built }) {
       </g>
       <Stage built={built} proposed={<path d={footprint} />}>
         <path d={footprint} opacity="0.6" />
+        {racks.map((r, i) => (
+          <g key={i} opacity="0.85">
+            <Box {...r} shade />
+            <path d={[0.9, 1.8, 2.7].map((z) => seg([r.x, r.y + r.d, z], [r.x + r.w, r.y + r.d, z])).join('')} opacity="0.6" />
+          </g>
+        ))}
         <path d={lines(frame)} strokeWidth="1.6" data-heavy />
         <path d={lines(runs)} />
         <path d={lines(bracing)} opacity="0.6" />
@@ -281,10 +323,131 @@ function Shed({ built }) {
   )
 }
 
-// E: a tower crane, its swing radius marked on the ground
-function Crane({ built }) {
-  const [mx, my] = [45, 13]
-  const top = 30
+// About, the control plane: stacked site cabins with a monitoring dish
+function Office({ built }) {
+  const pane = (x, y, z) => poly([x, y, z], [x + 2, y, z], [x + 2, y, z + 1.2], [x, y, z + 1.2])
+  const [dx, dy] = P(57, 10.5, 10.6)
+  return (
+    <Stage built={built} proposed={<path d={poly([46, 8], [60, 8], [60, 19], [46, 19])} />}>
+      <Box x={46} y={8} w={14} d={5} h={3} shade />
+      <Box x={46} y={8} z={3} w={14} d={5} h={3} shade />
+      <Box x={46} y={14} w={14} d={5} h={3} shade />
+      <path
+        d={[48, 52, 56].map((x) => pane(x, 19, 1.1)).join('') + [48, 52, 56].map((x) => pane(x, 13, 4.1)).join('')}
+        opacity="0.7"
+      />
+      {/* the mast and its dish */}
+      <path d={seg([57, 10.5, 6], [57, 10.5, 10])} />
+      <ellipse cx={dx} cy={dy} rx="11" ry="6" transform={`rotate(-25 ${f(dx)} ${f(dy)})`} fill="var(--color-paper)" />
+      <path d={`M${f(dx)} ${f(dy)}l7 -9`} />
+    </Stage>
+  )
+}
+
+// Experience, databases: a primary and two replicas, as silos
+const SILOS = [
+  [64, 55],
+  [70, 55],
+  [76, 55],
+]
+const SILO_R = 2.4
+const SILO_H = 8
+function Silo({ x, y }) {
+  const base = flatEllipse(x, y, SILO_R)
+  const top = flatEllipse(x, y, SILO_R, SILO_H)
+  const left = f(base.cx - base.rx)
+  const right = f(base.cx + base.rx)
+  // the bands across the front, the way a database symbol is drawn
+  const band = (z) => {
+    const yy = f(base.cy - z * K)
+    return `M${left} ${yy}A${f(base.rx)} ${f(base.ry)} 0 0 0 ${right} ${yy}`
+  }
+  return (
+    <g>
+      <path
+        d={`M${left} ${f(top.cy)}L${left} ${f(base.cy)}A${f(base.rx)} ${f(base.ry)} 0 0 0 ${right} ${f(base.cy)}L${right} ${f(top.cy)}Z`}
+        fill="var(--color-paper)"
+      />
+      <path d={band(SILO_H / 3) + band((SILO_H * 2) / 3)} opacity="0.7" />
+      <ellipse {...top} fill="var(--color-paper)" />
+    </g>
+  )
+}
+function Silos({ built }) {
+  const tops = SILOS.map(([x, y]) => P(x, y, SILO_H + 1.2))
+  return (
+    <Stage
+      built={built}
+      proposed={SILOS.map(([x, y]) => (
+        <ellipse key={x} {...flatEllipse(x, y, SILO_R)} />
+      ))}
+    >
+      {SILOS.map(([x, y]) => (
+        <Silo key={x} x={x} y={y} />
+      ))}
+      {/* replication, primary to each replica */}
+      <path
+        d={`M${f(tops[0][0])} ${f(tops[0][1])}Q${f((tops[0][0] + tops[1][0]) / 2)} ${f(tops[0][1] - 22)} ${f(tops[1][0])} ${f(tops[1][1])}M${f(tops[0][0])} ${f(tops[0][1])}Q${f((tops[0][0] + tops[2][0]) / 2)} ${f(tops[0][1] - 40)} ${f(tops[2][0])} ${f(tops[2][1])}`}
+        className="text-clay"
+        stroke="currentColor"
+        strokeDasharray="3 3"
+        opacity="0.8"
+      />
+    </Stage>
+  )
+}
+
+// Skills: a container yard, each container stencilled with something I use,
+// and a crane, the orchestrator, lowering one more into place
+const CONTAINER = { w: 8, d: 2.4, h: 2.6 }
+const COLS = [9, 17.5, 26]
+const STACK = [
+  { x: COLS[0], y: 45.5, z: 0 },
+  { x: COLS[1], y: 45.5, z: 0 },
+  { x: COLS[2], y: 45.5, z: 0 },
+  { x: COLS[0], y: 45.5, z: 2.6 },
+  { x: COLS[1], y: 45.5, z: 2.6, tag: 'Spring' },
+  { x: COLS[0], y: 50, z: 0 },
+  { x: COLS[2], y: 50, z: 0 },
+  { x: COLS[2], y: 50, z: 2.6, tag: 'FastAPI' },
+  { x: COLS[0], y: 54.5, z: 0 },
+  { x: COLS[1], y: 54.5, z: 0 },
+  { x: COLS[2], y: 54.5, z: 0 },
+  { x: COLS[0], y: 54.5, z: 2.6, tag: 'Flutter' },
+  { x: COLS[0], y: 59, z: 0, tag: 'React' },
+  { x: COLS[1], y: 59, z: 0, tag: 'Django' },
+  { x: COLS[2], y: 59, z: 0, tag: 'Postgres' },
+]
+const HANGING = { x: COLS[1], y: 50, z: 7.5, tag: 'Docker' }
+function Container({ x, y, z, tag }) {
+  const { w, d, h } = CONTAINER
+  // corrugations down the long side, the door seam on the end
+  const ribs = []
+  for (let i = 0.75; i < w; i += 0.75) ribs.push([[x + i, y + d, z + 0.15], [x + i, y + d, z + h - 0.15]])
+  return (
+    <g>
+      <Box x={x} y={y} z={z} w={w} d={d} h={h} />
+      <path d={lines(ribs)} opacity="0.25" />
+      <path d={seg([x + w, y + d / 2, z], [x + w, y + d / 2, z + h])} opacity="0.6" />
+      {tag && (
+        <text
+          transform={onLeftFace(x + 0.6, y + d, z + 0.85)}
+          className="font-mono"
+          fontSize="12.5"
+          fill="currentColor"
+          stroke="var(--color-paper)"
+          strokeWidth="3"
+          paintOrder="stroke"
+        >
+          {tag}
+        </text>
+      )}
+    </g>
+  )
+}
+function Crane() {
+  const [mx, my] = [36, 46.5]
+  const top = 22
   const legs = [
     [mx, my],
     [mx + 2, my],
@@ -292,102 +455,59 @@ function Crane({ built }) {
     [mx, my + 2],
   ]
   const lattice = []
-  for (let z = 0, i = 0; z < top; z += 2.5, i++) {
-    const z2 = Math.min(top, z + 2.5)
-    // zigzag up the two faces the viewer sees
+  for (let z = 0, i = 0; z < top; z += 2.2, i++) {
+    const z2 = Math.min(top, z + 2.2)
     lattice.push(i % 2 ? [[mx, my + 2, z], [mx + 2, my + 2, z2]] : [[mx + 2, my + 2, z], [mx, my + 2, z2]])
     lattice.push(i % 2 ? [[mx + 2, my, z], [mx + 2, my + 2, z2]] : [[mx + 2, my + 2, z], [mx + 2, my, z2]])
   }
+  const cy = my + 1
   const jib = [
-    [[mx + 1, my + 1, top], [15, my + 1, top]],
-    [[mx + 1, my + 1, top + 4], [15, my + 1, top]],
-    [[mx + 1, my + 1, top + 4], [mx + 10, my + 1, top]],
-    [[mx + 2, my + 1, top], [mx + 10, my + 1, top]],
-    [[mx + 1, my + 1, top], [mx + 1, my + 1, top + 4]],
+    [[mx + 1, cy, top], [8, cy, top]],
+    [[mx + 1, cy, top + 3.5], [8, cy, top]],
+    [[mx + 1, cy, top + 3.5], [mx + 8, cy, top]],
+    [[mx + 2, cy, top], [mx + 8, cy, top]],
+    [[mx + 1, cy, top], [mx + 1, cy, top + 3.5]],
   ]
-  const jibTruss = []
-  for (let x = 17; x < mx; x += 3) jibTruss.push([[x, my + 1, top], [x + 1.5, my + 1, top + ((x + 1.5 - 15) / (mx + 1 - 15)) * 4]])
-  const swing = groundEllipse(mx + 1, my + 1, 31)
-
+  const truss = []
+  for (let x = 10; x < mx; x += 3) truss.push([[x, cy, top], [x + 1.5, cy, top + ((x + 1.5 - 8) / (mx + 1 - 8)) * 3.5]])
+  const hookX = HANGING.x + CONTAINER.w / 2
+  const hookTop = HANGING.z + CONTAINER.h
   return (
     <g>
-      <ellipse {...swing} data-hair fill="none" stroke="currentColor" strokeDasharray="3 5" opacity="0.4" />
-      <Stage built={built} proposed={<path d={poly([mx - 1, my - 1], [mx + 3, my - 1], [mx + 3, my + 3], [mx - 1, my + 3])} />}>
-        <Box x={mx - 1} y={my - 1} w={4} d={4} h={0.8} />
-        <path d={lines(legs.map(([x, y]) => [[x, y, 0.8], [x, y, top]]))} strokeWidth="1.4" data-heavy />
-        <path d={lines(lattice)} opacity="0.6" />
-        <path d={lines(jib)} strokeWidth="1.3" />
-        <path d={lines(jibTruss)} opacity="0.5" />
-        <Box x={mx + 7} y={my + 0.2} z={top - 1.6} w={3} d={1.6} h={1.6} shade />
-        <Box x={mx - 0.4} y={my - 0.4} z={top - 3} w={2.8} d={2.8} h={2.6} />
-        {/* the trolley and its hook */}
-        <path d={seg([26, my + 1, top], [26, my + 1, 17]) + seg([25.4, my + 1, 17], [26.6, my + 1, 17])} opacity="0.8" />
-      </Stage>
+      <Box x={mx - 0.8} y={my - 0.8} w={3.6} d={3.6} h={0.8} />
+      <path d={lines(legs.map(([x, y]) => [[x, y, 0.8], [x, y, top]]))} strokeWidth="1.4" data-heavy />
+      <path d={lines(lattice)} opacity="0.6" />
+      <path d={lines(jib)} strokeWidth="1.3" />
+      <path d={lines(truss)} opacity="0.5" />
+      <Box x={mx + 5.5} y={my + 0.2} z={top - 1.6} w={2.6} d={1.6} h={1.6} shade />
+      <Box x={mx - 0.3} y={my - 0.3} z={top - 2.8} w={2.6} d={2.6} h={2.4} />
+      {/* the trolley, its cable and the container on the hook */}
+      <path d={seg([hookX, cy, top], [hookX, cy, hookTop + 1.2])} opacity="0.8" />
+      <path
+        d={seg([hookX, cy, hookTop + 1.2], [HANGING.x + 0.3, HANGING.y + 1.2, hookTop]) + seg([hookX, cy, hookTop + 1.2], [HANGING.x + CONTAINER.w - 0.3, HANGING.y + 1.2, hookTop])}
+        opacity="0.6"
+      />
     </g>
   )
 }
-
-// B: site office, three cabins, one stacked, with a stair up the end
-function Office({ built }) {
-  const pane = (x, y, z) => poly([x, y, z], [x + 2, y, z], [x + 2, y, z + 1.2], [x, y, z + 1.2])
-  return (
-    <Stage built={built} proposed={<path d={poly([62, 50], [78, 50], [78, 61], [62, 61])} />}>
-      <Box x={62} y={50} w={16} d={5} h={3} shade />
-      <Box x={62} y={50} z={3} w={16} d={5} h={3} shade />
-      <Box x={62} y={56} w={16} d={5} h={3} shade />
-      <path
-        d={[64, 68, 72].map((x) => pane(x, 61, 1.1)).join('') + [64, 68, 72].map((x) => pane(x, 55, 4.1)).join('')}
-        opacity="0.7"
-      />
-      <path d={seg([78.4, 49, 0], [78.4, 52.5, 3]) + seg([79.4, 49, 0], [79.4, 52.5, 3])} opacity="0.8" />
-    </Stage>
-  )
-}
-
-// D: materials yard, steel stacked on bearers, two heaps of aggregate, rebar
 function Yard({ built }) {
-  const fence = poly([8, 44], [34, 44], [34, 64], [8, 64])
-  const beams = []
-  for (let row = 0; row < 2; row++) {
-    for (let layer = 0; layer < 3; layer++) {
-      for (let k = 0; k < 3 - layer; k++) {
-        beams.push({ x: 11, y: 46.5 + row * 5 + k * 1.1 + layer * 0.55, z: layer * 0.7, w: 15, d: 0.8, h: 0.6 })
-      }
-    }
-  }
-  const heap = (x, y, r, h) => {
-    const e = groundEllipse(x, y, r)
-    const [ax, ay] = P(x, y, h)
-    return (
-      <g key={`${x}-${y}`}>
-        <path
-          d={`M${f(e.cx - e.rx)} ${f(e.cy)}Q${f(ax - e.rx * 0.35)} ${f(ay)} ${f(ax)} ${f(ay)}Q${f(ax + e.rx * 0.35)} ${f(ay)} ${f(e.cx + e.rx)} ${f(e.cy)}A${f(e.rx)} ${f(e.ry)} 0 0 1 ${f(e.cx - e.rx)} ${f(e.cy)}Z`}
-          fill="var(--color-paper)"
-        />
-        <path d={`M${f(ax - 6)} ${f(ay + 14)}h3M${f(ax + 4)} ${f(ay + 20)}h3M${f(ax - 2)} ${f(ay + 26)}h3`} opacity="0.6" />
-      </g>
-    )
-  }
-  const rebar = []
-  for (let i = 0; i < 5; i++) rebar.push([[11, 60 + i * 0.35, 0.3], [24, 60 + i * 0.35, 0.3]])
-  rebar.push([[14, 59.8, 0.3], [14, 61.6, 0.3]], [[21, 59.8, 0.3], [21, 61.6, 0.3]])
-
+  const fence = poly([7.5, 44], [34.5, 44], [34.5, 63], [7.5, 63])
+  const ordered = [...STACK].sort((a, b) => a.y - b.y || a.z - b.z || a.x - b.x)
   return (
     <g>
       <path d={fence} data-hair fill="none" stroke="currentColor" strokeDasharray="2 3" opacity="0.6" />
-      <Stage built={built} proposed={<path d={poly([11, 46], [26, 46], [26, 62], [11, 62])} />}>
-        {beams.map((b, i) => (
-          <Box key={i} {...b} />
+      <Stage built={built} proposed={<path d={poly([9, 45.5], [34, 45.5], [34, 61.4], [9, 61.4])} />}>
+        {ordered.map((c) => (
+          <Container key={`${c.x}-${c.y}-${c.z}`} {...c} />
         ))}
-        {heap(30, 49, 3, 3.2)}
-        {heap(29.5, 58.5, 3.6, 3.8)}
-        <path d={lines(rebar)} opacity="0.85" />
+        <Container {...HANGING} />
+        <Crane />
       </Stage>
     </g>
   )
 }
 
-// C: a footbridge over the drain
+// Hackathons, integration: a bridge, out over the drain to the world outside
 function Bridge({ built }) {
   const posts = []
   for (let x = 80.5; x <= 89.6; x += 2.25) posts.push([[x, 18, 0.9], [x, 18, 1.9]], [[x, 22, 0.9], [x, 22, 1.9]])
@@ -402,7 +522,7 @@ function Bridge({ built }) {
   )
 }
 
-// F: the site gate, its leaves swung open, and the security cabin
+// Contact, the API gateway: the site gate, with its gatehouse
 function Gate({ built }) {
   const leaf = (x) =>
     poly([x, SITE.y2, 0.3], [x, SITE.y2 - 3.4, 0.3], [x, SITE.y2 - 3.4, 2.4], [x, SITE.y2, 2.4]) +
@@ -420,12 +540,12 @@ function Gate({ built }) {
 const TREES = [
   [4, 36],
   [4, 28],
+  [70, 5],
+  [76, 4],
   [93, 8],
   [95, 34],
   [94, 50],
   [96, 62],
-  [60, 5],
-  [66, 4],
   [4, 68],
 ]
 function Tree({ x, y }) {
@@ -439,10 +559,45 @@ function Tree({ x, y }) {
   )
 }
 
+// requests in flight: dots riding the road centrelines between two deployed parts
+function Traffic({ built, reduced }) {
+  return (
+    <g className="text-clay" fill="currentColor">
+      {FLOWS.filter((flow) => built[flow.from] && built[flow.to]).map((flow) => {
+        const d = polyline(flow.path)
+        const dur = routeLength(flow.path) / FLOW_SPEED
+        return (
+          <g key={`${flow.from}-${flow.to}`}>
+            <path d={d} fill="none" stroke="currentColor" strokeWidth="1" opacity="0.35" data-hair />
+            {Array.from({ length: flow.dots }, (_, i) => {
+              if (reduced) {
+                // still: the packets drawn where they are, part way along
+                const at = alongPath(flow.path, ((i + 0.5) / flow.dots) * routeLength(flow.path))
+                const [sx, sy] = P(at.x, at.y)
+                return <rect key={i} x={f(sx - 3)} y={f(sy - 3)} width="6" height="6" />
+              }
+              return (
+                <rect key={i} x="-3" y="-3" width="6" height="6">
+                  <animateMotion
+                    dur={`${dur.toFixed(2)}s`}
+                    begin={`${(-(i * dur) / flow.dots).toFixed(2)}s`}
+                    repeatCount="indefinite"
+                    path={d}
+                  />
+                </rect>
+              )
+            })}
+          </g>
+        )
+      })}
+    </g>
+  )
+}
+
 function Notes() {
+  const key = content.key
   return (
     <g className="text-ink" fill="currentColor">
-      {/* north point */}
       <g transform="translate(1196 96)" stroke="currentColor" fill="none" data-hair>
         <circle r="22" opacity="0.5" />
         <path d="M0 -30L7 8L0 2L-7 8Z" fill="currentColor" stroke="none" transform="rotate(-60)" />
@@ -450,14 +605,36 @@ function Notes() {
           {content.north}
         </text>
       </g>
-      <text x="40" y="872" className="font-mono max-sm:hidden" fontSize="15" opacity="0.7">
-        {content.view}
-      </text>
+
+      {/* the key to the drawing */}
+      <g className="max-sm:hidden" fontSize="15" transform="translate(40 52)">
+        <text className="font-mono" opacity="0.7">
+          {content.view}
+        </text>
+        <g transform="translate(0 28)">
+          <rect x="0" y="-9" width="7" height="7" className="text-clay" fill="currentColor" />
+          <text x="18" opacity="0.8">
+            {key.request}
+          </text>
+        </g>
+        <g transform="translate(0 52)" data-hair stroke="currentColor" fill="none">
+          <path d="M0 -5h12" strokeDasharray="4 3" />
+          <text x="18" fill="currentColor" stroke="none" opacity="0.8">
+            {key.designed}
+          </text>
+        </g>
+        <g transform="translate(0 76)" data-hair stroke="currentColor" fill="none">
+          <path d="M0 -5h12" />
+          <text x="18" fill="currentColor" stroke="none" opacity="0.8">
+            {key.deployed}
+          </text>
+        </g>
+      </g>
     </g>
   )
 }
 
-function Drawing({ built }) {
+function Drawing({ built, reduced }) {
   const near = ([x, y]) => x + y >= 60
   return (
     <svg
@@ -474,18 +651,19 @@ function Drawing({ built }) {
         </pattern>
       </defs>
       <Ground />
+      <Traffic built={built} reduced={reduced} />
       {/* back to front, so nearer things cover farther ones */}
       {TREES.filter((t) => !near(t)).map(([x, y]) => (
         <Tree key={`${x}-${y}`} x={x} y={y} />
       ))}
       <Shed built={built.shed} />
-      <Crane built={built.crane} />
+      <Office built={built.office} />
       {TREES.filter(near).map(([x, y]) => (
         <Tree key={`${x}-${y}`} x={x} y={y} />
       ))}
       <Yard built={built.yard} />
       <Bridge built={built.bridge} />
-      <Office built={built.office} />
+      <Silos built={built.silos} />
       <Gate built={built.gate} />
       <Notes />
     </svg>
@@ -494,25 +672,7 @@ function Drawing({ built }) {
 
 // --- walking ------------------------------------------------------------------------
 
-const routeLength = (route) =>
-  route.slice(1).reduce((s, b, i) => s + Math.hypot(b[0] - route[i][0], b[1] - route[i][1]), 0)
 const LENGTHS = Object.fromEntries(Object.entries(ROUTES).map(([k, r]) => [k, routeLength(r)]))
-
-// the point `d` along a route, and the direction of travel there
-function along(route, d) {
-  let left = d
-  for (let i = 1; i < route.length; i++) {
-    const [ax, ay] = route[i - 1]
-    const [bx, by] = route[i]
-    const len = Math.hypot(bx - ax, by - ay)
-    if (left <= len || i === route.length - 1) {
-      const t = len ? Math.min(1, left / len) : 1
-      return { x: ax + (bx - ax) * t, y: ay + (by - ay) * t, dx: bx - ax, dy: by - ay }
-    }
-    left -= len
-  }
-  return { x: route[0][0], y: route[0][1], dx: 0, dy: 0 }
-}
 
 const ALL_BUILT = Object.fromEntries(TOUR.map((z) => [z, true]))
 const NONE_BUILT = Object.fromEntries(TOUR.map((z) => [z, false]))
@@ -539,7 +699,7 @@ export default function SitePlan({ className = '' }) {
     let raf = 0
 
     function place(frame) {
-      const p = along(ROUTES[state.route], state.d)
+      const p = alongPath(ROUTES[state.route], state.d)
       const [sx, sy] = P(p.x, p.y)
       walker.style.left = `${(sx / W) * 100}%`
       walker.style.top = `${(sy / H) * 100}%`
@@ -547,7 +707,7 @@ export default function SitePlan({ className = '' }) {
     }
 
     if (reduced) {
-      // standing just inside the gate, everything built
+      // standing just inside the gate, everything running
       setBuilt(ALL_BUILT)
       state.d = LENGTHS.gate * 0.55
       facing = 'down'
@@ -602,7 +762,7 @@ export default function SitePlan({ className = '' }) {
       state.d = dir > 0 ? Math.min(leg.to, state.d + step) : Math.max(leg.to, state.d - step)
 
       // face the way he is heading on screen
-      const p = along(ROUTES[state.route], state.d)
+      const p = alongPath(ROUTES[state.route], state.d)
       const sdx = (p.dx - p.dy) * COS * dir
       const sdy = (p.dx + p.dy) * 0.5 * dir
       facing = Math.abs(sdx) > Math.abs(sdy) * 1.1 ? (sdx > 0 ? 'right' : 'left') : sdy > 0 ? 'down' : 'up'
@@ -639,7 +799,7 @@ export default function SitePlan({ className = '' }) {
     <div className={`relative ${className}`}>
       <div ref={rootRef} className="site-plan relative select-none" style={{ aspectRatio: `${W} / ${H}` }}>
         <p className="sr-only">{content.description}</p>
-        <Drawing built={built} />
+        <Drawing built={built} reduced={reduced} />
         <Leaders active={active} built={built} />
         <div ref={walkerRef} className="engineer-sprite site-plan-walker pointer-events-none absolute" aria-hidden="true" />
 
@@ -685,7 +845,10 @@ export default function SitePlan({ className = '' }) {
                 className="group flex min-h-11 items-center gap-2"
               >
                 <TagCircle tag={label.tag} on={active === label.zone} />
-                <span className="text-sm text-ink">{label.section}</span>
+                <span className="min-w-0 leading-tight">
+                  <span className="block text-sm text-ink">{label.section}</span>
+                  <span className="block text-[12px] text-faint">{label.name}</span>
+                </span>
               </LabelLink>
             </li>
           ))}
@@ -705,7 +868,7 @@ export default function SitePlan({ className = '' }) {
   )
 }
 
-// leader lines from each label to its structure; until it is built, to the
+// leader lines from each label to its part; until it is deployed, to the
 // middle of its footprint
 function Leaders({ active, built }) {
   return (
@@ -740,18 +903,18 @@ function TagCircle({ tag, on }) {
   )
 }
 
-// a label on the drawing or a line of the key: a section of this page, or
-// /world. Pointing at one sends the engineer to that structure.
+// a label on the drawing or a line of the key: a section of this page.
+// Pointing at one sends the engineer to that part.
 function LabelLink({ label, onPoint, className, style, children }) {
   const shared = {
     onPointerEnter: onPoint,
     onFocus: onPoint,
     className,
     style,
-    'aria-label': `${label.tag}: ${label.section}`,
+    'aria-label': `${label.tag}: ${label.section}, ${label.name}`,
   }
   return label.href.startsWith('/') ? (
-    <Link to={label.href} onClick={() => track('world_explore_click', { source: 'site_plan' })} {...shared}>
+    <Link to={label.href} {...shared}>
       {children}
     </Link>
   ) : (

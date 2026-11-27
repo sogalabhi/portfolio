@@ -1,5 +1,5 @@
 {
-  "description": "An isometric line drawing of a construction site. Each labelled structure links to a section of this page, and a small pixel-art site engineer walks between them.",
+  "description": "A system architecture drawn as an isometric site layout. Each labelled part links to a section of this page: compute, databases, an integration bridge, a container yard, the control plane and the API gateway. A small pixel-art engineer walks between them, and requests move along the roads.",
   "legend": {
     "heading": "On this page",
     "label": "Sections of this page"
@@ -10,48 +10,53 @@
       "zone": "shed",
       "tag": "A",
       "section": "Work",
-      "name": "Fabrication shed",
+      "name": "Compute",
       "href": "#work"
     },
     {
-      "zone": "office",
+      "zone": "silos",
       "tag": "B",
       "section": "Experience",
-      "name": "Site office",
+      "name": "Databases",
       "href": "#experience"
     },
     {
       "zone": "bridge",
       "tag": "C",
       "section": "Hackathons",
-      "name": "Footbridge",
+      "name": "Integration",
       "href": "#achievements"
     },
     {
       "zone": "yard",
       "tag": "D",
       "section": "Skills",
-      "name": "Materials yard",
+      "name": "Containers",
       "href": "#skills"
     },
     {
-      "zone": "crane",
+      "zone": "office",
       "tag": "E",
-      "section": "Contact",
-      "name": "Tower crane",
-      "href": "#contact"
+      "section": "About",
+      "name": "Control plane",
+      "href": "#about"
     },
     {
       "zone": "gate",
       "tag": "F",
-      "section": "Play it",
-      "name": "Site gate",
-      "href": "/world"
+      "section": "Contact",
+      "name": "API gateway",
+      "href": "#contact"
     }
   ],
-  "hint": "Point at a label and the site engineer walks over to inspect it.",
+  "hint": "Point at a part of the system and the engineer walks over to deploy it.",
   "hintTouch": "Tap a label to go to that section.",
-  "buildAll": "Build it all",
-  "clear": "Back to the plan",
-  "view": "Isometric view, not to scale"
+  "buildAll": "Deploy all",
+  "clear": "Back to the design",
+  "view": "System layout, isometric",
+  "key": {
+    "request": "Request",
+    "designed": "Designed",
+    "deployed": "Deployed"
+  }
 }

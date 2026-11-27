@@ -1,85 +1,55 @@
 {
-  "summary": "A second prize, two third-place finishes and an ETHGlobal selection.",
+  "summary": "A second place, two third places and an ETHGlobal selection.",
   "hackathons": [
     {
       "event": "Esko AIForge Hackathon",
+      "logo": "/logos/esko.png",
       "date": "2026",
       "result": "2nd prize",
-      "project": "BriefForge: AI-assisted print-readiness check for packaging artwork",
-      "oneLiner": "Checks finished artwork against approved product information and a rulebook, then sorts each result into fail, needs review or pass, with the evidence shown.",
-      "myRole": "Solo; built the whole project",
-      "stack": [
-        "Python",
-        "FastAPI",
-        "React",
-        "TypeScript",
-        "Gemini"
-      ],
+      "project": "BriefForge",
+      "oneLiner": "Checks packaging artwork against the approved product data and a rulebook, and sorts every finding into fail, needs review or pass, with the evidence beside it. Built solo.",
+      "stack": ["Python", "FastAPI", "React", "TypeScript", "Gemini"],
       "links": {
         "github": "https://github.com/sogalabhi/esko",
-        "devpost": "",
         "demo": ""
       }
     },
     {
-      "event": "AssetHub Hackathon, Goa 2025",
+      "event": "AssetHub Hackathon, Goa",
+      "logo": "/logos/polkadot.png",
       "date": "2025",
-      "result": "3rd of 190+",
-      "project": "Polkaflow: visual blockchain workflow builder for Polkadot",
-      "oneLiner": "Drag-and-drop flowchart to deployed smart contract, with AI code-gen, a hand-built logic engine, and automatic Solidity-to-Rust optimization for gas-heavy functions.",
-      "myRole": "",
-      "stack": [
-        "React",
-        "Solidity",
-        "Rust",
-        "PolkaVM",
-        "AssetHub"
-      ],
+      "result": "3rd of 190+ teams",
+      "project": "Polkaflow",
+      "oneLiner": "Turns a drag-and-drop flowchart into a deployed Polkadot smart contract. AI writes a first draft of the code, and gas-heavy functions are moved from Solidity to Rust automatically.",
+      "stack": ["React", "Solidity", "Rust", "PolkaVM", "AssetHub"],
       "links": {
         "github": "https://github.com/sogalabhi/Polkadot",
-        "devpost": "",
         "demo": "https://www.youtube.com/watch?v=1wMiRCPWYBE"
       }
     },
     {
       "event": "Polkadot Builder House, Bengaluru",
-      "date": "2025-12",
+      "logo": "/logos/polkadot.png",
+      "date": "Dec 2025",
       "result": "3rd place",
-      "project": "Polar Bridge: cross-chain lending, INR collateral to PAS tokens",
-      "oneLiner": "A fiat-to-Polkadot on-ramp: pay by UPI, borrow PAS tokens against INR collateral, no crypto knowledge needed.",
-      "myRole": "Web3 developer, 2-person team; built the smart contracts and the relayer service handling cross-chain event synchronization between the Stellar vault and the Paseo Asset Hub pool",
-      "stack": [
-        "React",
-        "Node.js",
-        "Stellar Soroban",
-        "Paseo Asset Hub",
-        "Solidity",
-        "Razorpay"
-      ],
+      "project": "Polar Bridge",
+      "oneLiner": "Pay in rupees over UPI and borrow Polkadot tokens against it, with no crypto needed up front. In a team of two, I wrote the smart contracts and the relayer that keeps the Stellar vault and the Asset Hub pool in sync.",
+      "stack": ["React", "Node.js", "Stellar Soroban", "Solidity", "Razorpay"],
       "links": {
         "github": "https://github.com/sogalabhi/Polar",
-        "devpost": "",
         "demo": ""
       }
     },
     {
       "event": "ETHGlobal New Delhi",
-      "date": "2025-09",
-      "result": "Selected for ETHGlobal",
-      "project": "PokeWars: multiplayer Pokémon shooting game with Web3 rewards on Polygon",
-      "oneLiner": "Wallet-authenticated multiplayer combat in Phaser, with NFT-owned Pokémon and daily on-chain rewards via the X402 protocol.",
-      "myRole": "",
-      "stack": [
-        "Phaser",
-        "React",
-        "Solidity",
-        "Polygon",
-        "MetaMask",
-        "WebSockets"
-      ],
+      "logo": "/logos/ethglobal.png",
+      "date": "Sep 2025",
+      "result": "Selected to compete",
+      "project": "PokeWars",
+      "oneLiner": "A multiplayer Pokémon shooter in Phaser. You sign in with your wallet, your Pokémon are NFTs, and daily rewards are paid out on-chain on Polygon.",
+      "stack": ["Phaser", "React", "Solidity", "Polygon", "WebSockets"],
       "links": {
         "github": "",
-        "devpost": "",
         "demo": ""
       }
     }

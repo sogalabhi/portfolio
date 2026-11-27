@@ -152,7 +152,7 @@ function GardenContent() {
 function ArchiveContent() {
   return (
     <div className="space-y-5">
-      {experience.tier1.map((exp) => (
+      {experience.jobs.filter((exp) => exp.logo).map((exp) => (
         <div key={exp.org} className="border-l-2 border-[#F4EDE2]/20 pl-3">
           <p className="text-sm font-semibold text-[#F4EDE2]">{exp.org}</p>
           <p className="text-xs text-[#F4EDE2]/55">{exp.period}</p>

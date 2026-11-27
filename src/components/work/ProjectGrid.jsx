@@ -1,6 +1,8 @@
 import useGsapReveal from '../../hooks/useGsapReveal'
 import ProjectCard from './ProjectCard'
 
+// Featured: the first project across the full width, the rest two by two.
+// Compact: the index, one row per project.
 export default function ProjectGrid({ projects, label, compact = false }) {
   const revealRef = useGsapReveal({ batch: true, stagger: 0.06 })
 
@@ -17,7 +19,13 @@ export default function ProjectGrid({ projects, label, compact = false }) {
       }
     >
       {projects.map((project, i) => (
-        <ProjectCard key={project.id} project={project} compact={compact} number={i + 1} />
+        <ProjectCard
+          key={project.id}
+          project={project}
+          compact={compact}
+          lead={!compact && i === 0}
+          number={i + 1}
+        />
       ))}
     </ul>
   )

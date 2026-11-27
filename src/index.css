@@ -21,11 +21,7 @@
   --color-moss: #2F7D32;
   --color-sand: #E3F1F3;
 
-  /* the two /world colors that aren't already duplicates of the homepage
-     palette (its terracotta/moss/sand/cream match clay/moss/sand/paper
-     exactly), used as rare, deliberate accents, not a base-palette swap:
-     panel for one contained dark section (the footer), teal for a single
-     hover accent on the /world link. See conversation for the reasoning. */
+  /* two colours borrowed from /world, which still uses them */
   --color-panel: #0F2227;
   --color-teal: #87C5C2;
 
@@ -136,37 +132,6 @@
   vector-effect: non-scaling-stroke;
 }
 
-/* a figure plate's survey grid: a small cross every 60 px, faint */
-.plate-grid {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M26 30h8M30 26v8' stroke='%231C1B19' stroke-opacity='0.22' fill='none'/%3E%3C/svg%3E");
-  background-position: center;
-}
-
-/* the About portrait: public/world/sprites/avatar_portrait.png (2 frames of
-   32x48, eyes open then shut) at 5x, blinking every few seconds. Under reduced
-   motion the animation collapses and the eyes stay open. */
-.portrait-blink {
-  width: 160px;
-  height: 240px;
-  background-size: 200% 100%;
-  background-position: 0 0;
-  background-repeat: no-repeat;
-  image-rendering: pixelated;
-  animation: portrait-blink 4.6s step-end infinite;
-}
-
-@keyframes portrait-blink {
-  0% {
-    background-position: 0 0;
-  }
-  94% {
-    background-position: 100% 0;
-  }
-  97% {
-    background-position: 0 0;
-  }
-}
-
 /* hairlines don't scale down with the drawing, so on a phone the heavier
    lines (coast, building outlines) come down to one px to keep the weights apart */
 @media (max-width: 639px) {
@@ -189,20 +154,21 @@
   }
 }
 
-/* one frame of public/world/sprites/avatar.png (16 frames of 16x24), anchored at the feet */
-.avatar-sprite {
+/* the site engineer walking the hero's drawing: one frame of
+   public/world/sprites/engineer.png (16 frames of 16x24), anchored at the feet */
+.engineer-sprite {
   width: 16px;
   height: 24px;
-  background: url("/world/sprites/avatar.png") 0 0 / 1600% 100% no-repeat;
+  background: url("/world/sprites/engineer.png") 0 0 / 1600% 100% no-repeat;
   image-rendering: pixelated;
 }
 
-.site-plan-avatar {
+.site-plan-walker {
   transform: translate(-50%, -94%);
 }
 
-@media (min-width: 640px) {
-  .site-plan-avatar {
+@media (min-width: 1024px) {
+  .site-plan-walker {
     width: 32px;
     height: 48px;
   }
@@ -229,7 +195,6 @@
      before printing - force every animated element to its final visible state */
   [data-reveal],
   [data-hero-item],
-  [data-timeline-line],
   [data-heatmap-cell] {
     opacity: 1 !important;
     transform: none !important;

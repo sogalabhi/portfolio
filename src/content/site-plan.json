@@ -1,67 +1,57 @@
 {
-  "description": "A site plan of the island from the interactive version of this portfolio. Each building holds one section of the page.",
-  "hint": "Move across the drawing to build it.",
-  "hintTouch": "Tap the drawing to build it.",
-  "buildAll": "Build it all",
-  "clear": "Back to the drawing",
+  "description": "An isometric line drawing of a construction site. Each labelled structure links to a section of this page, and a small pixel-art site engineer walks between them.",
   "legend": {
-    "heading": "Key",
-    "label": "Key to the site plan"
+    "heading": "On this page",
+    "label": "Sections of this page"
   },
   "north": "N",
-  "scale": [
-    "0",
-    "5",
-    "10 m"
-  ],
-  "titleBlock": {
-    "drawingLabel": "Drawing",
-    "drawing": "Site plan, as built",
-    "sheetLabel": "Sheet",
-    "sheet": "01 / 06"
-  },
   "labels": [
     {
-      "zone": "workshop",
+      "zone": "shed",
       "tag": "A",
-      "name": "Workshop",
       "section": "Work",
+      "name": "Fabrication shed",
       "href": "#work"
     },
     {
-      "zone": "archive",
+      "zone": "office",
       "tag": "B",
-      "name": "Archive",
       "section": "Experience",
+      "name": "Site office",
       "href": "#experience"
     },
     {
-      "zone": "garden",
+      "zone": "bridge",
       "tag": "C",
-      "name": "Garden",
-      "section": "Skills",
-      "href": "#skills"
-    },
-    {
-      "zone": "shrine",
-      "tag": "D",
-      "name": "Shrine",
-      "section": "Achievements",
+      "section": "Hackathons",
+      "name": "Footbridge",
       "href": "#achievements"
     },
     {
-      "zone": "tower",
+      "zone": "yard",
+      "tag": "D",
+      "section": "Skills",
+      "name": "Materials yard",
+      "href": "#skills"
+    },
+    {
+      "zone": "crane",
       "tag": "E",
-      "name": "Tower",
       "section": "Contact",
+      "name": "Tower crane",
       "href": "#contact"
     },
     {
-      "zone": "terminal",
+      "zone": "gate",
       "tag": "F",
-      "name": "Terminal",
       "section": "Play it",
+      "name": "Site gate",
       "href": "/world"
     }
-  ]
+  ],
+  "hint": "Point at a label and the site engineer walks over to inspect it.",
+  "hintTouch": "Tap a label to go to that section.",
+  "buildAll": "Build it all",
+  "clear": "Back to the plan",
+  "view": "Isometric view, not to scale"
 }

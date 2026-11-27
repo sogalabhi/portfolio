@@ -2,7 +2,7 @@
   {
     "id": "osdag-web",
     "title": "Osdag Web",
-    "tagline": "Steel design workspace built with FOSSEE, IIT Bombay. Async calculations, 3D CAD exports, PDF reports, and live job updates with Django and React.",
+    "tagline": "The web version of Osdag, FOSSEE's open-source steel design software. Engineers set up a connection, the design runs as a background job with live progress, and they get a 3D CAD model and a PDF report back.",
     "stack": [
       "React",
       "Django",
@@ -24,18 +24,18 @@
       "sde",
       "civil"
     ],
-    "result": "4-person team · production deployment at IIT Bombay",
+    "result": "I lead the 4-person team · in production at IIT Bombay",
     "screenshot": {
       "src": "/projects/osdag-web.webp",
       "alt": "The Connections page of Osdag Web, with plated, shear, moment, base plate and truss connection tabs.",
       "width": 1440,
       "height": 900,
       "fit": "cover",
-      "caption": "Built: the Connections page of the web app."
+      "caption": "The Connections page."
     },
     "figure": {
       "type": "base-plate",
-      "caption": "Column base plate, elevation and plan.",
+      "caption": "Column base plate, in elevation and plan.",
       "labels": {
         "elevation": "Elevation",
         "plan": "Plan",
@@ -56,7 +56,7 @@
   {
     "id": "arjun-guruji",
     "title": "Arjun Guruji",
-    "tagline": "Offline Kannada books, synced-lyric audio, and event notifications in a Flutter app maintained since 2021.",
+    "tagline": "Kannada books that work offline, audio with lyrics that follow along, and reminders for upcoming events. I built it in 2021 and still maintain it.",
     "stack": [
       "Flutter",
       "BLoC",
@@ -82,11 +82,11 @@
       "width": 1100,
       "height": 688,
       "fit": "contain",
-      "caption": "Built: Books, Astottara and Audio, from the Play Store listing."
+      "caption": "Books, Astottara and Audio, from the Play Store listing."
     },
     "figure": {
       "type": "phone",
-      "caption": "Front elevation: what runs on the phone.",
+      "caption": "What the app does on the phone.",
       "labels": {
         "notifications": "Event notifications",
         "books": "Books stored on the device",
@@ -97,7 +97,7 @@
   {
     "id": "retail-lakehouse",
     "title": "OpenLake: Retail Lakehouse",
-    "tagline": "Batch and streaming retail lakehouse using Spark, Airflow, Delta Lake, and dbt. Serves analytics, churn predictions, and scores back to a mock CRM.",
+    "tagline": "A retail data platform with batch and streaming paths, built on Spark, Airflow, Delta Lake and dbt. It feeds dashboards and a churn model, and writes scores back to a mock CRM. The same code runs locally or on Azure.",
     "stack": [
       "Apache Spark",
       "Airflow",
@@ -152,7 +152,7 @@
   {
     "id": "process-mining",
     "title": "Process Mining & Analytics",
-    "tagline": "Discovers process maps, bottlenecks, and rework from event logs. Spring Boot alignment algorithms detect deviations in an interactive React dashboard.",
+    "tagline": "Give it an event log and it draws the process map, shows where cases wait longest and flags rework. The alignment algorithms run in Spring Boot, and the dashboard is React.",
     "stack": [
       "Java",
       "Spring Boot",
@@ -173,7 +173,7 @@
     "result": "16K+ events across 2,500+ cases",
     "figure": {
       "type": "process",
-      "caption": "An event log in, a process map out.",
+      "caption": "From an event log to a process map.",
       "labels": {
         "log": "Event log",
         "graph": "Directly-Follows Graph",
@@ -184,12 +184,42 @@
         "bottleneck": "Bottleneck",
         "rework": "Rework"
       }
+    },
+    "screenshot": {
+      "src": "/projects/process-mining.webp",
+      "alt": "The process mining dashboard: a process map of an order fulfilment log, with the slowest steps listed beside it.",
+      "width": 1440,
+      "height": 900,
+      "fit": "cover",
+      "caption": "The process map for an order fulfilment log."
     }
+  },
+  {
+    "id": "interactive-portfolio",
+    "title": "Portfolio Island",
+    "tagline": "This portfolio as a small pixel-art island you can walk around. Each building opens a part of the site: projects, experience, skills. Built with Phaser and React.",
+    "stack": [
+      "React",
+      "Phaser",
+      "GSAP",
+      "Tailwind CSS",
+      "JavaScript"
+    ],
+    "links": {
+      "github": "https://github.com/sogalabhi/portfolio",
+      "live": "/world",
+      "demo": "",
+      "playStore": ""
+    },
+    "order": 5,
+    "roles": [
+      "sde"
+    ]
   },
   {
     "id": "mechanics-sight",
     "title": "Mechanics Sight",
-    "tagline": "Interactive beam analysis with exact polynomial solutions, editable loads and supports, force and deflection diagrams, and worked calculation reports.",
+    "tagline": "Beam analysis you can play with: change the loads and supports and the shear, moment and deflection diagrams update, with exact solutions and a worked calculation report.",
     "stack": [
       "Python",
       "FastAPI",
@@ -203,7 +233,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 5,
+    "order": 6,
     "roles": [
       "sde",
       "civil"
@@ -212,7 +242,7 @@
   {
     "id": "briefforge",
     "title": "BriefForge: Packaging Artwork Review",
-    "tagline": "AI-assisted packaging review against approved product data and rulebooks. Verifies nutrition, units, and barcodes with source evidence and human review. Built solo.",
+    "tagline": "Checks packaging artwork against the approved product data and a rulebook: nutrition values, units, barcodes. Every finding shows its evidence, and anything uncertain goes to a person. Built solo at a hackathon.",
     "stack": [
       "Python",
       "FastAPI",
@@ -226,7 +256,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 6,
+    "order": 7,
     "roles": [
       "sde"
     ],
@@ -237,11 +267,11 @@
       "width": 1440,
       "height": 810,
       "fit": "cover",
-      "caption": "Built: the marked-up artwork."
+      "caption": "Artwork marked up with numbered findings."
     },
     "figure": {
       "type": "review",
-      "caption": "Artwork in, a verdict with its evidence out.",
+      "caption": "How a piece of artwork gets checked.",
       "labels": {
         "artwork": "Artwork",
         "sheet": "Content sheet",
@@ -256,7 +286,7 @@
   {
     "id": "polkaflow",
     "title": "Polkaflow",
-    "tagline": "Drag-and-drop workflows into deployable Polkadot contracts, with a custom code generator and AI assistance.",
+    "tagline": "Build a Polkadot smart contract by drawing a flowchart. A custom code generator turns the flowchart into contract code, with AI help along the way.",
     "stack": [
       "React",
       "React Flow",
@@ -273,18 +303,18 @@
       "demo": "https://www.youtube.com/watch?v=1wMiRCPWYBE",
       "playStore": ""
     },
-    "order": 7,
+    "order": 8,
     "roles": [
       "sde"
     ],
-    "result": "3rd of 190+ · AssetHub Hackathon",
+    "result": "3rd of 190+ teams · AssetHub Hackathon",
     "screenshot": {
       "src": "/projects/polkaflow.webp",
       "alt": "Polkaflow workflow canvas with connected trigger, logic, wallet, and smart contract nodes.",
       "width": 1440,
       "height": 784,
       "fit": "cover",
-      "caption": "Built: the workflow canvas."
+      "caption": "The workflow canvas."
     },
     "figure": {
       "type": "flow",
@@ -302,7 +332,7 @@
   {
     "id": "polar-bridge",
     "title": "Polar Bridge",
-    "tagline": "Hackathon lending prototype linking INR payments, Stellar collateral, and Polkadot tokens. Built smart contracts and the relayer in a two-person team.",
+    "tagline": "Hackathon prototype for borrowing Polkadot tokens against rupees paid over UPI, with the collateral held on Stellar. I wrote the smart contracts and the relayer in a team of two.",
     "stack": [
       "React",
       "Node.js",
@@ -318,7 +348,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 8,
+    "order": 9,
     "roles": [
       "sde"
     ]
@@ -326,7 +356,7 @@
   {
     "id": "money-follows",
     "title": "Money Follows",
-    "tagline": "Offline Flutter finance app for expenses, net worth, shared balances, and card billing. Local SQLite storage, Android widgets, and portable backups.",
+    "tagline": "An offline finance app for expenses, net worth, money split with friends and credit card bills. Everything stays on the phone in SQLite, with home screen widgets and backups you can move between devices.",
     "stack": [
       "Flutter",
       "Dart",
@@ -340,7 +370,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 9,
+    "order": 10,
     "roles": [
       "sde"
     ]
@@ -348,7 +378,7 @@
   {
     "id": "syssight",
     "title": "SysSight",
-    "tagline": "Distributed host monitoring with Python agents and a live dashboard. TimescaleDB stores metrics; configurable thresholds trigger Discord alerts.",
+    "tagline": "Small Python agents on each machine report their metrics to a FastAPI server, which stores them in TimescaleDB and shows them live. When a metric stays over its threshold, it sends a single Discord alert.",
     "stack": [
       "Python",
       "FastAPI",
@@ -363,14 +393,14 @@
       "demo": "https://drive.google.com/file/d/19mqFjbhBrghrIJcMFxcmGHI4u8wZWqrY/view?usp=sharing",
       "playStore": ""
     },
-    "order": 10,
+    "order": 11,
     "roles": [
       "sde"
     ],
     "result": "One alert per sustained spike",
     "figure": {
       "type": "monitor",
-      "caption": "Many hosts, one server, one alert.",
+      "caption": "Agents on each machine report to one server.",
       "labels": {
         "agent": "Agent",
         "server": "FastAPI",
@@ -383,7 +413,7 @@
   {
     "id": "stainless-csm",
     "title": "Stainless Steel CSM Calculator",
-    "tagline": "Stainless steel calculation engine and web app using the Continuous Strength Method. Shows clause references, formulas, material curves, and resistance.",
+    "tagline": "Designs stainless steel members with the Continuous Strength Method and shows its working: the clause behind each step, the formulas, the material curves and the final resistance.",
     "stack": [
       "Python",
       "FastAPI",
@@ -397,7 +427,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 11,
+    "order": 12,
     "roles": [
       "sde",
       "civil"
@@ -406,7 +436,7 @@
   {
     "id": "verdict-chain",
     "title": "Verdict Chain",
-    "tagline": "Chargeback prototype combining AI evidence extraction with deterministic rule scoring. Generates cited decision memos and hashes states to an EVM ledger.",
+    "tagline": "A chargeback review prototype. AI pulls the evidence out of documents, fixed rules do the scoring, and each decision becomes a memo with citations, hashed to an EVM ledger.",
     "stack": [
       "Python",
       "FastAPI",
@@ -421,7 +451,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 12,
+    "order": 13,
     "roles": [
       "sde"
     ]
@@ -429,7 +459,7 @@
   {
     "id": "isofold",
     "title": "IsoFold",
-    "tagline": "Classifies geological folds from traced photograph boundaries using spline geometry and dip isogons. Includes synthetic benchmarks and sensitivity analysis.",
+    "tagline": "Classifies geological folds from a photograph. Trace the fold, and it fits splines and uses dip isogons to name the class. Tested on synthetic folds, with a sensitivity analysis.",
     "stack": [
       "Python",
       "NumPy",
@@ -442,7 +472,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 13,
+    "order": 14,
     "roles": [
       "civil"
     ]
@@ -450,7 +480,7 @@
   {
     "id": "rag-is-code",
     "title": "IS 800 Code Assistant",
-    "tagline": "RAG assistant for IS 800 steel design provisions. Compares keyword, semantic, and hybrid search, then validates answer citations against source evidence.",
+    "tagline": "Ask a question about IS 800, India's steel design code, and get an answer that cites its clauses. Compares keyword, semantic and hybrid search, and checks every citation against the source text.",
     "stack": [
       "Python",
       "FastAPI",
@@ -465,7 +495,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 14,
+    "order": 15,
     "roles": [
       "sde",
       "civil"
@@ -488,7 +518,7 @@
   {
     "id": "arjun-guruji-web",
     "title": "Arjun Guruji Web",
-    "tagline": "React companion for Kannada texts, persistent audio, and event calendars. Calculates location-aware Panchang in the browser with shareable content links.",
+    "tagline": "The web companion to Arjun Guruji: Kannada texts, audio that keeps playing while you browse, an events calendar, and a Panchang worked out in the browser for where you are.",
     "stack": [
       "React",
       "Firestore",
@@ -502,7 +532,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 15,
+    "order": 16,
     "roles": [
       "sde"
     ]
@@ -510,7 +540,7 @@
   {
     "id": "slope-stability",
     "title": "Slope Stability Analyzer",
-    "tagline": "Python toolkit for layered slopes, loads, groundwater, and critical slip-circle search. Includes a web interface and a separate 3D analysis engine.",
+    "tagline": "Finds the critical slip circle for layered slopes with loads and groundwater. A Python toolkit with a web interface, plus a separate 3D analysis engine.",
     "stack": [
       "Python",
       "PySlope",
@@ -525,7 +555,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 16,
+    "order": 17,
     "roles": [
       "sde",
       "civil"
@@ -534,7 +564,7 @@
   {
     "id": "paladin-sdk",
     "title": "Paladin Java SDK PoC",
-    "tagline": "Java SDK proof of concept with a fluent transaction builder and automatic idempotency recovery. MockWebServer tests cover failures without a live node.",
+    "tagline": "A proof-of-concept Java SDK for Paladin, with a fluent transaction builder that retries failed requests without submitting twice. Tested against MockWebServer, so failures can be simulated without a live node.",
     "stack": [
       "Java",
       "Maven",
@@ -547,7 +577,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 17,
+    "order": 18,
     "roles": [
       "sde"
     ]
@@ -555,7 +585,7 @@
   {
     "id": "pokiwars",
     "title": "PokeWars",
-    "tagline": "Multiplayer Phaser arena game with wallet login and NFT-owned characters. Socket.IO coordinates lobbies, combat, and scores alongside Polygon integrations.",
+    "tagline": "A multiplayer arena game in Phaser. Players sign in with a wallet and fight with NFT characters, while Socket.IO runs the lobbies, combat and scores.",
     "stack": [
       "Phaser",
       "React",
@@ -571,7 +601,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 18,
+    "order": 19,
     "roles": [
       "sde"
     ]
@@ -579,7 +609,7 @@
   {
     "id": "agentic-orchestration",
     "title": "Agentic Workflow Builder",
-    "tagline": "React Flow workflow builder with a Python execution engine. Connects AI steps, branches, and variables, with JSON import/export and execution logs.",
+    "tagline": "A drag-and-drop builder for AI workflows on React Flow, with a Python engine that runs them: AI steps, branches, variables, JSON import and export, and a log of every run.",
     "stack": [
       "React",
       "React Flow",
@@ -595,7 +625,7 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 19,
+    "order": 20,
     "roles": [
       "sde"
     ]
@@ -603,7 +633,7 @@
   {
     "id": "eta-predictor",
     "title": "Intelligent ETA Predictor",
-    "tagline": "Neural-network prototype predicting kitchen prep and delivery travel time separately. FastAPI maps live inputs to the exact training feature schema.",
+    "tagline": "Predicts food delivery time in two parts, kitchen prep and travel, with a neural network for each. A FastAPI service turns live inputs into the exact features the models were trained on.",
     "stack": [
       "Python",
       "TensorFlow",
@@ -617,13 +647,13 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 20,
+    "order": 21,
     "roles": []
   },
   {
     "id": "finsight",
     "title": "FinSight",
-    "tagline": "Daily news pipeline from Finnhub to Gemini sentiment and PostgreSQL aggregates. Airflow orchestrates bronze, silver, and gold layers in Docker.",
+    "tagline": "A daily pipeline that pulls market news from Finnhub, scores its sentiment with Gemini and stores the totals in PostgreSQL. Airflow runs the bronze, silver and gold steps in Docker.",
     "stack": [
       "Python",
       "Airflow",
@@ -638,13 +668,13 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 21,
+    "order": 22,
     "roles": []
   },
   {
     "id": "voyagehunt",
     "title": "VoyageHunt",
-    "tagline": "Team-built tourism app prototype with treasure hunts, photo quests, and leaderboards. React Native and Supabase support tourist and business flows.",
+    "tagline": "A tourism app prototype built with a team: treasure hunts, photo quests and leaderboards for visitors, and a side for local businesses. React Native and Supabase.",
     "stack": [
       "React Native",
       "Expo",
@@ -658,28 +688,6 @@
       "demo": "",
       "playStore": ""
     },
-    "order": 22,
-    "roles": [
-      "sde"
-    ]
-  },
-  {
-    "id": "interactive-portfolio",
-    "title": "Interactive Portfolio World",
-    "tagline": "Explorable pixel-art island built with Phaser and React. Movement, pathfinding, and interactive buildings reveal projects, skills, and experience.",
-    "stack": [
-      "React",
-      "Phaser",
-      "GSAP",
-      "Tailwind CSS",
-      "JavaScript"
-    ],
-    "links": {
-      "github": "https://github.com/sogalabhi/portfolio",
-      "live": "/world",
-      "demo": "",
-      "playStore": ""
-    },
     "order": 23,
     "roles": [
       "sde"
@@ -688,7 +696,7 @@
   {
     "id": "vehicle-pcu",
     "title": "Vehicle Detection & PCU Prototype",
-    "tagline": "YOLOv8 and Streamlit prototype for vehicle detection and PCU-weighted frame analysis. Includes progress tracking, Plotly charts, and CSV exports.",
+    "tagline": "Counts vehicles in traffic video with YOLOv8 and converts them to passenger car units, frame by frame. A Streamlit app with progress tracking, Plotly charts and CSV export.",
     "stack": [
       "Python",
       "YOLOv8",
@@ -710,7 +718,7 @@
   {
     "id": "genkisportz-links",
     "title": "GenkiSportz App Links",
-    "tagline": "Sports-app companion site for tournament and team invitations. App-opening actions, copy-link fallbacks, mobile association files, and support pages.",
+    "tagline": "The link site behind a sports app's tournament and team invites. It opens the app when it's installed, falls back to a link you can copy when it isn't, and serves the Android and iOS association files.",
     "stack": [
       "HTML",
       "CSS",

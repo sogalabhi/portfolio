@@ -2,38 +2,26 @@ import { useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
 import { ScrollTrigger } from './lib/gsap'
-import useGsapReveal from './hooks/useGsapReveal'
 import Nav from './components/layout/Nav'
 import Footer from './components/layout/Footer'
 import Section from './components/layout/Section'
 import SectionHeader from './components/layout/SectionHeader'
-import WorldMiniBanner from './components/layout/WorldMiniBanner'
-import MarginAlignment from './components/layout/MarginAlignment'
 import Hero from './components/hero/Hero'
 import ProjectExplorer from './components/work/ProjectExplorer'
 import SkillsSummary from './components/skills/SkillsSummary'
 import GithubHeatmap from './components/skills/GithubHeatmap'
-import TimelineCard from './components/exp/TimelineCard'
-import CompactRoleList from './components/exp/CompactRoleList'
-import EducationBlock from './components/exp/EducationBlock'
+import Timeline from './components/exp/Timeline'
 import About from './components/misc/About'
 import Achievements from './components/misc/Achievements'
-import Contact from './components/misc/Contact'
 import NotFound from './components/misc/NotFound'
 import ScrollProgressBar from './components/misc/ScrollProgressBar'
 import KeyboardShortcuts from './components/misc/KeyboardShortcuts'
 import projects from './content/projects.json'
-import experience from './content/experience.json'
-import education from './content/education.json'
-import sections from './content/sections.json'
 
 const World = lazy(() => import('./world/WorldPage'))
-const Another = lazy(() => import('./another/AnotherPage'))
 
 function Home() {
   const orderedProjects = [...projects].sort((a, b) => a.order - b.order)
-
-  const timelineRevealRef = useGsapReveal()
 
   return (
     <>
@@ -45,7 +33,6 @@ function Home() {
       </a>
 
       <Nav />
-      <MarginAlignment />
       <main id="main">
         <Hero />
 
@@ -58,21 +45,12 @@ function Home() {
 
         <Section id="experience">
           <SectionHeader id="experience" />
-          <div ref={timelineRevealRef} className="mt-4">
-            {experience.tier1.map((exp) => (
-              <TimelineCard key={exp.org} experience={exp} />
-            ))}
-            <CompactRoleList roles={experience.tier2} />
-          </div>
+          <Timeline />
+        </Section>
 
-          <div className="mt-14">
-            <h3 className="font-mono text-[11px] font-normal uppercase tracking-[0.1em] text-slate">
-              {sections.experience.educationHeading}
-            </h3>
-            <div className="mt-4">
-              <EducationBlock education={education} />
-            </div>
-          </div>
+        <Section id="achievements">
+          <SectionHeader id="achievements" />
+          <Achievements />
         </Section>
 
         <Section id="skills">
@@ -88,21 +66,8 @@ function Home() {
           <SectionHeader id="about" />
           <About />
         </Section>
-
-        <Section id="achievements">
-          <SectionHeader id="achievements" />
-          <div className="mt-8">
-            <Achievements />
-          </div>
-        </Section>
-
-        <Section id="contact">
-          <SectionHeader id="contact" />
-          <Contact />
-        </Section>
       </main>
       <Footer />
-      <WorldMiniBanner />
     </>
   )
 }
@@ -121,15 +86,6 @@ export default function App() {
       <KeyboardShortcuts />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* the blueprint draft, beside the real home page */}
-        <Route
-          path="/another"
-          element={
-            <Suspense fallback={null}>
-              <Another />
-            </Suspense>
-          }
-        />
         <Route
           path="/world"
           element={

@@ -1,8 +1,8 @@
 {
   "name": "Abhijith Sogal",
-  "tagline": "Civil engineering student at NITK, building production software, from steel design at IIT Bombay to backend systems and Flutter apps.",
-  "availability": "SDE / AI Engineer · 2027",
-  "location": "Mysuru, Karnataka, India",
+  "tagline": "I lead the web team building Osdag, an open-source steel design app at IIT Bombay. I've also kept a Flutter app with over 2,000 downloads running since 2021.",
+  "intro": "B.Tech at NITK Surathkal, graduating in 2027. Looking for a software engineering role.",
+  "location": "Mysuru, India",
   "email": "abhijithsogal@gmail.com",
   "links": {
     "github": "https://github.com/sogalabhi",
@@ -11,24 +11,24 @@
   },
   "stats": [
     {
+      "value": "Web lead",
+      "label": "Osdag, IIT Bombay"
+    },
+    {
       "value": "2,000+",
-      "label": "app downloads"
+      "label": "Arjun Guruji downloads"
     },
     {
-      "value": "3x",
-      "label": "Hackathon winner"
+      "value": "2nd, 3rd, 3rd",
+      "label": "Hackathon finishes"
     },
     {
-      "value": "5 yrs",
-      "label": "shipping"
-    },
-    {
-      "value": "Web Lead",
-      "label": "IIT Bombay"
+      "value": "Since 2021",
+      "label": "Shipping apps"
     }
   ],
   "actions": {
     "resume": "Résumé",
-    "explore": "Explore the island"
+    "contact": "Get in touch"
   }
 }

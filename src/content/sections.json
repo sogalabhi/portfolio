@@ -1,17 +1,15 @@
 {
-  "sheetLabel": "Sheet",
   "work": {
     "heading": "Work",
-    "sheet": "02",
-    "tag": "A",
-    "zone": "workshop",
-    "zoneName": "Workshop",
-    "note": "Pick a track, then the index",
+    "featured": [
+      "osdag-web",
+      "arjun-guruji",
+      "briefforge",
+      "syssight",
+      "process-mining"
+    ],
     "card": {
       "figure": "Fig.",
-      "drawing": "Drawing",
-      "built": "Built",
-      "viewLabel": "Show the drawing or the built thing",
       "openFull": "Open the full image of {title}",
       "github": "GitHub",
       "githubLabel": "{title} on GitHub",
@@ -19,45 +17,25 @@
       "playStore": "Play Store",
       "demo": "Demo",
       "private": "Private project",
-      "stackLabel": "Stack"
-    },
-    "tracksLabel": "Show featured projects for a role",
-    "tracks": [
-      { "id": "sde", "label": "SDE", "projects": ["osdag-web", "syssight", "arjun-guruji", "process-mining"] },
-      { "id": "ai", "label": "AI Engineer", "projects": ["briefforge", "rag-is-code"] }
-    ],
-    "roles": {
-      "sde": "Software",
-      "civil": "Civil"
+      "stackLabel": "Stack",
+      "screenshot": "Screenshot",
+      "diagram": "Diagram",
+      "viewLabel": "Show the diagram or the screenshot"
     },
     "index": {
-      "show": "Show {count} more",
-      "hide": "Hide the index",
-      "heading": "Index of the other {count}",
-      "all": "All",
-      "filterLabel": "Filter the index by role",
+      "show": "{count} more projects",
+      "hide": "Hide the rest",
       "featuredLabel": "Featured projects",
       "indexLabel": "More projects"
     }
   },
   "experience": {
     "heading": "Experience",
-    "educationHeading": "Education",
-    "sheet": "03",
-    "tag": "B",
-    "zone": "archive",
-    "zoneName": "Archive",
-    "note": "2021 – present",
-    "moreRoles": "Show {count} more roles",
-    "hideRoles": "Hide"
+    "clubsHeading": "Clubs and research",
+    "educationHeading": "Education"
   },
   "skills": {
     "heading": "Skills",
-    "sheet": "04",
-    "tag": "C",
-    "zone": "shed",
-    "zoneName": "Garden",
-    "note": "What I reach for",
     "heatmap": {
       "total": "{total} contributions in the last year",
       "streak": "{streak}-day streak",
@@ -66,20 +44,10 @@
     }
   },
   "about": {
-    "heading": "About",
-    "sheet": "05",
-    "tag": "",
-    "zone": "signpost",
-    "zoneName": "General notes",
-    "note": ""
+    "heading": "About"
   },
   "achievements": {
-    "heading": "Achievements",
-    "sheet": "06",
-    "tag": "D",
-    "zone": "shrine",
-    "zoneName": "Shrine",
-    "note": "Hackathons",
+    "heading": "Hackathons",
     "links": {
       "github": "Code",
       "demo": "Demo video",
@@ -88,15 +56,9 @@
     }
   },
   "contact": {
-    "heading": "Let's build something.",
-    "sheet": "06",
-    "tag": "E",
-    "zone": "tower",
-    "zoneName": "Tower",
-    "note": "",
-    "copy": "Copy",
-    "copied": "Copied",
-    "copyLabel": "Copy email address",
+    "heading": "Get in touch",
+    "body": "Email is the best way to reach me. I'm also on GitHub and LinkedIn.",
+    "email": "Email",
     "github": "GitHub",
     "linkedin": "LinkedIn",
     "resume": "Résumé (PDF)"

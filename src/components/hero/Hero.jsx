@@ -1,15 +1,11 @@
 import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
-import { Link } from 'react-router-dom'
-import { ArrowUpRight, Download, Crosshair } from 'lucide-react'
+import { Download, Crosshair } from 'lucide-react'
 import { track } from '@vercel/analytics'
 import { gsap } from '../../lib/gsap'
 import useReducedMotion from '../../hooks/useReducedMotion'
 import profile from '../../content/profile.json'
-import navContent from '../../content/nav.json'
 import sitePlan from '../../content/site-plan.json'
-import { GithubIcon, LinkedinIcon } from '../misc/BrandIcons'
-import AvailabilityBadge from './AvailabilityBadge'
 import StatStrip from './StatStrip'
 import SitePlan from './SitePlan'
 
@@ -17,8 +13,9 @@ const GRID_COLUMNS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 const GRID_ROWS = ['1', '2', '3', '4']
 
 // The hero is one drawing sheet: the intro on the left, the island's site
-// plan on the right, and the stats in the title block along the bottom edge,
-// where a drawing keeps the facts about itself.
+// plan on the right (it builds into the /world art as the avatar walks and the
+// cursor moves; the only place on the page the game shows), and the stats in
+// the title block along the bottom edge.
 export default function Hero() {
   const scope = useRef(null)
   const reduced = useReducedMotion()
@@ -26,12 +23,7 @@ export default function Hero() {
   useGSAP(
     () => {
       const items = gsap.utils.toArray('[data-hero-item]', scope.current)
-      if (!items.length) return
-
-      if (reduced) {
-        gsap.set(items, { opacity: 1, y: 0 })
-        return
-      }
+      if (!items.length || reduced) return
 
       gsap.from(items, {
         opacity: 0,
@@ -46,10 +38,7 @@ export default function Hero() {
 
   return (
     <section id="hero" ref={scope} className="scroll-mt-20 px-3 pt-[4.5rem] sm:px-5 md:pt-20">
-      <div
-        id="world-banner"
-        className="relative mx-auto max-w-[1400px] overflow-hidden border border-ink/35 bg-paper"
-      >
+      <div className="relative mx-auto max-w-[1400px] overflow-hidden border border-ink/35 bg-paper">
         {/* the sheet's inner rule and grid references */}
         <div className="pointer-events-none absolute inset-[5px] border border-ink/15" aria-hidden="true" />
         <div
@@ -70,75 +59,45 @@ export default function Hero() {
         </div>
 
         <div className="relative grid items-center lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.5fr)]">
-          <div className="relative z-10 px-6 pt-10 sm:px-10 lg:py-14 lg:pl-14 lg:pr-0">
-            <div data-hero-item>
-              <AvailabilityBadge text={profile.availability} />
-            </div>
-
-            <h1 data-hero-item className="mt-6 text-ink">
+          <div className="relative z-10 px-6 pt-12 sm:px-10 lg:py-14 lg:pl-14 lg:pr-0">
+            <h1 data-hero-item className="text-ink">
               {profile.name}
             </h1>
 
-            <p data-hero-item className="mt-5 max-w-[36ch] text-lg leading-relaxed text-slate md:text-xl">
+            <p data-hero-item className="mt-6 max-w-[38ch] text-lg leading-relaxed text-ink md:text-xl">
               {profile.tagline}
             </p>
+            <p data-hero-item className="mt-4 max-w-[38ch] leading-relaxed text-slate">
+              {profile.intro}
+            </p>
 
-            <div data-hero-item className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
-              <div className="flex flex-wrap items-center gap-3">
-                <a
-                  href={profile.links.resume}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => track('resume_download', { source: 'hero' })}
-                  className="inline-flex min-h-11 items-center gap-2 rounded-[10px] bg-clay px-4 py-3 text-sm font-medium text-paper transition-colors duration-150 hover:bg-clay/90 sm:px-5"
-                >
-                  {profile.actions?.resume ?? navContent.resumeLabel}
-                  <Download size={16} aria-hidden="true" />
-                </a>
-                <Link
-                  to="/world"
-                  onClick={() => track('world_explore_click', { source: 'hero' })}
-                  className="inline-flex min-h-11 items-center gap-2 rounded-[10px] border border-ink/25 bg-paper px-4 py-3 text-sm font-medium text-ink transition-colors duration-150 hover:border-clay hover:text-clay sm:px-5"
-                >
-                  {profile.actions?.explore ?? navContent.exploreLabel}
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </Link>
-              </div>
-              <div className="flex items-center gap-1">
-                <a
-                  href={profile.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub"
-                  title="GitHub"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate transition-colors duration-150 hover:text-clay"
-                >
-                  <GithubIcon size={20} />
-                </a>
-                <a
-                  href={profile.links.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="LinkedIn"
-                  title="LinkedIn"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate transition-colors duration-150 hover:text-clay"
-                >
-                  <LinkedinIcon size={20} />
-                </a>
-              </div>
+            <div data-hero-item className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <a
+                href={profile.links.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track('resume_download', { source: 'hero' })}
+                className="inline-flex min-h-11 items-center gap-2 border border-ink px-5 text-sm font-medium text-ink transition-colors duration-150 hover:bg-ink hover:text-paper"
+              >
+                {profile.actions.resume}
+                <Download size={16} aria-hidden="true" />
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex min-h-11 items-center text-sm font-medium text-slate underline decoration-ink/30 underline-offset-4 transition-colors duration-150 hover:text-clay hover:decoration-current"
+              >
+                {profile.actions.contact}
+              </a>
             </div>
 
-            <p
-              data-hero-item
-              className="mt-8 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-faint"
-            >
-              <Crosshair size={14} className="shrink-0 text-clay" aria-hidden="true" />
+            <p data-hero-item className="mt-8 flex items-center gap-2 text-sm text-faint">
+              <Crosshair size={15} className="shrink-0 text-clay" aria-hidden="true" />
               <span className="pointer-coarse:hidden">{sitePlan.hint}</span>
               <span className="hidden pointer-coarse:inline">{sitePlan.hintTouch}</span>
             </p>
           </div>
 
-          <div className="relative px-3 pb-8 pt-6 sm:px-8 sm:pb-12 lg:py-10 lg:pl-4 lg:pr-10">
+          <div className="relative px-3 pb-8 pt-8 sm:px-8 sm:pb-12 lg:py-10 lg:pl-4 lg:pr-10">
             <SitePlan />
           </div>
         </div>

@@ -1,138 +1,100 @@
 {
-  "tier1": [
+  "jobs": [
     {
       "org": "FOSSEE, IIT Bombay",
+      "logo": "/logos/iitb.png",
       "period": "May 2025 – Present",
-      "stack": [
-        "React",
-        "Django",
-        "Redis",
-        "Celery",
-        "WebSockets",
-        "Three.js",
-        "Nginx"
-      ],
+      "stack": ["React", "Django", "Redis", "Celery", "WebSockets", "Three.js", "Nginx"],
       "roles": [
-        {
-          "title": "Web Lead",
-          "period": "Nov 2025 – Present"
-        },
-        {
-          "title": "Autumn Intern",
-          "period": "Aug 2025 – Nov 2025"
-        },
-        {
-          "title": "Summer Intern",
-          "period": "May 2025 – Aug 2025"
-        }
+        { "title": "Web Lead", "period": "Nov 2025 – Present" },
+        { "title": "Autumn Intern", "period": "Aug 2025 – Nov 2025" },
+        { "title": "Summer Intern", "period": "May 2025 – Aug 2025" }
       ],
       "bullets": [
-        "4-person web team: led production steel-design modules and a refactor adopted as the team standard at IIT Bombay.",
-        "200+ concurrent requests load-tested with 20+ contributors; deployed with Nginx/SSL and built Redis, Celery, and WebSocket infrastructure."
+        "Lead a team of four building the web version of Osdag. I own its production steel design modules, and the refactor I proposed is now how the team structures new ones.",
+        "Set up the production stack: Nginx with SSL, Redis and Celery for the long-running design jobs, and WebSockets for live progress. Before launch I load-tested it at 200+ concurrent requests with 20+ people."
       ]
     },
     {
       "org": "IRIS, NITK",
+      "logo": "/logos/iris.png",
       "period": "Nov 2024 – Present",
-      "stack": [
-        "Flutter",
-        "BLoC",
-        "NoSQL",
-        "Clean Architecture",
-        "GitLab"
-      ],
+      "stack": ["Flutter", "BLoC", "NoSQL", "Clean Architecture", "GitLab"],
       "roles": [
-        {
-          "title": "App Developer",
-          "period": "Feb 2025 – Present"
-        },
-        {
-          "title": "Code-in Intern, App Dev",
-          "period": "Nov 2024 – Feb 2025"
-        }
+        { "title": "App Developer", "period": "Feb 2025 – Present" },
+        { "title": "Code-in Intern, App Dev", "period": "Nov 2024 – Feb 2025" }
       ],
       "bullets": [
-        "4 modules shipped for NITK’s ERP: event management, alumni donations, hostel-league tracking, and service requests.",
-        "Built event workflows with BLoC and Clean Architecture, and integrated BillDesk payments for alumni donations."
-      ]
-    },
-    {
-      "org": "Momento (Humora Technologies)",
-      "period": "Nov 2025 – Feb 2026",
-      "stack": [
-        "Flutter",
-        "Riverpod",
-        "Cloud Functions",
-        "Firestore Security Rules"
-      ],
-      "roles": [
-        {
-          "title": "Flutter Dev Intern",
-          "period": "Nov 2025 – Feb 2026"
-        }
-      ],
-      "bullets": [
-        "Built a paginated event feed with live filters and per-author notifications for a student-founded event platform.",
-        "Enforced role-based access with Firestore Security Rules; added media likes and creator filters using Riverpod."
+        "Shipped four modules for IRIS, the ERP that runs NITK: event management, alumni donations, hostel league tracking and service requests.",
+        "Built the event workflows with BLoC and Clean Architecture, and added BillDesk payments for alumni donations."
       ]
     },
     {
       "org": "SNSDS Trust",
+      "logo": "/logos/arjun-guruji.png",
       "period": "Apr 2021 – Present",
-      "stack": [
-        "Flutter",
-        "BLoC",
-        "Hive",
-        "Firebase Cloud Messaging"
-      ],
+      "stack": ["Flutter", "BLoC", "Hive", "Firebase Cloud Messaging"],
       "roles": [
-        {
-          "title": "App Developer (Freelance)",
-          "period": "Apr 2021 – Present"
-        }
+        { "title": "App Developer (Freelance)", "period": "Apr 2021 – Present" }
       ],
       "bullets": [
-        "2,000+ downloads and a 4.9★ Google Play rating for Arjun Guruji, maintained since 2021 and migrated from native Java to Flutter."
+        "Built Arjun Guruji in 2021 and still maintain it. I rewrote it from native Java to Flutter, and it now has 2,000+ downloads and a 4.9★ rating on Google Play."
+      ]
+    },
+    {
+      "org": "Momento (Humora Technologies)",
+      "logo": "/logos/momento.png",
+      "period": "Nov 2025 – Feb 2026",
+      "stack": ["Flutter", "Riverpod", "Cloud Functions", "Firestore Security Rules"],
+      "roles": [
+        { "title": "Flutter Dev Intern", "period": "Nov 2025 – Feb 2026" }
+      ],
+      "bullets": [
+        "Built the event feed for a student-founded events app: paginated, with live filters and notifications for the authors you follow.",
+        "Set who can read and write what with Firestore Security Rules, and added media likes and creator filters with Riverpod."
+      ]
+    },
+    {
+      "org": "Advista.live",
+      "period": "Jan 2025 – Mar 2025",
+      "roles": [
+        { "title": "Frontend Developer (part-time, on-site)", "period": "Jan 2025 – Mar 2025" }
+      ]
+    },
+    {
+      "org": "SriSadguru Hypertechnologies",
+      "period": "Aug 2022 – Jun 2024",
+      "roles": [
+        { "title": "Software Developer (internship)", "period": "May 2024 – Jun 2024" },
+        { "title": "Software Developer (full-time, Sringeri)", "period": "Aug 2022 – Oct 2022" }
+      ]
+    },
+    {
+      "org": "Datta Web Designers",
+      "period": "Sep 2021 – Aug 2022",
+      "roles": [
+        { "title": "Software Developer (freelance, Mysuru)", "period": "Sep 2021 – Aug 2022" }
       ]
     }
   ],
-  "tier2": [
+  "clubs": [
+    {
+      "org": "PACE NITK",
+      "title": "Member, GIS research",
+      "period": "Jan 2025 – Present",
+      "note": "Surveying the NITK campus in detail for a GIS project with Prof. Prithviraj."
+    },
+    {
+      "org": "Kannada Vedike NITK",
+      "title": "Technical Coordinator",
+      "period": "Feb 2024 – Present",
+      "note": "Coordinator since Sep 2025, on the tech team before that."
+    },
     {
       "org": "E-Cell NITK",
       "title": "Technical Team Member",
       "period": "Oct 2024 – Oct 2025",
-      "note": "Contributed to the E-Cell website and built the IPL Mock Auction website with real-time updates for all participants."
-    },
-    {
-      "org": "PACE NITK",
-      "title": "Member, GIS Research",
-      "period": "Jan 2025 – Present",
-      "note": "Working under Prof. Prithviraj on a GIS project involving detailed spatial surveying of the NITK campus."
-    },
-    {
-      "org": "Kannada Vedike NITK",
-      "title": "Technical Coordinator (Sep 2025 – Present); previously Technical Team Member",
-      "period": "Feb 2024 – Present"
-    },
-    {
-      "org": "Advista.live",
-      "title": "Frontend Developer (Part-time, on-site)",
-      "period": "Jan 2025 – Mar 2025"
-    },
-    {
-      "org": "SriSadguru Hypertechnologies",
-      "title": "Software Developer (Internship)",
-      "period": "May 2024 – Jun 2024"
-    },
-    {
-      "org": "SriSadguru Hypertechnologies",
-      "title": "Software Developer (Full-time, Sringeri), earlier stint",
-      "period": "Aug 2022 – Oct 2022"
-    },
-    {
-      "org": "Datta Web Designers",
-      "title": "Software Developer (Freelance, Mysuru)",
-      "period": "Sep 2021 – Aug 2022"
+      "note": "Worked on the E-Cell website and built an IPL mock auction site where every bidder sees bids as they happen."
     }
   ]
 }

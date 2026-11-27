@@ -1,7 +1,8 @@
 [
   {
-    "institution": "National Institute of Technology Karnataka, Surathkal",
-    "period": "2023 – Present",
+    "institution": "NIT Karnataka, Surathkal",
+    "logo": "/logos/nitk.png",
+    "period": "2023 – 2027",
     "degrees": [
       { "label": "B.Tech, Civil Engineering", "detail": "CGPA 7.92" },
       { "label": "Minor, Electronics & Communication", "detail": "CGPA 7.25" }

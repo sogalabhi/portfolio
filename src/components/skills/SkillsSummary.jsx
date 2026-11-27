@@ -6,7 +6,7 @@ export default function SkillsSummary() {
   const revealRef = useGsapReveal({ stagger: 0.02, y: 8 })
 
   return (
-    <div ref={revealRef} className="mt-8 divide-y divide-line border-t border-line">
+    <div ref={revealRef} className="mt-2 divide-y divide-line">
       {skills.map((group) => (
         <SkillGroup key={group.group} group={group.group} skills={group.skills} />
       ))}

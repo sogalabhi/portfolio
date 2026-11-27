@@ -1,5 +1,8 @@
 {
-  "photo": null,
+  "photo": {
+    "src": "/about/photo.webp",
+    "alt": "Abhijith Sogal in a black IRIS NITK polo, against a dark background."
+  },
   "bio": [
     "I study civil engineering at NITK Surathkal, but most of my time goes into writing software. That started in 2021, when I built Arjun Guruji, an app for SNSDS Trust. More than 2,000 people have installed it, and I still look after it.",
     "These days I lead the four-person web team on Osdag at FOSSEE, IIT Bombay. Osdag is open-source software that engineers use to design steel connections, so the job sits right between the two things I know. Before the web version went live, I ran a load test with more than 20 people sending 200+ requests at once, and set up the production servers from what it showed.",

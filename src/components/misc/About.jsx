@@ -1,8 +1,7 @@
 import useGsapReveal from '../../hooks/useGsapReveal'
 import about from '../../content/about.json'
 
-// A few paragraphs in my own words. A photo sits beside them once
-// about.json's `photo` has one: { "src": "/about/photo.jpg", "alt": "..." }.
+// A few paragraphs in my own words, with the photo from about.json beside them.
 export default function About() {
   const revealRef = useGsapReveal({ stagger: 0.06 })
   const { photo } = about
@@ -18,7 +17,7 @@ export default function About() {
           src={photo.src}
           alt={photo.alt}
           loading="lazy"
-          className="aspect-[4/5] w-full max-w-[16rem] border border-ink/30 object-cover"
+          className="aspect-square w-full max-w-[16rem] border border-ink/30 object-cover"
         />
       )}
 
